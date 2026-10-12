@@ -10710,7 +10710,7 @@ export type SupportRun = {
      */
     threadId: string;
     /**
-     * queued and running are in progress. needs_human means Ana handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
+     * queued and running are in progress. needs_human means the assistant handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
      */
     status: 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
     /**
@@ -10718,7 +10718,7 @@ export type SupportRun = {
      */
     stopReason: ('answered' | 'human_review' | 'cost_cap' | 'deadline' | 'max_iterations' | 'error' | 'expired') | null;
     /**
-     * Ana's answer. Null while the run is in progress or when it failed.
+     * The assistant's answer. Null while the run is in progress or when it failed.
      */
     answer: (string) | null;
     usage: SupportRunUsage;
@@ -10734,7 +10734,7 @@ export type SupportRun = {
     startedAt: (string) | null;
     finishedAt: (string) | null;
     /**
-     * Set when Ana opened a support ticket with the Zernio team. Null otherwise. A teammate follows up by email with the user whose API key started the run.
+     * Set when the assistant opened a support ticket with the Zernio team. Null otherwise. A teammate follows up by email with the user whose API key started the run.
      */
     supportTicket: {
         openedAt: string;
@@ -10746,7 +10746,7 @@ export type SupportRun = {
 };
 
 /**
- * queued and running are in progress. needs_human means Ana handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
+ * queued and running are in progress. needs_human means the assistant handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
  */
 export type status29 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
 
@@ -38846,7 +38846,7 @@ export type AskSupportQuestionData = {
          */
         threadId?: string;
         /**
-         * Ids Ana should look at. Each must belong to your workspace.
+         * Ids the assistant should look at. Each must belong to your workspace.
          */
         context?: {
             postId?: string;
