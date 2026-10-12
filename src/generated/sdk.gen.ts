@@ -1727,7 +1727,9 @@ export const handleOAuthCallback = <ThrowOnError extends boolean = false>(option
 
 /**
  * Connect ads for a platform
- * Unified ads connection endpoint. Creates a dedicated ads SocialAccount for the specified platform.
+ * Starts connecting a platform's ads account, giving you a dedicated ads connection to manage campaigns without touching posting accounts.
+ *
+ * Creates a dedicated ads SocialAccount for the specified platform.
  *
  * **Meta business login (opt-in).** Set `loginMode=business` for `facebook` or
  * `instagram` to use Facebook Login for Business and a Business Integration System User
@@ -1827,7 +1829,10 @@ export const connectAds = <ThrowOnError extends boolean = false>(options: Option
 
 /**
  * Complete Meta business login
+ * Finishes a Meta business login after the user approves access, connects the Meta ads account and sends them back to your app.
+ *
  * Facebook Login for Business redirect target. Meta supplies the single-use authorization code and the authenticated state returned by connectAds. The state expires after 30 minutes and binds the user, profile, Page selection and ad-account scope. No bearer token is sent by the browser. Success reconnects only metaads and redirects to the original redirect_url. Invalid state returns 400; inaccessible profiles or missing ads access cannot connect. Dashboard logins with several Pages redirect to the Facebook Page picker with an encrypted selectionToken valid for ten minutes. Listing and selecting require the initiating user and current profile access. No plaintext platform token is returned to the browser.
+ *
  */
 export const completeMetaAdsBusinessLogin = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CompleteMetaAdsBusinessLoginData, ThrowOnError>) => {
     return (options?.client ?? client).get<void, unknown, ThrowOnError>({
@@ -1956,7 +1961,10 @@ export const configureTikTokAdsBrandIdentity = <ThrowOnError extends boolean = f
 
 /**
  * List Facebook pages
- * Returns Facebook Pages after OAuth. Classic connections require profileId and tempToken from the OAuth redirect. Use X-Connect-Token for headless connections. The dashboard business-login picker instead sends only selectionToken, an encrypted grant valid for ten minutes. This requires the initiating user and current profile access and returns only Page IDs and names. X-Connect-Token cannot authorize business selection.
+ * Lists the Facebook Pages a user can pick from after signing in, so they can choose which Page to connect.
+ *
+ * Classic connections require profileId and tempToken from the OAuth redirect. Use X-Connect-Token for headless connections. The dashboard business-login picker instead sends only selectionToken, an encrypted grant valid for ten minutes. This requires the initiating user and current profile access and returns only Page IDs and names. X-Connect-Token cannot authorize business selection.
+ *
  */
 export const listFacebookPages = <ThrowOnError extends boolean = false>(options?: OptionsLegacyParser<ListFacebookPagesData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListFacebookPagesResponse, ListFacebookPagesError, ThrowOnError>({
@@ -1967,7 +1975,10 @@ export const listFacebookPages = <ThrowOnError extends boolean = false>(options?
 
 /**
  * Select Facebook page
+ * Connects the Facebook Page the user picked after signing in, completing the Facebook or Meta Ads connection.
+ *
  * Complete a classic Facebook Page connection with profileId, pageId, tempToken and userProfile. Use X-Connect-Token for headless connections. The dashboard business-login picker instead sends only selectionToken and pageId to complete a Meta Ads connection. The server verifies the initiating user, profile access, current grants and connection eligibility. The profile, platform token, ad-account scope and return URL come only from the encrypted grant. Business selection requires a session or bearer authentication for the initiating user; X-Connect-Token is not accepted. It returns redirect_url with connected=metaads on success or an eligibility error redirect.
+ *
  */
 export const selectFacebookPage = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<SelectFacebookPageData, ThrowOnError>) => {
     return (options?.client ?? client).post<SelectFacebookPageResponse, SelectFacebookPageError, ThrowOnError>({
@@ -9468,6 +9479,8 @@ export const listCommentAutomationLogs = <ThrowOnError extends boolean = false>(
 
 /**
  * List ads
+ * Lists your ads with their performance over a date range, including ads created directly in each platform's ads manager.
+ *
  * Returns a paginated list of ads with metrics computed over an optional date range.
  * Use source=all to include externally-synced ads from platform ad managers.
  * If no date range is provided, defaults to the last 90 days. Date range is capped at 730 days max.
@@ -9488,6 +9501,8 @@ export const listAds = <ThrowOnError extends boolean = false>(options?: OptionsL
 
 /**
  * Google Ads search terms report
+ * Shows the actual Google searches that triggered your ads, with spend and results, so you can spot wasted spend and add negative keywords.
+ *
  * The actual search queries that triggered your ads, with matched-keyword
  * status and spend metrics, the raw material for wasted-spend analysis and
  * negative-keyword lists. Reads Google's `search_term_view`, cached for
@@ -9505,7 +9520,10 @@ export const getAdsSearchTerms = <ThrowOnError extends boolean = false>(options:
 
 /**
  * List Google Ads recommendations
+ * Lists Google's optimization suggestions for an ad account, with the estimated impact of each.
+ *
  * Google's optimization recommendations for one ad account: type, estimated impact (base vs potential metrics, cost in account currency units), the campaign, ad group or budget they target, and the type-specific payload Google returns (`details`, in Google's own shape with micros). Filter by campaignId and types. Cached for 10 minutes and cleared by apply or dismiss; served stale when Google quota is exhausted.
+ *
  */
 export const listGoogleRecommendations = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListGoogleRecommendationsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListGoogleRecommendationsResponse, ListGoogleRecommendationsError, ThrowOnError>({
@@ -9516,7 +9534,10 @@ export const listGoogleRecommendations = <ThrowOnError extends boolean = false>(
 
 /**
  * Apply Google Ads recommendations
+ * Applies Google's optimization suggestions to an ad account, using Google's values or your own; the changes cannot be undone.
+ *
  * Apply up to 100 recommendations. This changes the account (budgets, bidding, keywords, assets) and is not reversible or idempotent; Google offers no validate-only mode for it. Items run in partial-failure mode, so one stale recommendation does not block the rest. `parameters` is optional and takes exactly one key named for the recommendation type, in Google's ApplyRecommendationOperation shape (for example `campaignBudget: { newBudgetAmountMicros }` or `keyword: { matchType, cpcBidMicros }`); omit it to apply Google's suggested values.
+ *
  */
 export const applyGoogleRecommendations = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ApplyGoogleRecommendationsData, ThrowOnError>) => {
     return (options?.client ?? client).post<ApplyGoogleRecommendationsResponse, ApplyGoogleRecommendationsError, ThrowOnError>({
@@ -9527,7 +9548,10 @@ export const applyGoogleRecommendations = <ThrowOnError extends boolean = false>
 
 /**
  * Dismiss Google Ads recommendations
+ * Dismisses Google optimization suggestions so Google stops showing them.
+ *
  * Dismiss up to 100 recommendations so Google stops suggesting them. Items run in partial-failure mode.
+ *
  */
 export const dismissGoogleRecommendations = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DismissGoogleRecommendationsData, ThrowOnError>) => {
     return (options?.client ?? client).post<DismissGoogleRecommendationsResponse, DismissGoogleRecommendationsError, ThrowOnError>({
@@ -9538,6 +9562,8 @@ export const dismissGoogleRecommendations = <ThrowOnError extends boolean = fals
 
 /**
  * List portfolio bid strategies
+ * Lists a Google Ads account's shared bid strategies with how many campaigns use each and how they performed.
+ *
  * Bidding strategy report: type, status, campaign count, clicks, cost, cost per conversion, impressions, average CPC and conversions over the date range (default last 30 days). Reads Google's `bidding_strategy` resource, cached for the quota window. Draws on the shared Google Ads operations budget. The response carries `cachedAt` and `stale`, set when a quota-exhausted call falls back to the last-good copy instead of a live read.
  */
 export const listBidStrategies = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListBidStrategiesData, ThrowOnError>) => {
@@ -9549,7 +9575,10 @@ export const listBidStrategies = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Create portfolio bid strategy
- * Creates a standalone bid strategy shared across campaigns. Attach it to a campaign with `portfolioBidStrategyId` on POST /v1/ads/create, PUT /v1/ads/campaigns/{campaignId}, or PUT /v1/ads/ad-sets/{adSetId}. Attaching a strategy aligned to a shared budget fails there with a 400 (Google's `BIDDING_STRATEGY_AND_BUDGET_MUST_BE_ALIGNED`); this is not retryable.
+ * Creates a Google Ads bid strategy that several campaigns can share, such as one target CPA or ROAS.
+ *
+ * Attach it to a campaign with `portfolioBidStrategyId` on POST /v1/ads/create, PUT /v1/ads/campaigns/{campaignId}, or PUT /v1/ads/ad-sets/{adSetId}. Attaching a strategy aligned to a shared budget fails there with a 400 (Google's `BIDDING_STRATEGY_AND_BUDGET_MUST_BE_ALIGNED`); this is not retryable.
+ *
  */
 export const createBidStrategy = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateBidStrategyData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateBidStrategyResponse, CreateBidStrategyError, ThrowOnError>({
@@ -9560,7 +9589,10 @@ export const createBidStrategy = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Update portfolio bid strategy
- * Renames or retargets a portfolio bid strategy. The strategy's status is output only on Google's side, so it cannot be changed here; remove a strategy in Google Ads. `type` is only needed alongside `targetCpa`/`targetRoas` to disambiguate the field Google writes to (TARGET_CPA and MAXIMIZE_CONVERSIONS both take a target CPA; TARGET_ROAS and MAXIMIZE_CONVERSION_VALUE both take a target ROAS); the strategy's family is otherwise immutable once created.
+ * Renames a shared Google Ads bid strategy or changes its target CPA or ROAS.
+ *
+ * The strategy's status is output only on Google's side, so it cannot be changed here; remove a strategy in Google Ads. `type` is only needed alongside `targetCpa`/`targetRoas` to disambiguate the field Google writes to (TARGET_CPA and MAXIMIZE_CONVERSIONS both take a target CPA; TARGET_ROAS and MAXIMIZE_CONVERSION_VALUE both take a target ROAS); the strategy's family is otherwise immutable once created.
+ *
  */
 export const updateBidStrategy = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateBidStrategyData, ThrowOnError>) => {
     return (options?.client ?? client).patch<UpdateBidStrategyResponse, UpdateBidStrategyError, ThrowOnError>({
@@ -9571,6 +9603,8 @@ export const updateBidStrategy = <ThrowOnError extends boolean = false>(options:
 
 /**
  * List shared budgets
+ * Lists a Google Ads account's shared budgets and how many campaigns draw from each.
+ *
  * Lists the Google Ads customer's shared campaign budgets (`campaign_budget.explicitly_shared`
  * = true, not removed), with how many campaigns use each. Move a campaign onto one with
  * `sharedBudgetId` on PUT /v1/ads/campaigns/{campaignId}. Google only; other platforms return 501.
@@ -9585,6 +9619,8 @@ export const listSharedBudgets = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Create a shared budget
+ * Creates a daily Google Ads budget that several campaigns can share.
+ *
  * Creates a daily shared campaign budget (`explicitly_shared: true`, standard delivery) that
  * several campaigns can draw from. A lifetime budget returns 422, like every Google budget.
  * Google refuses some bidding strategies on a shared budget; that error surfaces when a
@@ -9600,6 +9636,8 @@ export const createSharedBudget = <ThrowOnError extends boolean = false>(options
 
 /**
  * Google Local Services Ads leads
+ * Lists the calls, messages and bookings your Google Local Services Ads generated, newest first.
+ *
  * Leads generated by Local Services Ads (phone calls, messages, bookings),
  * read live from Google's `local_services_lead` resource, newest first.
  * No persistence: Google is the source of truth and lead/credit statuses
@@ -9616,6 +9654,8 @@ export const listLocalServicesLeads = <ThrowOnError extends boolean = false>(opt
 
 /**
  * List lead conversations
+ * Shows the calls (with recordings) and messages exchanged with one Google Local Services lead, oldest first.
+ *
  * Conversation entries of one Local Services lead: phone calls (duration,
  * recording URL) and messages (text, attachment URLs), oldest first. Read
  * live from `local_services_lead_conversation`, always scoped to a single
@@ -9631,6 +9671,8 @@ export const listLocalServicesLeadConversations = <ThrowOnError extends boolean 
 
 /**
  * List Search keywords
+ * Lists the keywords and negative keywords in your Google Search ad groups.
+ *
  * Returns the Google Search keyword criteria (positive and negative) synced from
  * connected Google Ads accounts, one row per ad-group keyword. Refreshed about
  * once a day per Google Ads customer (the keyword sweep rides the ads discovery
@@ -9651,6 +9693,8 @@ export const listAdKeywords = <ThrowOnError extends boolean = false>(options?: O
 
 /**
  * Add Search ad-group keywords
+ * Adds keywords, or negative keywords, to a Google Search ad group without replacing the ones already there.
+ *
  * Adds one or more keyword criteria to an existing Google Search ad group,
  * without touching the keywords already there (unlike the whole-set diff on
  * `PUT /v1/ads/{adId}`, `keywords`/`negativeKeywords` in `platformSpecificData`,
@@ -9667,6 +9711,8 @@ export const addAdKeywords = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Pause or enable a Search keyword
+ * Pauses or re-enables a single Google Search keyword.
+ *
  * Changes `ad_group_criterion.status` for one keyword criterion (M.140).
  * Negative keywords have no status on Google and cannot be paused or enabled.
  *
@@ -9680,7 +9726,10 @@ export const updateAdKeyword = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Remove a Search keyword
+ * Removes a single keyword or negative keyword from a Google Search ad group.
+ *
  * Removes one keyword criterion (positive or negative) from its ad group (M.140).
+ *
  */
 export const removeAdKeyword = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveAdKeywordData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveAdKeywordResponse, RemoveAdKeywordError, ThrowOnError>({
@@ -9691,6 +9740,8 @@ export const removeAdKeyword = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * List campaigns
+ * Lists your campaigns with spend, impressions and clicks summed across their ads, plus each campaign's status and budget.
+ *
  * Returns campaigns as virtual aggregations over ad documents grouped by platform campaign ID.
  * Metrics (spend, impressions, clicks, etc.) are summed across all ads in each campaign.
  * Campaign status is derived from child ad statuses (active > pending_review > paused > error > completed > cancelled > rejected).
@@ -9723,6 +9774,8 @@ export const listAdCampaigns = <ThrowOnError extends boolean = false>(options?: 
 
 /**
  * Create a standalone campaign
+ * Creates an empty campaign, paused, so you can add ad sets and ads to it afterwards.
+ *
  * Creates a campaign WITHOUT its first ad set / ad, on the platform of the given
  * `accountId`. Ad sets join it later via `existingCampaignId` on the create endpoints.
  * Platform notes: on Meta a budget here is campaign-level (CBO) by definition; omit it
@@ -9747,6 +9800,8 @@ export const createAdCampaign = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Pause or resume a campaign
+ * Pauses or resumes a campaign, leaving the on/off switches of its ad sets and ads as they are.
+ *
  * Writes the campaign's own on/off switch and nothing else, on every platform (Meta, TikTok,
  * Google, LinkedIn campaign group, Pinterest, X, ChatGPT (OpenAI)). Its ad sets and ads keep
  * their own switches: pausing stops their delivery through the campaign, and resuming lets
@@ -9773,6 +9828,8 @@ export const updateAdCampaignStatus = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Read a campaign's ad schedule (dayparting)
+ * Shows the days and hours a Google campaign runs and its bid adjustments, optionally with performance by day and hour.
+ *
  * The windows a Google campaign serves in, with the bid modifier on each, plus the
  * criterion ids Google minted for them.
  *
@@ -9797,7 +9854,9 @@ export const getCampaignAdSchedule = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Replace a campaign's ad schedule (dayparting)
- * Replaces the campaign's whole ad schedule with the windows you send. This is a
+ * Replaces the days and hours a Google campaign runs, or clears them so it serves around the clock.
+ *
+ * This is a
  * REPLACE, not a merge: windows you leave out stop serving.
  *
  * Send `schedule: []` to clear dayparting, which returns the campaign to serving around
@@ -9826,6 +9885,8 @@ export const updateCampaignAdSchedule = <ThrowOnError extends boolean = false>(o
 
 /**
  * Read a campaign's current bidding
+ * Shows a Google campaign's current bidding strategy and targets, ready to prefill an edit.
+ *
  * Read of the campaign's bidding strategy on Google, cached for the quota window, for
  * pre-filling the bid strategy block before a PUT to /v1/ads/campaigns/{campaignId}.
  * Google Ads only; `platform` is required and rejected when it is anything else, since
@@ -9850,6 +9911,8 @@ export const getCampaignBidding = <ThrowOnError extends boolean = false>(options
 
 /**
  * Get live campaign details
+ * Shows a Meta campaign's current settings straight from Meta, such as its objective, budget, bid strategy, schedule and delivery issues.
+ *
  * Reads one campaign live from Meta, returned verbatim, so a caller that knows a
  * campaign id no longer has to page `GET /v1/ads/campaigns` to find it. The default
  * projection covers name, status, objective, buying type, bid strategy, budgets,
@@ -9866,7 +9929,9 @@ export const getAdCampaignDetails = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Update a campaign
- * Campaign-level edits. Send at least one of `budget`, `bidStrategy`,
+ * Changes a campaign's settings, such as its name, budget, bidding or tracking URLs.
+ *
+ * Send at least one of `budget`, `bidStrategy`,
  * `portfolioBidStrategyId`, `targetImpressionShare`, `manualCpc`, `networkSettings`,
  * `trackingUrlTemplate`, `finalUrlSuffix`, `sharedBudgetId`, `name` or `platformSpecificData`. An unsupported
  * field is always an error, never a silent drop.
@@ -9936,8 +10001,9 @@ export const updateAdCampaign = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Delete a campaign
- * Deletes the whole campaign on the platform, cascading to its ad sets
- * and ads. Locally, all Ad documents for this campaign are marked
+ * Deletes a campaign along with all of its ad sets and ads, including a campaign that never got any ads.
+ *
+ * Locally, all Ad documents for this campaign are marked
  * `status: cancelled`.
  *
  * **Empty campaigns.** A campaign with zero ads has no local Ad documents
@@ -9958,6 +10024,8 @@ export const deleteAdCampaign = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * List campaign-level negative keywords
+ * Lists the negative keywords set on a whole Google campaign, separate from ad group negatives.
+ *
  * Returns the campaign-level negative keywords (`campaign_criterion.negative`),
  * distinct from the ad-group-level negatives under `GET /v1/ads/keywords`. Cached
  * for the quota window (not synced to Postgres), and gated by the shared Google
@@ -9978,6 +10046,8 @@ export const listCampaignNegativeKeywords = <ThrowOnError extends boolean = fals
 
 /**
  * Replace campaign-level negative keywords
+ * Replaces a Google campaign's full list of campaign-level negative keywords, or clears it.
+ *
  * Replaces the FULL set of campaign-level negative keywords (C.270): the desired
  * list is diffed against what Google already has, and the difference is applied
  * as one `create`/`remove` mutate. Send an empty array to clear every campaign
@@ -9996,7 +10066,9 @@ export const replaceCampaignNegativeKeywords = <ThrowOnError extends boolean = f
 
 /**
  * Pause or resume many campaigns
- * Process up to 50 campaigns in one call. Each campaign is updated
+ * Pauses or resumes up to 50 campaigns in one call, with a separate result per campaign so one failure does not block the rest.
+ *
+ * Each campaign is updated
  * concurrently and the response contains a per-campaign result so a
  * single bad row does not fail the whole batch. Each campaign is read,
  * written and re-read exactly as PUT /v1/ads/campaigns/{campaignId}/status
@@ -10013,6 +10085,8 @@ export const bulkUpdateAdCampaignStatus = <ThrowOnError extends boolean = false>
 
 /**
  * Duplicate a campaign
+ * Copies a campaign with its ad sets, ads, creatives and targeting, created paused so you can review it before launch.
+ *
  * Duplicates a campaign, including its ad sets, ads, creatives, and
  * targeting by default (`deepCopy: true`). The copy is created paused
  * so callers can review before launching.
@@ -10053,6 +10127,8 @@ export const duplicateAdCampaign = <ThrowOnError extends boolean = false>(option
 
 /**
  * Read a Google campaign's device, location, excluded location, and language targeting
+ * Shows a Google campaign's device, location, excluded location and language targeting so you can build an editor for it.
+ *
  * Google Ads compliance requires geo, language, budget, and bidding targeting
  * set at creation to stay editable afterwards; this reads the campaign state
  * so an integrator can build an editor around it. Cached for the quota window
@@ -10080,6 +10156,8 @@ export const getCampaignTargeting = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Edit a Google campaign's device, location, excluded location, or language targeting
+ * Changes a Google campaign's device, location, excluded location or language targeting after it was created.
+ *
  * Google Ads compliance row M.10: geo and language targeting set at
  * creation must stay editable afterwards. Send at least one of `devices`,
  * `locations`, `excludedLocations`, `languages`, `locationTargetingType`; each provided field REPLACES that field's
@@ -10141,6 +10219,8 @@ export const updateCampaignTargeting = <ThrowOnError extends boolean = false>(op
 
 /**
  * List ad sets
+ * Lists ad sets (ad groups on Google) with their targeting, bidding and optimization settings, optionally for one campaign.
+ *
  * Ad sets (Google ad groups) synced for the connection, optionally
  * filtered by platform and campaignId. Reads the `ad_sets` table
  * directly, independent of the `ads` rollup GET /v1/ads/tree uses, so a
@@ -10188,6 +10268,8 @@ export const listAdSets = <ThrowOnError extends boolean = false>(options?: Optio
 
 /**
  * Create a standalone ad group
+ * Creates an empty Google ad group under an existing campaign, ready for ads to be added later.
+ *
  * Google Ads compliance row C.190: creates an ad group WITHOUT an ad,
  * under an existing campaign. Ads join it later via `adSetId`
  * on POST /v1/ads/create. Google only; every other platform returns 501.
@@ -10208,7 +10290,9 @@ export const createAdSet = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * Duplicate an ad set
- * Duplicates an ad set. The copy is created paused so callers can review before launching.
+ * Copies an ad set, optionally with its ads and into another campaign, created paused so you can review it before launch.
+ *
+ * The copy is created paused so callers can review before launching.
  * `campaignId` retargets the copy into another campaign; omitted = the source's own campaign.
  *
  * Meta: ads and creatives are included by default (`deepCopy: true`) via Meta's native
@@ -10219,6 +10303,7 @@ export const createAdSet = <ThrowOnError extends boolean = false>(options: Optio
  * budget and schedule (start reset to now); `deepCopy: true` recreates its ads too (default
  * false). `startTime`, `endTime` and `renameStrategy` are ignored and `statusOption` must be
  * PAUSED or absent. The copy appears on the next discovery sync.
+ *
  */
 export const duplicateAdSet = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DuplicateAdSetData, ThrowOnError>) => {
     return (options?.client ?? client).post<DuplicateAdSetResponse, DuplicateAdSetError, ThrowOnError>({
@@ -10229,6 +10314,8 @@ export const duplicateAdSet = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Duplicate an ad
+ * Copies a single Meta ad, optionally into another ad set, created paused so you can review it before launch.
+ *
  * Duplicates a single ad via Meta's native `POST /{ad-id}/copies`. The copy is created
  * paused. `adSetId` retargets the copy into another ad set; omitted = the source's own ad
  * set. Accepts the Zernio ad id or the platform ad id. Sync discovery is triggered
@@ -10249,6 +10336,8 @@ export const duplicateAd = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * Get live ad-set details
+ * Shows a Meta ad set's current settings straight from Meta, including its learning phase, budget, schedule and targeting.
+ *
  * Reads the ad set live from Meta, returned verbatim. The default projection includes
  * `learning_stage_info` (learning-phase status: LEARNING / SUCCESS / FAIL / WAIVING; Meta
  * omits its `status` key on paused ad sets), delivery settings, budgets, schedule and
@@ -10264,7 +10353,9 @@ export const getAdSetDetails = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Update an ad set
- * Ad-set-level writes. Use this for ABO budget updates, ad-set-scoped
+ * Changes an ad set's settings, such as its budget, bid strategy, status or delivery options.
+ *
+ * Use this for ABO budget updates, ad-set-scoped
  * pause/resume, bid-strategy edits, Meta value-rule-set attach/detach, and
  * Meta-only post-launch delivery settings via `platformSpecificData`. At
  * least one updatable field is required.
@@ -10317,8 +10408,9 @@ export const updateAdSet = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * Delete an ad set
- * Deletes the ad set on the platform, cascading to its ads only (never the
- * campaign). Locally, every Ad document under the ad set is marked
+ * Deletes an ad set and its ads while keeping the campaign, archiving it instead on platforms without a hard delete.
+ *
+ * Locally, every Ad document under the ad set is marked
  * `status: cancelled`.
  *
  * Delete is soft on platforms that have no hard delete: LinkedIn moves the
@@ -10336,7 +10428,9 @@ export const deleteAdSet = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * Pause or resume a single ad set
- * Ad-set-scoped pause/resume (doesn't touch sibling ad sets). Thin wrapper
+ * Pauses or resumes one ad set without touching its campaign, its sibling ad sets or the switches of its ads.
+ *
+ * Thin wrapper
  * over PUT /v1/ads/ad-sets/{adSetId} for callers that only want the
  * status toggle and prefer a symmetric URL to
  * /v1/ads/campaigns/{campaignId}/status.
@@ -10371,7 +10465,8 @@ export const updateAdSetStatus = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Get campaign tree
- * Returns a nested Campaign > Ad Set > Ad hierarchy with rolled-up metrics at each level.
+ * Shows your campaigns with their ad sets and ads nested inside, with spend and results rolled up at every level.
+ *
  * Uses a two-stage aggregation: ads are grouped into ad sets, then ad sets into campaigns.
  * Metrics are computed over an optional date range, then rolled up from ad level to ad set
  * and campaign levels. Pagination is at the campaign level. Ads without a campaign or ad set
@@ -10399,6 +10494,8 @@ export const getAdTree = <ThrowOnError extends boolean = false>(options?: Option
 
 /**
  * Get daily account metrics
+ * Returns an ads account's spend, results and other metrics day by day, ready for a daily performance chart.
+ *
  * Returns daily aggregate metrics across all ads in a SocialAccount as a single
  * time series, one row per calendar day in the requested range. Use this for
  * dashboards that draw a daily-spend or daily-conversions chart, instead of
@@ -10425,7 +10522,8 @@ export const getAdsTimeline = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Get ad details
- * Returns an ad with its creative, targeting, status, and performance metrics.
+ * Shows one ad with its creative, targeting, status and performance metrics.
+ *
  * Google Search ads include current creative.headlines, creative.descriptions and creative.finalUrls,
  * preserving pinnedField. Top-level cachedAt and stale report cache freshness. Google mutations invalidate this read.
  * RSA enrichment requires a stored advertisingChannelType of SEARCH. Ads with an unknown or other channel
@@ -10464,6 +10562,8 @@ export const getAd = <ThrowOnError extends boolean = false>(options: OptionsLega
 
 /**
  * Update ad
+ * Changes an ad's status, budget, targeting or creative and applies the change on the platform.
+ *
  * Patch one or more fields on an ad. Status, budget, targeting, and creative changes
  * are propagated to the platform.
  *
@@ -10566,6 +10666,8 @@ export const updateAd = <ThrowOnError extends boolean = false>(options: OptionsL
 
 /**
  * Cancel an ad
+ * Deletes an ad on the platform while keeping its history, and removes empty parents only when they were created through this API.
+ *
  * Deletes the ad on the platform and marks it as cancelled in the database. The ad is preserved for history. OpenAI Ads has no delete API; the ad is archived instead (a terminal state, the closest equivalent).
  *
  * Only the ad is deleted; a campaign or ad set is never deleted while it still holds another ad. On Meta, when the ad set and campaign were created by Zernio (by `POST /v1/ads/create` or `POST /v1/ads/boost`) and Meta lists no other ad in the ad set (archived ads count), the emptied ad set is deleted too, then the campaign once it holds no other ad set. Parents created outside Zernio, and the parents of an ad imported from the platform, are always kept. On LinkedIn the ad is a creative inside a campaign inside a campaign group: the creative is always removed, the campaign only when Zernio created it and LinkedIn lists no other creative in it that is not archived, canceled or deleted, and the campaign group only when Zernio created it and LinkedIn lists no other campaign in it that is not canceled or deleted (archived campaigns count). If the creative itself cannot be removed the request fails and no parent is touched. To delete a whole campaign on purpose use `DELETE /v1/ads/campaigns/{campaignId}`.
@@ -10580,6 +10682,8 @@ export const deleteAd = <ThrowOnError extends boolean = false>(options: OptionsL
 
 /**
  * Pause or resume a single ad
+ * Pauses or resumes a single ad without touching its ad set, campaign or sibling ads.
+ *
  * Ad-scoped pause/resume: flips ONLY this ad's own switch (Meta
  * `configured_status`, TikTok `operation_status`, Google ad group ad
  * status, LinkedIn creative, Pinterest ad), never its parent ad set or
@@ -10616,7 +10720,10 @@ export const updateAdStatus = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * List campaign assets
- * Lists directly attached Google assets. Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ * Lists the sitelinks, callouts and other assets attached directly to a Google campaign.
+ *
+ * Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ *
  */
 export const listCampaignAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListCampaignAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListCampaignAssetsResponse, ListCampaignAssetsError, ThrowOnError>({
@@ -10627,7 +10734,10 @@ export const listCampaignAssets = <ThrowOnError extends boolean = false>(options
 
 /**
  * Attach campaign assets
+ * Adds sitelinks, callouts, structured snippets and images to a Google campaign in one step.
+ *
  * Creates and attaches sitelinks, callouts, structured snippets and image assets in one Google mutation. Google shows images only on accounts it deems eligible (account age, policy history, vertical).
+ *
  */
 export const attachCampaignAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<AttachCampaignAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).post<AttachCampaignAssetsResponse, AttachCampaignAssetsError, ThrowOnError>({
@@ -10638,7 +10748,10 @@ export const attachCampaignAssets = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Update campaign assets
- * Edits existing Google assets in place. Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ * Edits a Google campaign's existing assets, such as sitelinks or callouts, in place; the change applies everywhere that asset is used.
+ *
+ * Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ *
  */
 export const updateCampaignAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateCampaignAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateCampaignAssetsResponse, UpdateCampaignAssetsError, ThrowOnError>({
@@ -10649,7 +10762,10 @@ export const updateCampaignAssets = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Remove campaign assets
- * Removes the specified attachments only. Google assets cannot be deleted. Other attachments remain. assetResourceNames is retained for compatibility. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ * Detaches assets from a Google campaign without deleting them, so they stay in the account and on anything else they are attached to.
+ *
+ * Google assets cannot be deleted. Other attachments remain. assetResourceNames is retained for compatibility. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ *
  */
 export const removeCampaignAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveCampaignAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveCampaignAssetsResponse, RemoveCampaignAssetsError, ThrowOnError>({
@@ -10660,7 +10776,10 @@ export const removeCampaignAssets = <ThrowOnError extends boolean = false>(optio
 
 /**
  * List ad-group assets
- * Lists directly attached Google assets. Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ * Lists the sitelinks, callouts, snippets and images attached directly to a Google ad group, not those inherited from the campaign or account.
+ *
+ * Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ *
  */
 export const listAdGroupAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdGroupAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdGroupAssetsResponse, ListAdGroupAssetsError, ThrowOnError>({
@@ -10671,7 +10790,10 @@ export const listAdGroupAssets = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Attach ad-group assets
+ * Creates sitelinks, callouts, structured snippets or image assets and attaches them to a Google ad group in one step.
+ *
  * Creates and attaches sitelinks, callouts, structured snippets and image assets in one Google mutation. Google shows images only on accounts it deems eligible (account age, policy history, vertical).
+ *
  */
 export const attachAdGroupAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<AttachAdGroupAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).post<AttachAdGroupAssetsResponse, AttachAdGroupAssetsError, ThrowOnError>({
@@ -10682,7 +10804,10 @@ export const attachAdGroupAssets = <ThrowOnError extends boolean = false>(option
 
 /**
  * Update ad-group assets
- * Edits existing Google assets in place. Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ * Edits a Google ad group's existing assets in place; the change applies everywhere that asset is used.
+ *
+ * Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ *
  */
 export const updateAdGroupAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdGroupAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAdGroupAssetsResponse, UpdateAdGroupAssetsError, ThrowOnError>({
@@ -10693,7 +10818,10 @@ export const updateAdGroupAssets = <ThrowOnError extends boolean = false>(option
 
 /**
  * Remove ad-group assets
- * Removes the specified attachments only. Google assets cannot be deleted. Other attachments remain. assetResourceNames is retained for compatibility. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ * Detaches assets from a Google ad group without deleting them, so they stay in the account and on anything else they are attached to.
+ *
+ * Google assets cannot be deleted. Other attachments remain. assetResourceNames is retained for compatibility. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ *
  */
 export const removeAdGroupAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveAdGroupAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveAdGroupAssetsResponse, RemoveAdGroupAssetsError, ThrowOnError>({
@@ -10704,6 +10832,8 @@ export const removeAdGroupAssets = <ThrowOnError extends boolean = false>(option
 
 /**
  * Get campaign analytics
+ * Returns a campaign's performance summary and daily timeline, with optional breakdowns by age, gender and other audience dimensions.
+ *
  * Returns performance analytics for a whole campaign in one call: summary metrics, a daily
  * timeline over the requested date range (summed across the campaign's ads), and optional
  * demographic breakdowns. Breakdowns are fetched live from Meta at the campaign level (one call
@@ -10727,6 +10857,8 @@ export const getCampaignAnalytics = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Render pre-create ad previews
+ * Shows how a Meta creative will look in each placement before you create the ad, as embeddable previews.
+ *
  * Renders how a creative would look per placement BEFORE any ad exists, via Meta's
  * `/generatepreviews`. Provide exactly one creative source: `existingCreativeId` or `creativeSpec`.
  * Each preview is an HTML `<iframe>` snippet embeddable directly. Unknown `formats` values
@@ -10742,6 +10874,8 @@ export const generateAdPreviews = <ThrowOnError extends boolean = false>(options
 
 /**
  * Render previews of an existing ad
+ * Shows how an existing Meta ad looks in each placement, as embeddable previews.
+ *
  * Renders an EXISTING ad per placement via Meta's `/{ad_id}/previews`. Each preview is an HTML
  * `<iframe>` snippet embeddable directly. Unknown `formats` values return Meta's 400 verbatim.
  *
@@ -10755,6 +10889,8 @@ export const getAdPreviews = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Read the platform's review verdict for an ad
+ * Shows whether the platform approved an ad, where it may not deliver, and every rejection reason, without re-enabling a paused ad.
+ *
  * Reads the ad's review verdict from the platform now: whether it was approved, where it may
  * not deliver, and every rejection reason with TikTok's suggestion and the piece of content it
  * refers to. Read-only, so it works on a paused ad without re-enabling it.
@@ -10782,6 +10918,8 @@ export const getAdReview = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * Direct video and image URLs for an ad
+ * Returns fresh, short-lived download links for every image and video a Meta ad uses, including the original media of a boosted Instagram post.
+ *
  * Returns the direct signed URLs for every video and image asset used by an ad's live
  * creative, normalised across shapes: single image/video, carousel,
  * Reels/Story (`object_story_spec.video_data`) and dynamic
@@ -10807,6 +10945,8 @@ export const getAdMedia = <ThrowOnError extends boolean = false>(options: Option
 
 /**
  * Generate keyword ideas
+ * Suggests new keywords from seed keywords or a website using Google Keyword Planner, with search volume, competition and bid estimates.
+ *
  * Google Ads only. Runs Keyword Planner's generateKeywordIdeas from seed keywords, a seed URL,
  * or both, returning idea rows verbatim (avgMonthlySearches, competition, competitionIndex,
  * top-of-page bid micros, monthlySearchVolumes). Counters are int64s encoded as strings; bid
@@ -10822,6 +10962,8 @@ export const generateKeywordIdeas = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Get historical keyword metrics
+ * Gets historical search volume, competition and bid ranges for up to 1,000 keywords from Google Keyword Planner.
+ *
  * Google Ads only. Runs Keyword Planner's generateKeywordHistoricalMetrics for up to 1,000
  * exact keywords: historical search volume, competition and top-of-page bid ranges, plus
  * averageCpcMicros when includeAverageCpc is set. Rows come back verbatim; counters are int64s
@@ -10837,7 +10979,9 @@ export const generateKeywordHistoricalMetrics = <ThrowOnError extends boolean = 
 
 /**
  * Flexible live insights query
- * Live, flexible insights query. The account's platform picks the contract:
+ * Runs a custom performance query against Meta, Google Ads or TikTok and returns the platform's rows as is, for reports the fixed endpoints don't cover.
+ *
+ * The account's platform picks the contract:
  *
  * **Meta (facebook/instagram)**: forwards caller-chosen `fields`, `breakdowns` and `filtering`
  * to any Meta insights node and returns Meta's rows verbatim. `objectId` (required) selects the
@@ -10888,7 +11032,9 @@ export const queryAdInsights = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Submit async insights report
- * Submits an asynchronous Meta insights report. Same query surface as GET /v1/ads/insights, but
+ * Starts a background Meta insights report for long date ranges or large accounts where a live query would be too slow.
+ *
+ * Same query surface as GET /v1/ads/insights, but
  * in the JSON body; Meta processes the report server-side, which is the right choice for long
  * ranges or large accounts where the sync query is slow or rate-limited. Returns a `reportRunId`
  * to poll via GET /v1/ads/insights/reports/{reportRunId}.
@@ -10903,6 +11049,8 @@ export const createAdInsightsReport = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Poll an async insights report run
+ * Checks progress of a background Meta insights report and returns its results once it has finished.
+ *
  * Status and results for a report run created via POST /v1/ads/insights/reports. While the job
  * runs, returns `status` and `percentCompletion`. Once `status` is "Job Completed" the response
  * also carries a `data` page, cursor-paginated via `limit` / `after`.
@@ -10917,7 +11065,9 @@ export const getAdInsightsReport = <ThrowOnError extends boolean = false>(option
 
 /**
  * Get ad analytics
- * Returns detailed performance analytics for an ad. Includes summary metrics, a daily timeline
+ * Returns one ad's performance summary and daily timeline, with optional audience breakdowns on Meta and TikTok.
+ *
+ * Includes summary metrics, a daily timeline
  * over the requested date range, and optional demographic breakdowns (Meta and TikTok only).
  * If no date range is provided, defaults to the last 90 days. Date range is capped at 730 days max.
  *
@@ -10931,6 +11081,8 @@ export const getAdAnalytics = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Get ad tracking tags
+ * Shows the tracking parameters added to an ad's click URLs, such as UTM tags (not pixels).
+ *
  * Unified read of the platform's native click-URL tracking params.
  * - Meta (facebook/instagram): the creative's `url_tags` (and template_url_spec).
  * - Google (googleads): the campaign's `trackingUrlTemplate` + `finalUrlSuffix`.
@@ -10952,7 +11104,9 @@ export const getAdTrackingTags = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Set ad tracking tags
- * Unified update. Send only the fields for the ad's platform:
+ * Sets the tracking parameters added to an ad's click URLs, such as UTM tags, without rebuilding the rest of the ad.
+ *
+ * Send only the fields for the ad's platform:
  * - Meta: `urlTags` (array of {key,value}). Meta creatives are immutable, so this rebuilds the
  * creative and repoints the ad. By DEFAULT we PRESERVE the existing creative verbatim
  * (re-post its object_story_spec + the new url_tags, reusing the image), so you send `urlTags`
@@ -10975,7 +11129,9 @@ export const updateAdTrackingTags = <ThrowOnError extends boolean = false>(optio
 
 /**
  * List comments on an ad
- * Returns comments on an ad's underlying creative post. Useful for moderating or analyzing
+ * Lists the comments on an ad's post, including dark posts that never ran organically, so you can moderate ad engagement.
+ *
+ * Useful for moderating or analyzing
  * engagement on dark posts (ad creatives that never went live organically), which the
  * regular GET /v1/inbox/comments/{postId} endpoint cannot serve because dark posts are
  * not in Zernio's post database.
@@ -11126,6 +11282,8 @@ export const listAdsBusinessCenters = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Ad account change / audit log
+ * Shows who changed what in an ad account and when, as an audit log of edits to campaigns, ad sets and ads.
+ *
  * **Google**: reads the customer's `change_event` history, newest first. Google keeps 30 days
  * of it, so `since` defaults to 29 days ago and an older `since` returns 400; `until`
  * defaults to today. Each change is mapped onto the Meta row shape: `event_type` =
@@ -11154,7 +11312,9 @@ export const getAdsActivityLog = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Create reach-frequency prediction
- * Creates an R&F prediction. This is a QUOTE, nothing is bought and no ad entities are created.
+ * Quotes the reach or budget for a Meta reach and frequency campaign over a date range, without buying anything.
+ *
+ * This is a QUOTE, nothing is bought and no ad entities are created.
  * Provide a date range plus exactly one of `budgetAmount` (Meta predicts reach) or `reach`
  * (Meta predicts the budget). The response carries the estimate and its allowed bounds
  * (min/max budget and reach). Predictions expire on their own; to buy, reserve one via
@@ -11165,6 +11325,7 @@ export const getAdsActivityLog = <ThrowOnError extends boolean = false>(options:
  * omitted, `targeting.placements` is used; when neither is set, placements default to
  * Facebook feed (+ Instagram stream when a linked IG professional account resolves).
  * Instagram placements require that IG account.
+ *
  */
 export const createRfPrediction = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateRfPredictionData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateRfPredictionResponse, CreateRfPredictionError, ThrowOnError>({
@@ -11175,6 +11336,8 @@ export const createRfPrediction = <ThrowOnError extends boolean = false>(options
 
 /**
  * Get reach-frequency prediction
+ * Shows a Meta reach and frequency prediction, with its estimate and status.
+ *
  */
 export const getRfPrediction = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetRfPredictionData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetRfPredictionResponse, GetRfPredictionError, ThrowOnError>({
@@ -11185,7 +11348,10 @@ export const getRfPrediction = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Cancel reach-frequency booking
- * Releases a RESERVATION's locked price and inventory. Unreserved predictions expire on their own.
+ * Cancels a Meta reach and frequency reservation, releasing its locked price and inventory.
+ *
+ * Unreserved predictions expire on their own.
+ *
  */
 export const cancelRfReservation = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CancelRfReservationData, ThrowOnError>) => {
     return (options?.client ?? client).delete<CancelRfReservationResponse, CancelRfReservationError, ThrowOnError>({
@@ -11196,6 +11362,8 @@ export const cancelRfReservation = <ThrowOnError extends boolean = false>(option
 
 /**
  * Reserve reach-frequency inventory
+ * Locks the quoted price and inventory of a Meta reach and frequency prediction so you can launch a campaign on it.
+ *
  * Locks the quoted price + inventory until the returned `expiresAt` and mints a NEW
  * prediction id. Pass that RESERVED id (not the original) as `rfPredictionId` on
  * POST /v1/ads/create. Release an unused reservation via DELETE.
@@ -11209,6 +11377,8 @@ export const reserveRfPrediction = <ThrowOnError extends boolean = false>(option
 
 /**
  * A/B tests and lift studies
+ * Lists the A/B tests and lift studies on a Meta ad account, with their timing and test groups.
+ *
  * Lists the ad account's A/B tests and lift studies (Meta's `/act_X/ad_studies`), rows
  * returned verbatim. The default projection covers id, name, type, timing and cells with
  * split percentages; `fields` is a raw-passthrough override.
@@ -11244,7 +11414,10 @@ export const getTikTokSmartPlusMaterialReport = <ThrowOnError extends boolean = 
 
 /**
  * List Instagram ad identities
+ * Lists the Instagram accounts a Meta ad connection can run ads as, so you can pick the identity for a new ad.
+ *
  * Discovers identities through connected_instagram_accounts, Page linkage and Page-backed identities, with a best-effort business fallback. Business permission errors do not fail discovery. The resolved object uses the same profile-scoped resolver as ad creation; null means no identity was resolved. Format-specific observed-actor fallbacks at creative creation are not predicted.
+ *
  */
 export const listAdsInstagramAccounts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdsInstagramAccountsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdsInstagramAccountsResponse, ListAdsInstagramAccountsError, ThrowOnError>({
@@ -11255,7 +11428,10 @@ export const listAdsInstagramAccounts = <ThrowOnError extends boolean = false>(o
 
 /**
  * List Instagram posts to boost
+ * Lists posts from the Instagram account a Meta ad connection can reach, so you can boost one as an ad.
+ *
  * Lists the media of the Instagram account this Meta connection can reach, so an existing Instagram post can be boosted without connecting the Instagram account separately. Each `posts[].id` is the existing-post id to send as `platformPostId` when creating the ad; Meta turns it into `source_instagram_media_id` on the creative. Identity resolution reuses the same resolver as `/v1/ads/instagram-accounts`. `igUserId` is always checked against the identities the connection can reach and is never trusted as sent. When no identity is reachable the endpoint fails instead of returning an empty list, and the two causes stay apart: `403 reconnect_required` means the connection predates Instagram access (Meta then omits `instagram_business_account` from the Page read rather than erroring, so it looks identical to having no data) and the account must be reconnected granting Instagram access, while `422 instagram_business_account_unresolved` means the Page genuinely has no Instagram professional account linked.
+ *
  */
 export const listAdsInstagramPosts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdsInstagramPostsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdsInstagramPostsResponse, ListAdsInstagramPostsError, ThrowOnError>({
@@ -11266,7 +11442,10 @@ export const listAdsInstagramPosts = <ThrowOnError extends boolean = false>(opti
 
 /**
  * List advertisable apps
+ * Lists the mobile apps a Meta ad account can promote, with their platforms and store links, for app install campaigns.
+ *
  * Lists applications available to a Meta ad account, their supported platforms and unmodified object store URLs. A listed app still needs a configured mobile platform and store URL to run install promotion.
+ *
  */
 export const listAdvertisableApplications = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdvertisableApplicationsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdvertisableApplicationsResponse, ListAdvertisableApplicationsError, ThrowOnError>({
@@ -11277,7 +11456,10 @@ export const listAdvertisableApplications = <ThrowOnError extends boolean = fals
 
 /**
  * Get iOS 14 campaign limits
- * Reads Meta iOS 14 campaign limits for an application on an ad account. applicationId is sent as Meta app_id. This read does not establish that the application is configured for iOS promotion.
+ * Shows Meta's iOS 14 campaign limits for an app on an ad account (it does not confirm the app is set up for iOS promotion).
+ *
+ * applicationId is sent as Meta app_id. This read does not establish that the application is configured for iOS promotion.
+ *
  */
 export const getIosFourteenCampaignLimits = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetIosFourteenCampaignLimitsData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetIosFourteenCampaignLimitsResponse, GetIosFourteenCampaignLimitsError, ThrowOnError>({
@@ -11288,6 +11470,8 @@ export const getIosFourteenCampaignLimits = <ThrowOnError extends boolean = fals
 
 /**
  * Businesses list
+ * Lists the Meta business portfolios the connected user belongs to, with their verification status.
+ *
  * Business Manager portfolios the connected Meta user belongs to (Meta's `/me/businesses`),
  * rows returned verbatim (id, name, verification_status, created_time). Token-scoped, so no
  * `adAccountId` is needed. For TikTok Business Centers use
@@ -11302,6 +11486,8 @@ export const listMetaBusinesses = <ThrowOnError extends boolean = false>(options
 
 /**
  * Business users
+ * Lists the people and system users of a Meta business portfolio, with the ids you need to assign them to Pages or ad accounts.
+ *
  * People and system users of a Meta business portfolio, with the business-scoped ids that
  * `POST /v1/ads/accounts/users` and `POST /v1/ads/page-users` take. The connected Meta
  * user must be an admin of the portfolio.
@@ -11315,6 +11501,8 @@ export const listMetaBusinessUsers = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Page users of a business
+ * Lists the people in a business portfolio who are assigned to a Facebook Page it owns or was shared as a partner.
+ *
  * People of a business portfolio assigned to a Facebook Page the portfolio owns or was
  * granted as a partner (`POST /v1/accounts/{accountId}/business-partners` on the owner side).
  */
@@ -11327,6 +11515,8 @@ export const listPageUsers = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Assign a user to a Page
+ * Gives a person in your business portfolio tasks on a Facebook Page, such as advertising, so they can run ads for it.
+ *
  * Gives a person of the portfolio tasks on a Page the portfolio owns or was granted as a
  * partner. Meta does not assign partner admins automatically, so after an owner shares a
  * Page the partner calls this for the people whose tokens will advertise for it.
@@ -11342,6 +11532,8 @@ export const assignPageUser = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Remove a user from a Page
+ * Removes a person's access to a Facebook Page assigned through your business portfolio.
+ *
  */
 export const removePageUser = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemovePageUserData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemovePageUserResponse, RemovePageUserError, ThrowOnError>({
@@ -11352,7 +11544,7 @@ export const removePageUser = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * List ad labels
- * Lists the organizational labels on an ad account.
+ * Lists the labels used to organise campaigns and ads in an ad account.
  *
  * - **Meta**: pass `adAccountId=act_<n>`. Rows are Meta's `/act_X/adlabels` returned verbatim
  * (id, name, created/updated time), paginated with `limit` / `after`.
@@ -11360,6 +11552,7 @@ export const removePageUser = <ThrowOnError extends boolean = false>(options: Op
  * connection has a single customer). Returns every non-removed label as a `GoogleAdLabel`
  * in one page (`paging.after` is always null). Reads are cached for 10 minutes; when the
  * shared Google quota is exhausted the last successful result is served with `stale: true`.
+ *
  */
 export const listAdLabels = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdLabelsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdLabelsResponse, ListAdLabelsError, ThrowOnError>({
@@ -11370,9 +11563,12 @@ export const listAdLabels = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * Create a Google Ads label
- * Creates a label on a Google Ads customer. Attach it to campaigns, ad groups, ads and
+ * Creates a Google Ads label you can then attach to campaigns, ad groups, ads and keywords to organize and filter them.
+ *
+ * Attach it to campaigns, ad groups, ads and
  * keywords with `POST /v1/ads/labels/{labelId}/assignments`. Label names are unique per
  * customer; a duplicate is a 400.
+ *
  */
 export const createAdLabel = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdLabelData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateAdLabelResponse, CreateAdLabelError, ThrowOnError>({
@@ -11383,7 +11579,10 @@ export const createAdLabel = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Update a Google Ads label
- * Changes the name, color or description of a label. Only the fields sent are written.
+ * Changes a Google Ads label's name, color or description.
+ *
+ * Only the fields sent are written.
+ *
  */
 export const updateAdLabel = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdLabelData, ThrowOnError>) => {
     return (options?.client ?? client).patch<UpdateAdLabelResponse, UpdateAdLabelError, ThrowOnError>({
@@ -11394,7 +11593,10 @@ export const updateAdLabel = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Remove a Google Ads label
- * Removes the label. Google drops it from every campaign, ad group, ad and keyword it was attached to.
+ * Deletes a Google Ads label and removes it from everything it was attached to.
+ *
+ * Google drops it from every campaign, ad group, ad and keyword it was attached to.
+ *
  */
 export const removeAdLabel = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveAdLabelData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveAdLabelResponse, RemoveAdLabelError, ThrowOnError>({
@@ -11405,6 +11607,8 @@ export const removeAdLabel = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Attach a Google Ads label
+ * Attaches a Google Ads label to campaigns, ad groups, ads and keywords in one call, skipping any that already have it.
+ *
  * Attaches the label to campaigns, ad groups, ads and keywords (Google CampaignLabel,
  * AdGroupLabel, AdGroupAdLabel and AdGroupCriterionLabel) in one mutate. Idempotent: a
  * target that already carries the label is counted in `unchanged` instead of failing the
@@ -11421,7 +11625,10 @@ export const attachAdLabel = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Detach a Google Ads label
- * Removes the label from the given targets. Idempotent; a target without the label is counted in `unchanged`. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ * Removes a Google Ads label from the campaigns, ad groups, ads or keywords you name, skipping any that do not have it.
+ *
+ * Idempotent; a target without the label is counted in `unchanged`. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ *
  */
 export const detachAdLabel = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DetachAdLabelData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DetachAdLabelResponse, DetachAdLabelError, ThrowOnError>({
@@ -11432,6 +11639,8 @@ export const detachAdLabel = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * List high-demand periods
+ * Lists the scheduled budget increases set on a Meta campaign or ad set.
+ *
  * Scheduled budget increases (Meta's budget-scheduling API). The Graph edge lives on the
  * campaign and ad-set nodes only, so exactly one of `campaignId` / `adSetId` (platform
  * ids) is required. Rows returned verbatim (budget_value, budget_value_type, time window,
@@ -11446,8 +11655,9 @@ export const listHighDemandPeriods = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Schedule a budget increase
- * Pre-schedule a temporary budget increase (Black Friday, a launch, a sale) instead of
- * editing the budget by hand on the day. Same target rule as the GET: exactly one of
+ * Schedules a temporary budget increase on a Meta campaign or ad set for a busy period, like Black Friday or a launch.
+ *
+ * Same target rule as the GET: exactly one of
  * `campaignId` / `adSetId`.
  *
  * Two Meta constraints worth knowing before you call it. `timeStart` / `timeEnd` must
@@ -11455,6 +11665,7 @@ export const listHighDemandPeriods = <ThrowOnError extends boolean = false>(opti
  * across its schedules; the second type is rejected with "Can't mix your budget scaling
  * selection". Window rules (must sit inside the campaign's run dates, minimum lead time,
  * no overlap) are Meta's and its message is forwarded verbatim.
+ *
  */
 export const createHighDemandPeriod = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateHighDemandPeriodData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateHighDemandPeriodResponse, CreateHighDemandPeriodError, ThrowOnError>({
@@ -11465,6 +11676,8 @@ export const createHighDemandPeriod = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Creative library
+ * Lists the creatives saved in a Meta ad account so you can reuse one in a new ad.
+ *
  * Lists the ad account's creative library (Meta's `/act_X/adcreatives`), rows returned
  * verbatim. The default projection covers id, name, status, object type, thumbnail,
  * object_story_spec / asset_feed_spec and url_tags; `fields` is a raw-passthrough
@@ -11480,6 +11693,8 @@ export const listAdCreatives = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Create a standalone creative
+ * Creates a reusable Meta creative from an image or carousel without creating an ad, ready to attach to ads later.
+ *
  * Creates a creative in the library WITHOUT an ad, reusable on the create endpoints via
  * `existingCreativeId`. Provide exactly one of `imageUrl` (uploaded server-side),
  * `imageHash` (from POST /v1/ads/images or the library list), or `carouselCards` (2-10
@@ -11496,6 +11711,8 @@ export const createAdCreative = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Creative details
+ * Shows the details of one Meta creative, such as its content, status and thumbnail.
+ *
  * One creative's details, verbatim from Meta. `fields` is a raw-passthrough override of
  * the default projection.
  */
@@ -11508,9 +11725,12 @@ export const getAdCreative = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Rename a creative
- * Renames a creative. Creatives are immutable on Meta beyond `name`. For content changes
+ * Renames a Meta creative (Meta does not allow other changes, so make a new creative to change its content).
+ *
+ * Creatives are immutable on Meta beyond `name`. For content changes
  * create a new creative (POST /v1/ads/creatives) and swap it onto the ad
  * (PUT /v1/ads/{adId} with `creative`).
+ *
  */
 export const updateAdCreative = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdCreativeData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAdCreativeResponse, UpdateAdCreativeError, ThrowOnError>({
@@ -11521,8 +11741,11 @@ export const updateAdCreative = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Delete a creative
- * Deletes a creative from the library. Meta only allows deleting creatives not referenced
+ * Deletes a Meta creative from the library, which Meta only allows when no ad uses it.
+ *
+ * Meta only allows deleting creatives not referenced
  * by any ad; otherwise its 400 surfaces verbatim.
+ *
  */
 export const deleteAdCreative = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdCreativeData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DeleteAdCreativeResponse, DeleteAdCreativeError, ThrowOnError>({
@@ -11533,6 +11756,8 @@ export const deleteAdCreative = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * List value rule sets
+ * Lists a Meta ad account's value rule sets, which raise or lower bids for audience segments you value differently.
+ *
  * Lists the ad account's value rule sets (Meta's `/act_X/value_rule_set`). A value rule
  * set adjusts the auction bid up or down for audience segments you value differently;
  * attach one to an ad set with `valueRuleSetId` on `POST /v1/ads/create` or
@@ -11560,6 +11785,8 @@ export const listValueRuleSets = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Create a value rule set
+ * Creates a Meta value rule set that raises or lowers bids for chosen audience segments, ready to attach to ad sets.
+ *
  * Creates a value rule set on the ad account (Meta's `POST /act_X/value_rule_set`).
  * Attach the returned id to an ad set with `valueRuleSetId` on `POST /v1/ads/create` or
  * `PUT /v1/ads/ad-sets/{adSetId}`.
@@ -11600,6 +11827,8 @@ export const createValueRuleSet = <ThrowOnError extends boolean = false>(options
 
 /**
  * Read a value rule set
+ * Shows one Meta value rule set with all its rules and criteria, the first step before editing it.
+ *
  * Reads one value rule set including every nested rule id and criterion id. This is step
  * one of any edit: `PUT` is a full replace, so you need the ids before you can keep the
  * objects you are not changing.
@@ -11617,6 +11846,8 @@ export const getValueRuleSet = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Replace a value rule set
+ * Replaces a Meta value rule set with the rules you send, so any rule left out is deleted.
+ *
  * **THIS IS A FULL REPLACE, NOT A PATCH.** Meta's update is declarative: the body you
  * send becomes the rule set.
  *
@@ -11643,6 +11874,8 @@ export const updateValueRuleSet = <ThrowOnError extends boolean = false>(options
 
 /**
  * Delete a value rule set
+ * Deletes a Meta value rule set (detach it from ad sets first, since they are not changed here).
+ *
  * Deletes the rule set (Meta's `POST /{value-rule-set-id}/delete_rule_set`, a custom
  * action edge rather than an HTTP DELETE on its side). Ad sets pointing at it are not
  * modified here; detach them first with `valueRulesApplied: false` on
@@ -11657,7 +11890,10 @@ export const deleteValueRuleSet = <ThrowOnError extends boolean = false>(options
 
 /**
  * List negative keyword lists
+ * Lists the shared negative keyword lists in a Google Ads account, which you can apply to many campaigns at once.
+ *
  * Google Ads shared negative keyword lists (shared_set type NEGATIVE_KEYWORDS). Reads are cached for 10 minutes; quota exhaustion may return the last successful result for up to 7 days with stale=true. Customer selection is limited to this connection and its account scope.
+ *
  */
 export const listAdNegativeKeywordLists = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdNegativeKeywordListsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdNegativeKeywordListsResponse, ListAdNegativeKeywordListsError, ThrowOnError>({
@@ -11668,7 +11904,10 @@ export const listAdNegativeKeywordLists = <ThrowOnError extends boolean = false>
 
 /**
  * Create a negative keyword list
+ * Creates a shared Google Ads negative keyword list, optionally with starting keywords; it is not attached to any campaign yet.
+ *
  * Creates one Google Ads shared negative keyword list with optional initial keywords in a single atomic mutation. Daily quota is reserved for every mutate item, so large batches may return 429 before any change. This operation is not idempotent. The list is not attached to any campaign.
+ *
  */
 export const createAdNegativeKeywordList = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdNegativeKeywordListData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateAdNegativeKeywordListResponse, CreateAdNegativeKeywordListError, ThrowOnError>({
@@ -11679,7 +11918,10 @@ export const createAdNegativeKeywordList = <ThrowOnError extends boolean = false
 
 /**
  * Get a negative keyword list
+ * Shows one shared Google Ads negative keyword list with all of its keywords.
+ *
  * Google Ads shared negative keyword lists (shared_set type NEGATIVE_KEYWORDS). Reads are cached for 10 minutes; quota exhaustion may return the last successful result for up to 7 days with stale=true. Customer selection is limited to this connection and its account scope. Includes the keywords and their criterion ids.
+ *
  */
 export const getAdNegativeKeywordList = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetAdNegativeKeywordListData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetAdNegativeKeywordListResponse, GetAdNegativeKeywordListError, ThrowOnError>({
@@ -11690,7 +11932,10 @@ export const getAdNegativeKeywordList = <ThrowOnError extends boolean = false>(o
 
 /**
  * Rename a negative keyword list
- * Renames a shared negative keyword list. Keywords and campaign associations are unchanged. Use the keywords endpoint to edit the desired keyword set.
+ * Renames a shared Google Ads negative keyword list without changing its keywords or the campaigns using it.
+ *
+ * Keywords and campaign associations are unchanged. Use the keywords endpoint to edit the desired keyword set.
+ *
  */
 export const updateAdNegativeKeywordList = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdNegativeKeywordListData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAdNegativeKeywordListResponse, UpdateAdNegativeKeywordListError, ThrowOnError>({
@@ -11701,7 +11946,10 @@ export const updateAdNegativeKeywordList = <ThrowOnError extends boolean = false
 
 /**
  * Delete a negative keyword list
- * Removes the Google shared negative keyword list. Detach it from all campaigns first; an in-use list is rejected. Only NEGATIVE_KEYWORDS shared sets are supported.
+ * Deletes a shared Google Ads negative keyword list; detach it from every campaign first.
+ *
+ * Detach it from all campaigns first; an in-use list is rejected. Only NEGATIVE_KEYWORDS shared sets are supported.
+ *
  */
 export const deleteAdNegativeKeywordList = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdNegativeKeywordListData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DeleteAdNegativeKeywordListResponse, DeleteAdNegativeKeywordListError, ThrowOnError>({
@@ -11712,7 +11960,10 @@ export const deleteAdNegativeKeywordList = <ThrowOnError extends boolean = false
 
 /**
  * Replace negative list keywords
- * Replaces the full desired keyword set. Existing keywords are diffed by normalized text and match type; creates and removals are applied atomically in one mutation. Unchanged criteria retain their ids. Send an empty keywords array to clear the list. Changes affect every campaign using this list. Each create or removal consumes one daily operation; the entire batch must fit the remaining quota.
+ * Replaces all keywords in a shared Google Ads negative keyword list (or clears it), affecting every campaign that uses the list.
+ *
+ * Existing keywords are diffed by normalized text and match type; creates and removals are applied atomically in one mutation. Unchanged criteria retain their ids. Send an empty keywords array to clear the list. Changes affect every campaign using this list. Each create or removal consumes one daily operation; the entire batch must fit the remaining quota.
+ *
  */
 export const replaceAdNegativeKeywordListKeywords = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ReplaceAdNegativeKeywordListKeywordsData, ThrowOnError>) => {
     return (options?.client ?? client).put<ReplaceAdNegativeKeywordListKeywordsResponse, ReplaceAdNegativeKeywordListKeywordsError, ThrowOnError>({
@@ -11723,7 +11974,10 @@ export const replaceAdNegativeKeywordListKeywords = <ThrowOnError extends boolea
 
 /**
  * List campaign negative lists
- * Returns shared negative keyword lists attached to the campaign, separate from campaign-level negative keywords. Google Ads shared negative keyword lists (shared_set type NEGATIVE_KEYWORDS). Reads are cached for 10 minutes; quota exhaustion may return the last successful result for up to 7 days with stale=true. Customer selection is limited to this connection and its account scope.
+ * Lists the shared negative keyword lists attached to a Google campaign, separate from its own campaign-level negatives.
+ *
+ * Google Ads shared negative keyword lists (shared_set type NEGATIVE_KEYWORDS). Reads are cached for 10 minutes; quota exhaustion may return the last successful result for up to 7 days with stale=true. Customer selection is limited to this connection and its account scope.
+ *
  */
 export const listCampaignNegativeKeywordLists = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListCampaignNegativeKeywordListsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListCampaignNegativeKeywordListsResponse, ListCampaignNegativeKeywordListsError, ThrowOnError>({
@@ -11734,7 +11988,10 @@ export const listCampaignNegativeKeywordLists = <ThrowOnError extends boolean = 
 
 /**
  * Replace campaign negative lists
- * Sets the full desired set of shared negative keyword list associations on this campaign. Send listIds=[] to detach all negative keyword lists. Only campaign_shared_set links are changed; the lists and their keywords are preserved. Every list must belong to the campaign customer and have type NEGATIVE_KEYWORDS.
+ * Sets exactly which shared negative keyword lists apply to a Google campaign, or detaches them all, without changing the lists themselves.
+ *
+ * Send listIds=[] to detach all negative keyword lists. Only campaign_shared_set links are changed; the lists and their keywords are preserved. Every list must belong to the campaign customer and have type NEGATIVE_KEYWORDS.
+ *
  */
 export const replaceCampaignNegativeKeywordLists = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ReplaceCampaignNegativeKeywordListsData, ThrowOnError>) => {
     return (options?.client ?? client).put<ReplaceCampaignNegativeKeywordListsResponse, ReplaceCampaignNegativeKeywordListsError, ThrowOnError>({
@@ -11745,7 +12002,10 @@ export const replaceCampaignNegativeKeywordLists = <ThrowOnError extends boolean
 
 /**
  * List account callouts
- * Lists directly attached Google assets. Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included. Preserves Google RMF C.75 account-level callouts.
+ * Lists the callouts attached at account level in Google Ads, which can show on ads across all campaigns.
+ *
+ * Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included. Preserves Google RMF C.75 account-level callouts.
+ *
  */
 export const listAccountCallouts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAccountCalloutsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAccountCalloutsResponse, ListAccountCalloutsError, ThrowOnError>({
@@ -11756,7 +12016,10 @@ export const listAccountCallouts = <ThrowOnError extends boolean = false>(option
 
 /**
  * Add account callouts
+ * Creates callouts and attaches them at account level in Google Ads so they can show on ads across all campaigns.
+ *
  * Creates assets and customer_asset links for this Google customer. Links apply at account level.
+ *
  */
 export const addAccountCallouts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<AddAccountCalloutsData, ThrowOnError>) => {
     return (options?.client ?? client).post<AddAccountCalloutsResponse, AddAccountCalloutsError, ThrowOnError>({
@@ -11767,7 +12030,10 @@ export const addAccountCallouts = <ThrowOnError extends boolean = false>(options
 
 /**
  * Update account callouts
- * Edits existing Google assets in place. Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ * Edits existing Google Ads callouts in place; the change applies everywhere that callout is used.
+ *
+ * Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ *
  */
 export const updateAccountCallouts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAccountCalloutsData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAccountCalloutsResponse, UpdateAccountCalloutsError, ThrowOnError>({
@@ -11778,7 +12044,10 @@ export const updateAccountCallouts = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Remove account callout
+ * Detaches a callout from the Google Ads account level, leaving it on any campaigns or ad groups that still use it.
+ *
  * Removes the customer_asset attachment only. The underlying shared asset and its campaign or ad-group attachments remain. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ *
  */
 export const removeAccountCallout = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveAccountCalloutData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveAccountCalloutResponse, RemoveAccountCalloutError, ThrowOnError>({
@@ -11789,7 +12058,10 @@ export const removeAccountCallout = <ThrowOnError extends boolean = false>(optio
 
 /**
  * List account sitelinks
- * Lists directly attached Google assets. Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ * Lists the sitelinks attached at account level in Google Ads, which can show on ads across all campaigns.
+ *
+ * Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ *
  */
 export const listAccountSitelinks = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAccountSitelinksData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAccountSitelinksResponse, ListAccountSitelinksError, ThrowOnError>({
@@ -11800,7 +12072,10 @@ export const listAccountSitelinks = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Add account sitelinks
+ * Creates sitelinks and attaches them at account level in Google Ads so they can show on ads across all campaigns.
+ *
  * Creates assets and customer_asset links for this Google customer. Links apply at account level.
+ *
  */
 export const addAccountSitelinks = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<AddAccountSitelinksData, ThrowOnError>) => {
     return (options?.client ?? client).post<AddAccountSitelinksResponse, AddAccountSitelinksError, ThrowOnError>({
@@ -11811,7 +12086,10 @@ export const addAccountSitelinks = <ThrowOnError extends boolean = false>(option
 
 /**
  * Update account sitelinks
- * Edits existing Google assets in place. Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ * Edits existing Google Ads sitelinks in place; the change applies everywhere that sitelink is used.
+ *
+ * Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ *
  */
 export const updateAccountSitelinks = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAccountSitelinksData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAccountSitelinksResponse, UpdateAccountSitelinksError, ThrowOnError>({
@@ -11822,7 +12100,10 @@ export const updateAccountSitelinks = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Remove account sitelink
+ * Detaches a sitelink from the Google Ads account level, leaving it on any campaigns or ad groups that still use it.
+ *
  * Removes the customer_asset attachment only. The underlying shared asset and its campaign or ad-group attachments remain. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ *
  */
 export const removeAccountSitelink = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveAccountSitelinkData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveAccountSitelinkResponse, RemoveAccountSitelinkError, ThrowOnError>({
@@ -11833,7 +12114,10 @@ export const removeAccountSitelink = <ThrowOnError extends boolean = false>(opti
 
 /**
  * List account snippets
- * Lists directly attached Google assets. Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ * Lists the structured snippets attached at account level in Google Ads, which can show on ads across all campaigns.
+ *
+ * Fresh reads are cached for 10 minutes; exhausted quota may return the last successful read with stale=true. Inherited assets are not included.
+ *
  */
 export const listAccountStructuredSnippets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAccountStructuredSnippetsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAccountStructuredSnippetsResponse, ListAccountStructuredSnippetsError, ThrowOnError>({
@@ -11844,7 +12128,10 @@ export const listAccountStructuredSnippets = <ThrowOnError extends boolean = fal
 
 /**
  * Add account snippets
+ * Creates structured snippets and attaches them at account level in Google Ads so they can show on ads across all campaigns.
+ *
  * Creates assets and customer_asset links for this Google customer. Links apply at account level.
+ *
  */
 export const addAccountStructuredSnippets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<AddAccountStructuredSnippetsData, ThrowOnError>) => {
     return (options?.client ?? client).post<AddAccountStructuredSnippetsResponse, AddAccountStructuredSnippetsError, ThrowOnError>({
@@ -11855,7 +12142,10 @@ export const addAccountStructuredSnippets = <ThrowOnError extends boolean = fals
 
 /**
  * Update account snippets
- * Edits existing Google assets in place. Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ * Edits existing Google Ads structured snippets in place; the change applies everywhere that snippet is used.
+ *
+ * Send updates with assetResourceName and the fields to change. An asset is shared: changes affect every attachment using it. Omitted fields stay unchanged. The operation consumes the Google operations budget and invalidates affected cached lists.
+ *
  */
 export const updateAccountStructuredSnippets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAccountStructuredSnippetsData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAccountStructuredSnippetsResponse, UpdateAccountStructuredSnippetsError, ThrowOnError>({
@@ -11866,7 +12156,10 @@ export const updateAccountStructuredSnippets = <ThrowOnError extends boolean = f
 
 /**
  * Remove account snippet
+ * Detaches a structured snippet from the Google Ads account level, leaving it on any campaigns or ad groups that still use it.
+ *
  * Removes the customer_asset attachment only. The underlying shared asset and its campaign or ad-group attachments remain. Fields go in the query string. A JSON body with the same fields is also accepted and, when sent, the query string is ignored.
+ *
  */
 export const removeAccountStructuredSnippet = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveAccountStructuredSnippetData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveAccountStructuredSnippetResponse, RemoveAccountStructuredSnippetError, ThrowOnError>({
@@ -11877,6 +12170,8 @@ export const removeAccountStructuredSnippet = <ThrowOnError extends boolean = fa
 
 /**
  * Get manager account hierarchy
+ * Shows the Google Ads manager (MCC) and client account tree for a connection, including pending invitations and link status.
+ *
  * Live manager (MCC) and client tree for a Google Ads connection. Starts from every customer the Google user behind the connection can access directly and walks each tree to any depth with `customer_client`, then reads each manager's own client links so every client carries its direct parent, the `managerLinkId` and the link status. Invitations a manager sent that the client has not accepted yet appear as clients with `linkStatus: PENDING` (Google returns no name or currency for them). Refused, canceled and ended links are history and are omitted. `managerLinks` on a root lists the managers linked to that account, including invitations it can still accept with PATCH /v1/ads/accounts/manager-links. A directly accessible account that is also nested in another tree appears only once, inside that tree. `directCustomers` lists every account the Google user accesses directly (the ones this connection can accept or decline invitations for) with their pending invitations, including accounts that are also nested in a tree. Customers Google refuses to read (for example a cancelled account) are listed in `unavailable` with Google's reason instead of failing the call. Up to 50 roots and 50 managers per root are read; `truncated` is true when more exist. Cached for 10 minutes per connection; the response carries `cachedAt` and `stale`. When the connection is scoped to specific ad accounts, client accounts outside that scope are hidden (managers stay visible).
  */
 export const getAdAccountHierarchy = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetAdAccountHierarchyData, ThrowOnError>) => {
@@ -11888,6 +12183,8 @@ export const getAdAccountHierarchy = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Invite a client account to a manager
+ * Invites a Google Ads account to be managed by one of your manager accounts; the link stays pending until the client accepts.
+ *
  * Sends a manager-to-client link invitation from `managerCustomerId` to `clientCustomerId` (Google's CustomerClientLinkService). The manager must be one the connection's Google user reaches, directly or under another manager (see GET /v1/ads/accounts/hierarchy); the client can be any Google Ads account. The link stays `PENDING` until someone with access to the client accepts it in Google Ads or through PATCH on this path. Not idempotent: Google refuses a second invitation while one is pending. Send `validateOnly: true` to have Google check the request without sending anything.
  */
 export const inviteAdAccountToManager = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<InviteAdAccountToManagerData, ThrowOnError>) => {
@@ -11899,6 +12196,8 @@ export const inviteAdAccountToManager = <ThrowOnError extends boolean = false>(o
 
 /**
  * Accept, decline, cancel or end a manager link
+ * Accepts, declines or cancels a Google Ads manager invitation, or ends an existing manager-client link.
+ *
  * Changes one manager-client link, identified by `managerCustomerId`, `clientCustomerId` and `managerLinkId` (all from GET /v1/ads/accounts/hierarchy). `accept` and `decline` answer a pending invitation as the client (CustomerManagerLinkService), so the connection's Google user needs direct access to the client account; access through a manager is not enough, because the link does not exist yet. `cancel` withdraws a pending invitation and `unlink` ends an active link, both as the manager (CustomerClientLinkService). Send `validateOnly: true` to have Google check the change without applying it.
  */
 export const updateAdAccountManagerLink = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdAccountManagerLinkData, ThrowOnError>) => {
@@ -11910,8 +12209,10 @@ export const updateAdAccountManagerLink = <ThrowOnError extends boolean = false>
 
 /**
  * Ad account users
- * People of a business portfolio assigned to a Meta ad account, with their tasks.
+ * Lists the people in a business portfolio assigned to a Meta ad account, with what each can do.
+ *
  * Ids are business-scoped user ids (see `GET /v1/ads/businesses/users`).
+ *
  */
 export const listAdAccountUsers = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdAccountUsersData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdAccountUsersResponse, ListAdAccountUsersError, ThrowOnError>({
@@ -11922,9 +12223,12 @@ export const listAdAccountUsers = <ThrowOnError extends boolean = false>(options
 
 /**
  * Assign a user to an ad account
- * Gives a person of the portfolio tasks on the ad account. `MANAGE` is admin, `ADVERTISE`
+ * Gives a person in your business portfolio access to a Meta ad account, as admin, advertiser, analyst or draft editor.
+ *
+ * `MANAGE` is admin, `ADVERTISE`
  * creates and edits ads, `ANALYZE` reads reports, `DRAFT` edits drafts only. Assigning an
  * already assigned user replaces their task set.
+ *
  */
 export const assignAdAccountUser = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<AssignAdAccountUserData, ThrowOnError>) => {
     return (options?.client ?? client).post<AssignAdAccountUserResponse, AssignAdAccountUserError, ThrowOnError>({
@@ -11935,6 +12239,8 @@ export const assignAdAccountUser = <ThrowOnError extends boolean = false>(option
 
 /**
  * Remove a user from an ad account
+ * Removes a person's access to a Meta ad account assigned through your business portfolio.
+ *
  */
 export const removeAdAccountUser = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveAdAccountUserData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveAdAccountUserResponse, RemoveAdAccountUserError, ThrowOnError>({
@@ -11945,6 +12251,8 @@ export const removeAdAccountUser = <ThrowOnError extends boolean = false>(option
 
 /**
  * Ad account finances
+ * Shows a Meta ad account's balance, total spend, spend cap and funding source.
+ *
  * Finances of one Meta ad account: prepaid `balance`, lifetime `amountSpent`, account
  * `spendCap` (null = no cap) and the `fundingSource`. Money values are converted from
  * Meta's minor units to whole units of `currency`.
@@ -11958,6 +12266,8 @@ export const getAdAccountFinance = <ThrowOnError extends boolean = false>(option
 
 /**
  * Read an ad account's campaigns and ad sets live
+ * Reads an ad account's campaigns and ad sets straight from Meta or TikTok, so checks like budget limits see current values.
+ *
  * Reads the campaigns and ad sets of one Meta ad account or TikTok advertiser **live from
  * the platform**, so it is cheap enough to run before every write: for example a
  * per-ad-account spend ceiling that must see the current daily / lifetime budget rather
@@ -12002,6 +12312,8 @@ export const getAdAccountLiveEntities = <ThrowOnError extends boolean = false>(o
 
 /**
  * Create Meta ad account
+ * Creates a new Meta ad account in the user's own business portfolio (a payment method must then be added in Ads Manager).
+ *
  * Creates a durable Meta ad account in the end user's own business portfolio using
  * their connected Meta Ads token. Requires an active metaads accountId, Ads access,
  * business_management permission and business admin access. Discover portfolios with
@@ -12041,6 +12353,8 @@ export const createAdAccount = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * List ad accounts
+ * Lists the ad accounts a connection can manage, such as Meta ad accounts, TikTok advertisers or Google Ads customers.
+ *
  * Returns the platform ad accounts available for the given account (e.g. Meta ad
  * accounts, TikTok advertiser IDs, Google Ads customer IDs).
  * Meta business-login accounts use their own system-user token. Fresh Meta discovery
@@ -12066,8 +12380,9 @@ export const listAdAccounts = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Update ad account settings
- * Updates a Meta ad account in place: its name, its account-level spend cap, and its
- * default DSA beneficiary and payor. Pass any combination of fields.
+ * Changes a Meta ad account's name, spend cap or default EU DSA beneficiary and payor.
+ *
+ * Pass any combination of fields.
  *
  * **Spend cap.** `spendCap` is the total the account may spend before Meta pauses every
  * campaign in it, in whole units of the account currency. `spendCap: null` removes the
@@ -12110,6 +12425,8 @@ export const updateAdAccount = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Get ad account DSA defaults
+ * Shows the default EU DSA beneficiary and payor set on a Meta ad account.
+ *
  * Returns the default DSA beneficiary and payor currently set on a Meta ad account,
  * whether they were set via `PATCH /v1/ads/accounts` or in Meta Ads Manager. Fields
  * are omitted when no default is configured. Meta accounts only.
@@ -12124,6 +12441,8 @@ export const getDsaDefaults = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Get DSA recommendations
+ * Suggests beneficiary and payor names for a Meta ad account's EU DSA disclosures, for your user to pick from.
+ *
  * Returns Meta's suggested beneficiary/payor names for an ad account, derived by Meta
  * from the account's recent activity. Useful for prefilling `dsaBeneficiary`/`dsaPayor`
  * inputs, or the defaults sent to `PATCH /v1/ads/accounts`, in your own UI.
@@ -12143,8 +12462,9 @@ export const getDsaRecommendations = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Boost post as ad
- * Creates a paid ad from an existing published post, keeping the post's
- * engagement. By default it provisions the whole hierarchy (campaign, ad
+ * Turns an already published post into a paid ad that keeps the post's likes and comments, creating the campaign around it.
+ *
+ * By default it provisions the whole hierarchy (campaign, ad
  * set, ad).
  *
  * **Attach shape (Meta).** Send `adSetId` to put the ad under an EXISTING
@@ -12200,7 +12520,10 @@ export const boostPost = <ThrowOnError extends boolean = false>(options: Options
 
 /**
  * List Performance Max asset groups
- * Read Performance Max asset groups and their linked text, image and YouTube assets. campaignId is the platform campaign id returned by creation or the campaign list. The campaign must be visible to the caller. Uses a 10-minute cache, with the last successful response served as stale when Google quota is exhausted. Removed groups and asset links are excluded. Campaign-level brand assets on campaigns with brand guidelines enabled are not included.
+ * Lists a Performance Max campaign's asset groups with their linked text, image and YouTube assets.
+ *
+ * campaignId is the platform campaign id returned by creation or the campaign list. The campaign must be visible to the caller. Uses a 10-minute cache, with the last successful response served as stale when Google quota is exhausted. Removed groups and asset links are excluded. Campaign-level brand assets on campaigns with brand guidelines enabled are not included.
+ *
  */
 export const listGoogleAssetGroups = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListGoogleAssetGroupsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListGoogleAssetGroupsResponse, ListGoogleAssetGroupsError, ThrowOnError>({
@@ -12211,7 +12534,10 @@ export const listGoogleAssetGroups = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Create a Performance Max asset group
- * Add an asset group to an existing Performance Max campaign. The group, any new assets, their links and an optional listing-group tree are created in one atomic request, so Google checks the asset minimums (for non-retail campaigns) against the whole set. Created PAUSED unless status is ENABLED. validateOnly: true runs Google's validation without creating anything.
+ * Adds an asset group with its assets and optional product targeting to a Performance Max campaign, or just validates it without creating anything.
+ *
+ * The group, any new assets, their links and an optional listing-group tree are created in one atomic request, so Google checks the asset minimums (for non-retail campaigns) against the whole set. Created PAUSED unless status is ENABLED. validateOnly: true runs Google's validation without creating anything.
+ *
  */
 export const createGoogleAssetGroup = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateGoogleAssetGroupData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateGoogleAssetGroupResponse, CreateGoogleAssetGroupError, ThrowOnError>({
@@ -12222,7 +12548,10 @@ export const createGoogleAssetGroup = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Get a Performance Max asset group
+ * Shows one Performance Max asset group with its linked assets, ad strength, status and product targeting tree.
+ *
  * One asset group with its linked assets, ad strength, primary status and listing-group tree. Uses a 10-minute cache, served stale when Google quota is exhausted; any write below clears it.
+ *
  */
 export const getGoogleAssetGroup = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetGoogleAssetGroupData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetGoogleAssetGroupResponse, GetGoogleAssetGroupError, ThrowOnError>({
@@ -12233,7 +12562,10 @@ export const getGoogleAssetGroup = <ThrowOnError extends boolean = false>(option
 
 /**
  * Update a Performance Max asset group
+ * Changes a Performance Max asset group's name, status, final URLs or display paths.
+ *
  * Change the name, status (ENABLED or PAUSED), final URLs or display paths. Only the fields sent are written; null on path1 or path2 clears it. Change assets with the /assets endpoint and product targeting with /listing-group-filters. validateOnly: true validates without writing.
+ *
  */
 export const updateGoogleAssetGroup = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateGoogleAssetGroupData, ThrowOnError>) => {
     return (options?.client ?? client).patch<UpdateGoogleAssetGroupResponse, UpdateGoogleAssetGroupError, ThrowOnError>({
@@ -12244,7 +12576,10 @@ export const updateGoogleAssetGroup = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Remove a Performance Max asset group
+ * Permanently removes an asset group from a Performance Max campaign (this cannot be undone).
+ *
  * Removes the asset group on Google (status REMOVED, not reversible). Pass validateOnly=true to validate without removing.
+ *
  */
 export const removeGoogleAssetGroup = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveGoogleAssetGroupData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveGoogleAssetGroupResponse, RemoveGoogleAssetGroupError, ThrowOnError>({
@@ -12255,7 +12590,10 @@ export const removeGoogleAssetGroup = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Link or unlink asset group assets
+ * Links new or existing assets to a Performance Max asset group and unlinks others in one change, keeping unlinked assets in the account library.
+ *
  * Link existing assets or new content to the asset group, and unlink assets, in one atomic request. Links are applied before unlinks, so swapping the last asset of a role does not trip Google's per-role minimum. Unlinking removes the link only; the asset stays in the account library. validateOnly: true validates without writing.
+ *
  */
 export const editGoogleAssetGroupAssets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<EditGoogleAssetGroupAssetsData, ThrowOnError>) => {
     return (options?.client ?? client).post<EditGoogleAssetGroupAssetsResponse, EditGoogleAssetGroupAssetsError, ThrowOnError>({
@@ -12266,7 +12604,10 @@ export const editGoogleAssetGroupAssets = <ThrowOnError extends boolean = false>
 
 /**
  * Replace an asset group's listing-group tree
+ * Replaces the product targeting tree of a Performance Max retail asset group; only works on campaigns linked to Merchant Center.
+ *
  * Replace the product (listing-group) tree of a Performance Max retail asset group. The current tree is removed and the new one created in one atomic request. Read the current tree with GET on the asset group. Requires a campaign linked to Merchant Center; other campaigns return 400 LISTING_SOURCE_NOT_ALLOWED from Google. validateOnly: true validates without writing.
+ *
  */
 export const replaceGoogleListingGroupFilters = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ReplaceGoogleListingGroupFiltersData, ThrowOnError>) => {
     return (options?.client ?? client).put<ReplaceGoogleListingGroupFiltersResponse, ReplaceGoogleListingGroupFiltersError, ThrowOnError>({
@@ -12277,6 +12618,8 @@ export const replaceGoogleListingGroupFilters = <ThrowOnError extends boolean = 
 
 /**
  * Create standalone ad
+ * Creates a paid ad with your own creative, building the campaign and ad set it needs or adding it to existing ones.
+ *
  * Create a paid ad with custom creative across Meta, Google Ads, Pinterest, TikTok, X, LinkedIn, and OpenAI Ads (ChatGPT Ads).
  *
  * Google Performance Max: set `campaignType: "pmax"` and supply `assetGroup` with
@@ -12342,6 +12685,8 @@ export const createStandaloneAd = <ThrowOnError extends boolean = false>(options
 
 /**
  * List submitted leads
+ * Lists the leads submitted through your Meta or LinkedIn lead forms, newest first.
+ *
  * Returns submitted Lead Gen leads for your team, newest-first, with keyset pagination on `cursor`. For Meta (default) leads are served from the persisted cache, ingested in real time from the `leadgen` webhook. When `accountId` is a LinkedIn ads account, leads are fetched live from LinkedIn's `leadFormResponses` (LinkedIn has no webhook and enforces 90-day retention, so nothing is persisted) and `adAccountId` is required. Reading LinkedIn responses needs the `r_marketing_leadgen_automation` permission; accounts connected before it was added must reconnect. Requires the Ads add-on.
  *
  */
@@ -12354,7 +12699,9 @@ export const listLeads = <ThrowOnError extends boolean = false>(options?: Option
 
 /**
  * List lead forms
- * Lists the Lead Gen forms owned by the account. Meta: forms on the connected Facebook Page. Pass either the `metaads` ads connection (the Page is taken from the Facebook account linked to it) or the Facebook account itself. LinkedIn: forms owned by the ad account's Company Page. Pass `adAccountId` (LinkedIn forms are org-owned). Requires the Ads add-on.
+ * Lists the lead forms on a Facebook Page or LinkedIn Company Page.
+ *
+ * Meta: forms on the connected Facebook Page. Pass either the `metaads` ads connection (the Page is taken from the Facebook account linked to it) or the Facebook account itself. LinkedIn: forms owned by the ad account's Company Page. Pass `adAccountId` (LinkedIn forms are org-owned). Requires the Ads add-on.
  *
  */
 export const listLeadForms = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListLeadFormsData, ThrowOnError>) => {
@@ -12366,7 +12713,9 @@ export const listLeadForms = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Create a lead form
- * Creates a Lead Gen form. The form content goes inside `platformSpecificData` for both platforms (the shape is selected by the accountId's platform). Meta: created on the connected Facebook Page (POST /{page-id}/leadgen_forms), where `accountId` may be the `metaads` ads connection (its Page comes from the Facebook account linked to the same profile) or the Facebook account itself; the old top-level Meta fields (questions, thankYou*, contextCard, …) are DEPRECATED but still accepted while platformSpecificData is absent; mixing both shapes is a 400. LinkedIn: created on the ad account's Company Page. NOT idempotent: a retry creates a second form. Meta prefilled question types (EMAIL, PHONE, FULL_NAME, …) must omit label/key; CUSTOM questions require both. LinkedIn exposes only free-text and multiple-choice questions via API (prefilled-from-profile fields are Campaign Manager UI-only). Requires the Ads add-on.
+ * Creates a lead form on a Facebook Page or LinkedIn Company Page to collect contact details from ads.
+ *
+ * The form content goes inside `platformSpecificData` for both platforms (the shape is selected by the accountId's platform). Meta: created on the connected Facebook Page (POST /{page-id}/leadgen_forms), where `accountId` may be the `metaads` ads connection (its Page comes from the Facebook account linked to the same profile) or the Facebook account itself; the old top-level Meta fields (questions, thankYou*, contextCard, …) are DEPRECATED but still accepted while platformSpecificData is absent; mixing both shapes is a 400. LinkedIn: created on the ad account's Company Page. NOT idempotent: a retry creates a second form. Meta prefilled question types (EMAIL, PHONE, FULL_NAME, …) must omit label/key; CUSTOM questions require both. LinkedIn exposes only free-text and multiple-choice questions via API (prefilled-from-profile fields are Campaign Manager UI-only). Requires the Ads add-on.
  *
  */
 export const createLeadForm = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateLeadFormData, ThrowOnError>) => {
@@ -12378,6 +12727,8 @@ export const createLeadForm = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Get a lead form
+ * Shows a lead form in full, including its questions and thank-you page.
+ *
  * Returns the full form, including the thank-you page, so a form can be diffed against what was created. Meta forms are scoped to the Page the accountId manages: a form on any other Page is a 404, never a read.
  *
  */
@@ -12390,7 +12741,10 @@ export const getLeadForm = <ThrowOnError extends boolean = false>(options: Optio
 
 /**
  * Archive a lead form
+ * Archives a lead form so it can no longer be used (neither Meta nor LinkedIn allows deleting one).
+ *
  * Neither platform hard-deletes a form; this archives it (Meta status=ARCHIVED; LinkedIn state=ARCHIVED via PARTIAL_UPDATE). Meta forms must belong to the Page the accountId manages.
+ *
  */
 export const archiveLeadForm = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ArchiveLeadFormData, ThrowOnError>) => {
     return (options?.client ?? client).delete<ArchiveLeadFormResponse, ArchiveLeadFormError, ThrowOnError>({
@@ -12401,7 +12755,9 @@ export const archiveLeadForm = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * List leads for a single form
- * Returns leads for one form. Serves persisted leads (ingested via the leadgen webhook) when available, falling back to a live Graph read. Accepts a Facebook account or a metaads business-login account with leads_retrieval access to the form; the latter uses its system-user token without a posting parent.
+ * Lists the leads submitted through one Meta lead form.
+ *
+ * Serves persisted leads (ingested via the leadgen webhook) when available, falling back to a live Graph read. Accepts a Facebook account or a metaads business-login account with leads_retrieval access to the form; the latter uses its system-user token without a posting parent.
  *
  */
 export const listFormLeads = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListFormLeadsData, ThrowOnError>) => {
@@ -12413,6 +12769,8 @@ export const listFormLeads = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Create a test lead
+ * Submits a test lead to a Meta lead form so you can check your lead retrieval without running ads.
+ *
  * Submits a test lead against the form (POST /{form-id}/test_leads) to exercise retrieval without waiting for real ad impressions. Meta allows one test lead per form at a time.
  *
  */
@@ -12425,6 +12783,8 @@ export const createTestLead = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Delete a test lead
+ * Deletes the test lead on a Meta lead form so you can submit a new one (Meta allows only one at a time).
+ *
  * Removes a test lead created for the form (DELETE /{leadgen_id}), so a new one can be submitted: Meta keeps one test lead per form and refuses a second until the first is gone. The same test lead appears in Meta's Lead Ads Testing Tool. Meta only deletes test leads; a real lead is refused.
  *
  */
@@ -12437,10 +12797,12 @@ export const deleteTestLead = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Upload an ad image from base64
- * Uploads raw image bytes to the Meta ad account's image library, for callers whose
- * creatives aren't hosted at a public URL. Returns the image `hash` (Meta's identifier for
+ * Uploads an image file to a Meta ad account's library, for creatives that are not hosted at a public URL.
+ *
+ * Returns the image `hash` (Meta's identifier for
  * the asset) and the Meta-hosted `url`, which can be used directly as `imageUrl` on the
  * create endpoints. Max 30 MB decoded.
+ *
  */
 export const uploadAdImage = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UploadAdImageData, ThrowOnError>) => {
     return (options?.client ?? client).post<UploadAdImageResponse, UploadAdImageError, ThrowOnError>({
@@ -12451,6 +12813,8 @@ export const uploadAdImage = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Ad image library
+ * Lists the images in a Meta ad account's library so you can reuse one in a creative.
+ *
  * Lists the ad account's image library (Meta's `/act_X/adimages`), rows returned verbatim.
  * The default projection covers hash, url, name, dimensions and status; `fields` is a
  * raw-passthrough override. Any `hash` here is reusable wherever Meta accepts
@@ -12465,6 +12829,8 @@ export const listAdImages = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * Upload an ad video
+ * Uploads a video to a Meta ad account from a URL or file, so you can preview it or use it in ads before any ad exists.
+ *
  * Standalone ad-video upload (parallel to POST /v1/ads/images), so a video creative can
  * be rendered via POST /v1/ads/preview or attached via `video.id` on POST /v1/ads/create
  * before an ad exists.
@@ -12494,6 +12860,8 @@ export const uploadAdVideo = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Ad video library
+ * Lists the videos in a Meta ad account's library, including ones uploaded elsewhere, so you can reuse one across ads.
+ *
  * Lists the ad account's video library (Meta's `/act_X/advideos`), rows returned verbatim.
  * The default projection covers id, title, status, poster frames, length and `source` (the
  * playable MP4); `fields` is a raw-passthrough override. Any `id` here is reusable as
@@ -12519,6 +12887,8 @@ export const listAdVideos = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * Get ad video processing status
+ * Checks whether an uploaded Meta ad video has finished processing and is ready to use in an ad.
+ *
  * Reads a video's processing state live from Meta (`GET /{video-id}?fields=status`).
  * Poll this after `POST /v1/ads/videos` with `async: true` until `status` is `ready`;
  * the video is only usable as `video.id` on the create endpoints from then on.
@@ -12537,12 +12907,15 @@ export const getAdVideoStatus = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Delete an ad video
- * Removes a video from the ad account's video library. Meta's canonical
+ * Removes a video from a Meta ad account's video library.
+ *
+ * Meta's canonical
  * `DELETE /{video_id}` fails with code 10 / subcode 1363055 for videos uploaded via
  * `/act_X/advideos` even with `ads_management`; this endpoint uses the working
  * account-scoped shape `DELETE /act_X/advideos?video_id=<id>` and returns Meta's
  * `{success: true}` verbatim. Deleting a video that lives in a different ad account,
  * or that Meta has already removed, returns Meta's error verbatim as a 4xx.
+ *
  */
 export const deleteAdVideo = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdVideoData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DeleteAdVideoResponse, DeleteAdVideoError, ThrowOnError>({
@@ -12569,6 +12942,8 @@ export const searchAdInterests = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Search targeting options
+ * Finds targeting options by name, such as locations, interests or behaviors, and returns the ids to use in ad targeting.
+ *
  * Resolve a human-readable query into the platform's opaque targeting ids used in
  * the `TargetingSpec` (`countries`/`regions`/`cities`/`zips`/`metros` geo keys, and
  * `interests`/`behaviors` entity ids) on `POST /v1/ads/create`,
@@ -12698,6 +13073,8 @@ export const searchAdTargeting = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Browse targeting categories
+ * Shows Meta's full tree of detailed targeting categories for an ad account, so you can browse options without a keyword.
+ *
  * The whole Meta detailed-targeting category tree of one ad account (Meta's
  * `GET /act_{ad_account_id}/targetingbrowse`), as one flat list you can render as a
  * tree. Use it to show what can be targeted without a keyword; use
@@ -12746,7 +13123,9 @@ export const browseAdTargeting = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Search the public Ad Library
- * Competitor and market research over the public ad archives. Meta's Ad Library
+ * Searches Meta's or LinkedIn's public Ad Library to see what ads other advertisers run, for competitor and market research.
+ *
+ * Meta's Ad Library
  * (`GET /ads_archive`) is searched with Zernio's own developer access, so `platform=meta` needs
  * no connected account at all. LinkedIn's Ad Library (`GET /rest/adLibrary`) runs on a connected
  * `linkedin` / `linkedinads` account, passed as `accountId`. Passing a Meta account as `accountId`
@@ -12767,6 +13146,7 @@ export const browseAdTargeting = <ThrowOnError extends boolean = false>(options:
  * `platforms`, `mediaType`, `languages`, `searchType`, `fields`, `since`, `until` are Meta-only;
  * `advertiser` is LinkedIn-only. Passing a param the account's platform does not support is a 400
  * naming the param.
+ *
  */
 export const searchAdLibrary = <ThrowOnError extends boolean = false>(options?: OptionsLegacyParser<SearchAdLibraryData, ThrowOnError>) => {
     return (options?.client ?? client).get<SearchAdLibraryResponse, SearchAdLibraryError, ThrowOnError>({
@@ -12777,6 +13157,8 @@ export const searchAdLibrary = <ThrowOnError extends boolean = false>(options?: 
 
 /**
  * Estimate audience reach
+ * Estimates how many people a targeting setup would reach before you create a campaign.
+ *
  * Returns a normalized pre-flight audience-size estimate for a targeting spec,
  * before any campaign is created. Backed by each platform's native reach API
  * (Meta `delivery_estimate`, LinkedIn `audienceCounts`, X `audience_summary`,
@@ -12837,7 +13219,10 @@ export const getLinkedInSupplyForecast = <ThrowOnError extends boolean = false>(
 
 /**
  * List Meta product catalogs
- * Lists the Meta Commerce catalogs of a business portfolio (owned + agency-shared). The business comes from `businessId`, else the ad account's owner (`adAccountId`), else the WhatsApp Business Account's owner when `accountId` is a WhatsApp connection, else the only business the Meta login can see. Reads work with scopes customers already granted.
+ * Lists the Meta product catalogs a business portfolio owns or has been shared, for catalog and shopping ads.
+ *
+ * The business comes from `businessId`, else the ad account's owner (`adAccountId`), else the WhatsApp Business Account's owner when `accountId` is a WhatsApp connection, else the only business the Meta login can see. Reads work with scopes customers already granted.
+ *
  */
 export const listAdCatalogs = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdCatalogsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdCatalogsResponse, ListAdCatalogsError, ThrowOnError>({
@@ -12848,7 +13233,10 @@ export const listAdCatalogs = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Create a Meta product catalog
+ * Creates a Meta product catalog that can power catalog ads, Instagram and Facebook Shops, and a WhatsApp Business catalog.
+ *
  * Creates a Meta Commerce catalog in the business portfolio (resolved like GET). The same catalog serves Advantage+ catalog ads, Instagram/Facebook Shops and the WhatsApp Business catalog: link it to a WhatsApp number with POST /v1/whatsapp/catalogs. Needs catalog_management on the Meta login.
+ *
  */
 export const createAdCatalog = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdCatalogData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateAdCatalogResponse, CreateAdCatalogError, ThrowOnError>({
@@ -12859,6 +13247,8 @@ export const createAdCatalog = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Get a product catalog
+ * Shows one Meta product catalog and its details.
+ *
  */
 export const getAdCatalog = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetAdCatalogData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetAdCatalogResponse, GetAdCatalogError, ThrowOnError>({
@@ -12869,7 +13259,10 @@ export const getAdCatalog = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * Delete a product catalog
- * Deletes the catalog and every product in it on Meta. Ads and WhatsApp numbers that use it lose their catalog.
+ * Deletes a Meta product catalog and all its products, removing it from any ads or WhatsApp numbers that use it.
+ *
+ * Ads and WhatsApp numbers that use it lose their catalog.
+ *
  */
 export const deleteAdCatalog = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdCatalogData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DeleteAdCatalogResponse, DeleteAdCatalogError, ThrowOnError>({
@@ -12880,7 +13273,10 @@ export const deleteAdCatalog = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * List a catalog's products
- * Pages through the catalog's products. Filter by your own `retailerId` to look one up. `price` and `salePrice` come back formatted by Meta (for example "€49.90").
+ * Lists the products in a Meta catalog, or looks one up by your own SKU.
+ *
+ * Filter by your own `retailerId` to look one up. `price` and `salePrice` come back formatted by Meta (for example "€49.90").
+ *
  */
 export const listAdCatalogProducts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdCatalogProductsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdCatalogProductsResponse, ListAdCatalogProductsError, ThrowOnError>({
@@ -12891,7 +13287,10 @@ export const listAdCatalogProducts = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Add a product to a catalog
- * Adds one product. `retailerId` is your SKU and stays the handle for later lookups and batch updates. For many products at once use POST /v1/ads/catalogs/{catalogId}/products/batch. Needs catalog_management on the Meta login.
+ * Adds a single product to a Meta catalog, keyed by your own SKU for later lookups and updates.
+ *
+ * `retailerId` is your SKU and stays the handle for later lookups and batch updates. For many products at once use POST /v1/ads/catalogs/{catalogId}/products/batch. Needs catalog_management on the Meta login.
+ *
  */
 export const createAdCatalogProduct = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdCatalogProductData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateAdCatalogProductResponse, CreateAdCatalogProductError, ThrowOnError>({
@@ -12902,7 +13301,10 @@ export const createAdCatalogProduct = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Create, update or delete products in bulk
+ * Creates, updates or deletes up to 5,000 catalog products in one request, processed in the background by Meta.
+ *
  * Up to 5000 CREATE / UPDATE / DELETE requests keyed by `retailerId`, processed asynchronously by Meta. Returns handles; poll GET /v1/ads/catalogs/{catalogId}/batches/{handle} for the outcome and per-item errors. CREATE requests need name, url, imageUrl, price and currency.
+ *
  */
 export const batchAdCatalogProducts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<BatchAdCatalogProductsData, ThrowOnError>) => {
     return (options?.client ?? client).post<BatchAdCatalogProductsResponse, BatchAdCatalogProductsError, ThrowOnError>({
@@ -12913,6 +13315,8 @@ export const batchAdCatalogProducts = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Get a bulk request's status
+ * Shows whether a bulk catalog product request has finished, with any per-product errors.
+ *
  */
 export const getAdCatalogBatch = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetAdCatalogBatchData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetAdCatalogBatchResponse, GetAdCatalogBatchError, ThrowOnError>({
@@ -12923,6 +13327,8 @@ export const getAdCatalogBatch = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Get a product
+ * Shows one product from a Meta catalog.
+ *
  */
 export const getAdCatalogProduct = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetAdCatalogProductData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetAdCatalogProductResponse, GetAdCatalogProductError, ThrowOnError>({
@@ -12933,7 +13339,10 @@ export const getAdCatalogProduct = <ThrowOnError extends boolean = false>(option
 
 /**
  * Update a product
- * Partial update: only the fields sent change. `retailerId` cannot change.
+ * Changes some fields of a catalog product, such as its price or image, leaving the rest as they are.
+ *
+ * `retailerId` cannot change.
+ *
  */
 export const updateAdCatalogProduct = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdCatalogProductData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAdCatalogProductResponse, UpdateAdCatalogProductError, ThrowOnError>({
@@ -12944,6 +13353,8 @@ export const updateAdCatalogProduct = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Delete a product
+ * Removes one product from a Meta catalog.
+ *
  */
 export const deleteAdCatalogProduct = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdCatalogProductData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DeleteAdCatalogProductResponse, DeleteAdCatalogProductError, ThrowOnError>({
@@ -12954,6 +13365,8 @@ export const deleteAdCatalogProduct = <ThrowOnError extends boolean = false>(opt
 
 /**
  * List a catalog's product feeds
+ * Lists the product feeds that keep a Meta catalog filled from your product files.
+ *
  */
 export const listAdCatalogFeeds = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdCatalogFeedsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdCatalogFeedsResponse, ListAdCatalogFeedsError, ThrowOnError>({
@@ -12964,7 +13377,10 @@ export const listAdCatalogFeeds = <ThrowOnError extends boolean = false>(options
 
 /**
  * Create a product feed
+ * Creates a product feed that imports a CSV, TSV or XML product file into a Meta catalog, on a schedule or on demand.
+ *
  * A feed pulls a CSV/TSV/XML product file from a URL. With `schedule` Meta fetches it on a cadence; without it, trigger fetches with POST /v1/ads/catalogs/{catalogId}/feeds/{feedId}/uploads.
+ *
  */
 export const createAdCatalogFeed = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdCatalogFeedData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateAdCatalogFeedResponse, CreateAdCatalogFeedError, ThrowOnError>({
@@ -12975,6 +13391,8 @@ export const createAdCatalogFeed = <ThrowOnError extends boolean = false>(option
 
 /**
  * List a feed's uploads
+ * Lists a product feed's past file imports so you can check how each one went.
+ *
  */
 export const listAdCatalogFeedUploads = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdCatalogFeedUploadsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdCatalogFeedUploadsResponse, ListAdCatalogFeedUploadsError, ThrowOnError>({
@@ -12985,7 +13403,10 @@ export const listAdCatalogFeedUploads = <ThrowOnError extends boolean = false>(o
 
 /**
  * Fetch a feed file now
+ * Asks Meta to import a product file into a feed right away instead of waiting for its schedule.
+ *
  * Asks Meta to fetch the product file at `url` into the feed. Processing is asynchronous: read the outcome with GET uploads.
+ *
  */
 export const createAdCatalogFeedUpload = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdCatalogFeedUploadData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateAdCatalogFeedUploadResponse, CreateAdCatalogFeedUploadError, ThrowOnError>({
@@ -12996,7 +13417,10 @@ export const createAdCatalogFeedUpload = <ThrowOnError extends boolean = false>(
 
 /**
  * List a catalog's product sets
- * Lists a Meta product catalog's product sets, the unit a catalog ad promotes. Pass the chosen set id, not the parent catalog id, as `promotedObject.productSetId` on POST /v1/ads/create with `goal: catalog_sales`.
+ * Lists a Meta catalog's product sets, the groups of products a catalog ad promotes.
+ *
+ * Pass the chosen set id, not the parent catalog id, as `promotedObject.productSetId` on POST /v1/ads/create with `goal: catalog_sales`.
+ *
  */
 export const listAdCatalogProductSets = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdCatalogProductSetsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdCatalogProductSetsResponse, ListAdCatalogProductSetsError, ThrowOnError>({
@@ -13007,7 +13431,10 @@ export const listAdCatalogProductSets = <ThrowOnError extends boolean = false>(o
 
 /**
  * Create a product set
+ * Creates a product set, a filtered group of catalog products (by SKU, brand and so on) to promote in catalog ads.
+ *
  * A product set is a filter over the catalog, e.g. `{"retailer_id": {"is_any": ["sku-1", "sku-2"]}}` or `{"brand": {"i_contains": "acme"}}` (Meta's product set filter syntax).
+ *
  */
 export const createAdCatalogProductSet = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdCatalogProductSetData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateAdCatalogProductSetResponse, CreateAdCatalogProductSetError, ThrowOnError>({
@@ -13018,6 +13445,8 @@ export const createAdCatalogProductSet = <ThrowOnError extends boolean = false>(
 
 /**
  * Update a product set
+ * Changes a product set's name or the filter that decides which products it includes.
+ *
  */
 export const updateAdCatalogProductSet = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdCatalogProductSetData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAdCatalogProductSetResponse, UpdateAdCatalogProductSetError, ThrowOnError>({
@@ -13028,6 +13457,8 @@ export const updateAdCatalogProductSet = <ThrowOnError extends boolean = false>(
 
 /**
  * Delete a product set
+ * Deletes a product set from a Meta catalog.
+ *
  */
 export const deleteAdCatalogProductSet = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdCatalogProductSetData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DeleteAdCatalogProductSetResponse, DeleteAdCatalogProductSetError, ThrowOnError>({
@@ -13038,7 +13469,10 @@ export const deleteAdCatalogProductSet = <ThrowOnError extends boolean = false>(
 
 /**
  * List custom audiences
- * Returns custom audiences for the given ad account. Supports Meta, Google, TikTok, Pinterest, LinkedIn, and X.
+ * Lists the custom audiences in an ad account so you can reuse them for targeting.
+ *
+ * Supports Meta, Google, TikTok, Pinterest, LinkedIn, and X.
+ *
  */
 export const listAdAudiences = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdAudiencesData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdAudiencesResponse, ListAdAudiencesError, ThrowOnError>({
@@ -13049,7 +13483,9 @@ export const listAdAudiences = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Create custom audience
- * Create a custom audience. `customer_list` is supported on Meta, Google, X, LinkedIn, TikTok, and Pinterest.
+ * Creates a custom audience from a customer list, website visitors, a lookalike, or people who engaged with your content.
+ *
+ * `customer_list` is supported on Meta, Google, X, LinkedIn, TikTok, and Pinterest.
  * `website` (pixel/tag visitors) and `lookalike` are supported on Meta, TikTok, Pinterest and Google.
  * `meta_engagement` is Meta-only, `tiktok_engagement` TikTok-only, `pinterest_engagement` Pinterest-only;
  * `company_list`, `engagement` and `website_retargeting` are LinkedIn-only. A type sent to a platform
@@ -13097,7 +13533,10 @@ export const createAdAudience = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Get audience details
+ * Shows a custom audience's details, including its latest data from the ad platform when available.
+ *
  * Returns the local audience record and fresh data from Meta (if available).
+ *
  */
 export const getAdAudience = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetAdAudienceData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetAdAudienceResponse, GetAdAudienceError, ThrowOnError>({
@@ -13108,7 +13547,9 @@ export const getAdAudience = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Update an audience
- * Update an audience. `saved_targeting` audiences accept `name`, `description`, and `spec`
+ * Renames or redescribes an audience, or replaces a saved targeting audience's rules; platform audience rules cannot change.
+ *
+ * `saved_targeting` audiences accept `name`, `description`, and `spec`
  * (full replacement, no merge, Zernio-only, no platform call). Platform audiences
  * (uploaded/website/lookalike) accept `name` and `description` only, updated on the
  * platform first and then mirrored locally; their rules are immutable, so `spec` returns
@@ -13126,6 +13567,8 @@ export const updateAdAudience = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Delete custom audience
+ * Removes a custom audience from its ad platform (archiving it where the platform does not delete).
+ *
  * Removes the audience on its ad platform, then deletes the Zernio record. Meta, Google, TikTok,
  * LinkedIn list and engagement segments, and X are deleted; Pinterest audiences and LinkedIn
  * `website_retargeting` segments are archived, which is how those platforms remove them.
@@ -13145,7 +13588,9 @@ export const deleteAdAudience = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Add users to audience
- * Upload user data to a customer_list audience. Data is SHA256-hashed server-side before sending to the platform.
+ * Uploads customer emails (and phone numbers on Meta) to a customer list audience, hashed before they are sent.
+ *
+ * Data is SHA256-hashed server-side before sending to the platform.
  * Email is used on every platform; phone is used on Meta only (other platforms ignore it). On TikTok and Pinterest,
  * the first upload also provisions the audience (deferred create). LinkedIn uploads are full-replace. Max 10,000 users per request.
  *
@@ -13193,6 +13638,8 @@ export const replaceAdAudienceCompanies = <ThrowOnError extends boolean = false>
 
 /**
  * Get Event Match Quality
+ * Shows how well your server-side conversion events match users, with event match quality and coverage for Meta or Pinterest.
+ *
  * Reads Meta Event Match Quality (EMQ) and pixel↔CAPI event coverage for a
  * pixel/dataset, live from Meta's Dataset Quality API. Web events only (a
  * Meta limitation). Other platforms return 405, except Pinterest. Requires the Ads add-on.
@@ -13212,6 +13659,8 @@ export const getConversionsQuality = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Send conversion events
+ * Sends conversion events, such as purchases or leads, from your server to an ad platform so it can attribute and optimize ads.
+ *
  * Relay one or more conversion events to the target ad platform's native Conversions API.
  * Platform is inferred from the provided `accountId`. Requires the Ads add-on.
  *
@@ -13286,6 +13735,8 @@ export const sendConversions = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Adjust uploaded conversions
+ * Retracts, restates the value of, or enhances conversions you already sent to Google Ads, for refunds or late customer data.
+ *
  * Adjust conversions that were previously uploaded via `POST /v1/ads/conversions`:
  * retract them, restate their value, or enhance them with first-party data. Requires
  * the Ads add-on.
@@ -13325,6 +13776,8 @@ export const adjustConversions = <ThrowOnError extends boolean = false>(options:
 
 /**
  * List conversion actions
+ * Lists the conversion actions in a Google Ads account, with the website tag snippets to install where available.
+ *
  * Lists Google Ads conversion actions on the resolved customer, all types by
  * default. Each action's `tagSnippets` (global site tag + event snippet) is
  * included when Google has them for that action's type, e.g. `WEBPAGE`.
@@ -13349,6 +13802,8 @@ export const listConversionActions = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Create website conversion action
+ * Creates a Google Ads website conversion action and returns the tag snippets to install on your site.
+ *
  * Creates a `WEBPAGE` conversion action (category `DEFAULT`) and returns it with
  * its tag snippets, read back after creation since Google never returns them on
  * the create response itself. Invalidates the cached list `GET` on this resource
@@ -13365,6 +13820,8 @@ export const createConversionAction = <ThrowOnError extends boolean = false>(opt
 
 /**
  * List account conversion goals
+ * Lists a Google Ads account's default conversion goals, which ones are used for bidding, and the conversion actions in each.
+ *
  * Google Ads account-default conversion goals (CustomerConversionGoal), one per
  * category and origin, with `biddable` (whether the goal is used for bidding and
  * reported in the Conversions column) and the conversion actions that belong to it,
@@ -13381,6 +13838,8 @@ export const listAdConversionGoals = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Update account conversion goals
+ * Turns bidding on or off for a Google Ads account's default conversion goals, which campaigns using account goals follow.
+ *
  * Sets `biddable` on one or more account-default goals, addressed by category and
  * origin, in one mutate. Campaigns that use account-level goals
  * (`goalConfigLevel: CUSTOMER`) follow the change. Returns the re-read goal list.
@@ -13394,6 +13853,8 @@ export const updateAdConversionGoals = <ThrowOnError extends boolean = false>(op
 
 /**
  * Update a conversion action's settings
+ * Changes a Google Ads conversion action's settings, such as primary or secondary, counting, value and lookback windows, or removes or restores it.
+ *
  * Updates a Google Ads conversion action in one mutate, each field sent written on its own
  * update mask leaf so omitted fields keep their value. Send at least one field.
  *
@@ -13416,7 +13877,10 @@ export const updateConversionAction = <ThrowOnError extends boolean = false>(opt
 
 /**
  * List custom conversion goals
+ * Lists the custom conversion goals in a Google Ads account, each a named set of conversion actions a campaign can bid on.
+ *
  * Google Ads custom conversion goals (a named set of conversion actions a campaign can bid on). Removed goals are excluded. Cached like the other Google reads.
+ *
  */
 export const listCustomConversionGoals = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListCustomConversionGoalsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListCustomConversionGoalsResponse, ListCustomConversionGoalsError, ThrowOnError>({
@@ -13427,7 +13891,10 @@ export const listCustomConversionGoals = <ThrowOnError extends boolean = false>(
 
 /**
  * Create a custom conversion goal
+ * Creates a Google Ads custom conversion goal from a set of conversion actions, so a campaign can bid on just those.
+ *
  * Creates a custom conversion goal from conversion action ids. Point a campaign at it with `PATCH /v1/ads/campaigns/{campaignId}/conversion-goals`.
+ *
  */
 export const createCustomConversionGoal = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateCustomConversionGoalData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateCustomConversionGoalResponse, CreateCustomConversionGoalError, ThrowOnError>({
@@ -13438,7 +13905,10 @@ export const createCustomConversionGoal = <ThrowOnError extends boolean = false>
 
 /**
  * Update a custom conversion goal
- * Renames the goal and/or replaces its conversion actions. Returns the re-read goal.
+ * Renames a Google Ads custom conversion goal or replaces the conversion actions in it.
+ *
+ * Returns the re-read goal.
+ *
  */
 export const updateCustomConversionGoal = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateCustomConversionGoalData, ThrowOnError>) => {
     return (options?.client ?? client).patch<UpdateCustomConversionGoalResponse, UpdateCustomConversionGoalError, ThrowOnError>({
@@ -13449,7 +13919,10 @@ export const updateCustomConversionGoal = <ThrowOnError extends boolean = false>
 
 /**
  * Remove a custom conversion goal
- * Removes the goal. Google refuses (400) while any campaign still uses it: switch those campaigns to another goal first.
+ * Deletes a Google Ads custom conversion goal; switch any campaigns using it to another goal first.
+ *
+ * Google refuses (400) while any campaign still uses it: switch those campaigns to another goal first.
+ *
  */
 export const removeCustomConversionGoal = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<RemoveCustomConversionGoalData, ThrowOnError>) => {
     return (options?.client ?? client).delete<RemoveCustomConversionGoalResponse, RemoveCustomConversionGoalError, ThrowOnError>({
@@ -13460,6 +13933,8 @@ export const removeCustomConversionGoal = <ThrowOnError extends boolean = false>
 
 /**
  * Get campaign conversion goals
+ * Shows which conversion goals a Google campaign bids on, and whether it follows the account defaults or uses its own or a custom goal.
+ *
  * A Google campaign's conversion goals (CampaignConversionGoal, `biddable` per category
  * and origin) and its goal config (ConversionGoalCampaignConfig): `goalConfigLevel`
  * CUSTOMER means the campaign follows the account-default goals, CAMPAIGN means it uses
@@ -13474,6 +13949,8 @@ export const getCampaignConversionGoals = <ThrowOnError extends boolean = false>
 
 /**
  * Update campaign conversion goals
+ * Changes which conversions a Google campaign bids on, switching between account-default goals, its own goals or a custom goal.
+ *
  * Sets `biddable` on campaign goals, switches `goalConfigLevel`, and/or points the
  * campaign at a custom conversion goal, in one mutate. `customConversionGoalId: null`
  * clears it; Google refuses that (400) while the campaign stays at CAMPAIGN level with
@@ -13489,6 +13966,8 @@ export const updateCampaignConversionGoals = <ThrowOnError extends boolean = fal
 
 /**
  * List conversion destinations
+ * Lists where an ad account can receive conversion events (pixels, conversion actions or rules), so you know where to send them.
+ *
  * Returns the list of pixels (Meta), conversion actions (Google),
  * conversion rules (LinkedIn), pixels (OpenAI Ads) or ad accounts
  * (Pinterest) accessible to the connected ads account. Use the returned `id` as `destinationId` when
@@ -13514,7 +13993,9 @@ export const listConversionDestinations = <ThrowOnError extends boolean = false>
 
 /**
  * Create a conversion destination
- * Create a new conversion destination on the platform. Supported for
+ * Creates a new place to send conversion events: a Google Ads conversion action or a LinkedIn conversion rule.
+ *
+ * Supported for
  * LinkedIn (conversion rule) and Google Ads (conversion action). Meta
  * and OpenAI Ads pixels are created via their own tracking-tags flow
  * instead (`POST /v1/accounts/{accountId}/tracking-tags`); this endpoint
@@ -13560,6 +14041,8 @@ export const createConversionDestination = <ThrowOnError extends boolean = false
 
 /**
  * Get a conversion destination
+ * Shows one LinkedIn conversion rule with its full settings.
+ *
  * LinkedIn-only today. Returns the full destination record for one
  * conversion rule. The `adAccountId` query parameter is required because
  * LinkedIn rules are scoped to a sponsored ad account.
@@ -13574,6 +14057,8 @@ export const getConversionDestination = <ThrowOnError extends boolean = false>(o
 
 /**
  * Update a conversion destination
+ * Changes a LinkedIn conversion rule's name, value, attribution windows, or turns it on or off.
+ *
  * Partial-update a conversion rule. LinkedIn-only today. Whitelisted
  * fields: `name`, `enabled`, attribution windows, `valueType`, `value`,
  * `attributionType`. The rule's `type` and parent ad account are
@@ -13590,6 +14075,8 @@ export const updateConversionDestination = <ThrowOnError extends boolean = false
 
 /**
  * Delete a conversion destination
+ * Disables a LinkedIn conversion rule, which is how LinkedIn deletes it; the rule can still be read afterwards.
+ *
  * LinkedIn-only today. LinkedIn does not expose hard-delete on conversion
  * rules; what their UI calls "delete" is the same `enabled: false` flip
  * we apply here. The rule remains fetchable via GET with
@@ -13609,6 +14096,8 @@ export const deleteConversionDestination = <ThrowOnError extends boolean = false
 
 /**
  * List associated campaigns
+ * Lists the LinkedIn campaigns that track a conversion rule, so you can spot newer campaigns that still need linking.
+ *
  * LinkedIn-only today. Returns the campaigns currently associated with
  * this conversion rule. Auto-association on rule creation
  * runs once at create time; campaigns created after the rule still need
@@ -13624,7 +14113,9 @@ export const listConversionAssociations = <ThrowOnError extends boolean = false>
 
 /**
  * Associate campaigns
- * Associate one or more campaigns with this conversion rule. Returns a
+ * Links campaigns to a LinkedIn conversion rule so they track it, reporting which links succeeded or failed.
+ *
+ * Returns a
  * per-campaign success/failure result so callers can retry only the
  * rows that failed (e.g. wrong campaign type for the rule's objective).
  *
@@ -13638,7 +14129,8 @@ export const addConversionAssociations = <ThrowOnError extends boolean = false>(
 
 /**
  * Remove associated campaigns
- * Remove one or more campaign associations from this conversion rule.
+ * Unlinks campaigns from a LinkedIn conversion rule so they stop tracking it.
+ *
  * Pass `adAccountId` and `campaignIds` as query parameters
  * (`campaignIds` is comma-separated). The route also accepts a JSON
  * body with the same fields for clients that prefer DELETE-with-body,
@@ -13656,6 +14148,8 @@ export const removeConversionAssociations = <ThrowOnError extends boolean = fals
 
 /**
  * Get attribution metrics
+ * Shows a LinkedIn conversion rule's attributed conversions, value, leads and cost over time.
+ *
  * LinkedIn-only today. Returns conversion-attribution metrics
  * (`externalWebsiteConversions`, `externalWebsitePostClickConversions`,
  * `externalWebsitePostViewConversions`, `conversionValueInLocalCurrency`,
@@ -13742,6 +14236,8 @@ export const sendWhatsAppConversion = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Create messaging ad
+ * Creates a Meta ad that opens a chat with you on WhatsApp, Messenger or Instagram Direct when someone taps it.
+ *
  * Creates a click-to-message ad; `destination` selects where the tapped ad opens a
  * conversation: WhatsApp, the Page's Messenger inbox or the linked Instagram account's Direct inbox.
  * `destinations` puts two or three of them on one ad set and lets Meta pick the app per viewer.
@@ -13769,6 +14265,8 @@ export const createMessagingAd = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Create Click-to-Call ad
+ * Creates a Meta ad with a Call Now button that dials your phone number, optimized for quality calls.
+ *
  * Same shape and flow as POST /v1/ads/ctwa, but the CTA is CALL_NOW dialing `phoneNumber`
  * via a tel: link. The ad set is destination_type PHONE_CALL optimizing QUALITY_CALL
  * and the campaign objective defaults to OUTCOME_LEADS.
@@ -13817,7 +14315,10 @@ export const createCtwaAd = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * List custom conversions
+ * Lists a Meta ad account's custom conversions, including archived ones.
+ *
  * The ad account's Meta custom conversions, including archived ones (`isArchived`).
+ *
  */
 export const listCustomConversions = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListCustomConversionsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListCustomConversionsResponse, ListCustomConversionsError, ThrowOnError>({
@@ -13828,6 +14329,8 @@ export const listCustomConversions = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Create custom conversion
+ * Creates a Meta custom conversion for ads to optimise toward, reusing an existing one with the same name and pixel.
+ *
  * Provision the Meta custom conversion an ads flow optimises toward, and hand back the
  * `customConversionId` for `promotedObject.customConversionId` on POST /v1/ads/create.
  * Removes the manual "create it in Ads Manager first" step.
@@ -14456,6 +14959,8 @@ export const startBusinessAgentEvalRun = <ThrowOnError extends boolean = false>(
 
 /**
  * List tracking tags
+ * Lists the pixels and other measurement tags an ads account can see, so you can inspect or install them.
+ *
  * Returns the tracking tags (Meta Pixels, or OpenAI Ads pixels) the
  * connected ads account can see. Pass `?adAccountId=act_...` (Meta only)
  * to scope the list to a single ad account; omit it to list every pixel
@@ -14500,6 +15005,8 @@ export const listTrackingTags = <ThrowOnError extends boolean = false>(options: 
 
 /**
  * Create a tracking tag
+ * Creates a measurement pixel on an ad account and returns the snippet to install on your site.
+ *
  * Meta: creates a Meta Pixel on the given ad account (`POST /act_{id}/adspixels`,
  * where `name` is the only input). Returns the created tag including its
  * install `code`. The pixel is owned by the Business Manager that owns the
@@ -14570,6 +15077,8 @@ export const createTrackingTag = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Get a tracking tag
+ * Shows one pixel or measurement tag in full, including its install snippet, when it last fired and its conversion events.
+ *
  * Returns the full tag record including the base-code `code` snippet,
  * `lastFiredTime`, `ownerBusinessId`, `isUnavailable`, etc. Meta only
  * (platform `metaads`); other platforms return 501.
@@ -14612,6 +15121,8 @@ export const getTrackingTag = <ThrowOnError extends boolean = false>(options: Op
 
 /**
  * Update a tracking tag
+ * Changes a pixel's settings, such as its name or automatic matching, on platforms that allow edits.
+ *
  * Partial-update a pixel. Whitelisted fields: `name` (rename),
  * `enableAutomaticMatching`, `automaticMatchingFields`,
  * `firstPartyCookieStatus`, `dataUseSetting`. At least one is required.
@@ -14667,6 +15178,8 @@ export const updateTrackingTag = <ThrowOnError extends boolean = false>(options:
 
 /**
  * List accounts it is shared with
+ * Lists the other ad accounts a pixel is shared with.
+ *
  * Meta (`metaads`) and LinkedIn (`linkedinads`); other platforms return 501.
  *
  * LinkedIn (`linkedinads`): the ad accounts this connection can see that hold access to the
@@ -14686,8 +15199,9 @@ export const listTrackingTagSharedAccounts = <ThrowOnError extends boolean = fal
 
 /**
  * Share with an ad account
- * Shares the pixel with another ad account so campaigns/audiences in that
- * account can use it. Requires that you administer both the pixel's owning
+ * Shares a pixel with another ad account so its campaigns and audiences can use it.
+ *
+ * Requires that you administer both the pixel's owning
  * Business Manager and the target ad account; a pixel on a personal
  * (non-BM) ad account can't be shared (Meta will reject the call). Meta
  * and LinkedIn; other platforms return 501.
@@ -14712,6 +15226,8 @@ export const addTrackingTagSharedAccount = <ThrowOnError extends boolean = false
 
 /**
  * Stop sharing with an account
+ * Stops sharing a pixel with an ad account.
+ *
  * `adAccountId` may be passed as a query parameter (recommended) or as a
  * JSON body field for clients that can send DELETE bodies. Meta and
  * LinkedIn; other platforms return 501.
@@ -14732,6 +15248,8 @@ export const removeTrackingTagSharedAccount = <ThrowOnError extends boolean = fa
 
 /**
  * Install on a Shopify store or WordPress site
+ * Installs a pixel on a connected Shopify store or WordPress site, so store visits and purchases are reported without editing the theme.
+ *
  * Puts the Meta pixel on a connected Shopify store's storefront and checkout through
  * Zernio's Shopify web pixel (a Shopify app pixel, no theme edits). The store then sends
  * PageView, ViewContent, AddToCart, Search, InitiateCheckout, AddPaymentInfo and Purchase
@@ -14820,6 +15338,8 @@ export const installTrackingTagOnStore = <ThrowOnError extends boolean = false>(
 
 /**
  * Get store install status
+ * Shows whether a tracking tag is live on your Shopify store or WordPress site, and whether a WordPress install would be blocked.
+ *
  * Whether this tag is the one the Shopify store fires for its platform. `installedTagId`
  * names the tag of that platform the store currently fires, which can be a different tag,
  * and `tags` lists every Zernio tag on the store (all platforms).
@@ -14841,7 +15361,9 @@ export const getTrackingTagStoreInstall = <ThrowOnError extends boolean = false>
 
 /**
  * Remove from a Shopify store or WordPress site
- * Removes the tag from the store. Idempotent: nothing installed returns 200 with
+ * Removes a tracking tag from your Shopify store or WordPress site, leaving other platforms' tags and hand-added pixel code in place.
+ *
+ * Idempotent: nothing installed returns 200 with
  * `installed: false`. If the store fires a different tag of the same platform, nothing is
  * removed and the call answers 409 `invalid_resource_state`. Shopify: other platforms'
  * tags stay; the web pixel itself is deleted once no tag remains.
@@ -14859,6 +15381,8 @@ export const removeTrackingTagFromStore = <ThrowOnError extends boolean = false>
 
 /**
  * List conversion events
+ * Lists the conversion events tied to a tracking tag, such as Google conversion actions or Meta custom conversions.
+ *
  * The tag's conversion events, on platforms where each conversion is its own object:
  * Google conversion actions, LinkedIn conversion rules, X web event tags, OpenAI event
  * settings, TikTok pixel events, Meta custom conversions, Pinterest advertiser defined
@@ -14911,7 +15435,9 @@ export const listTrackingTagEvents = <ThrowOnError extends boolean = false>(opti
 
 /**
  * Create a conversion event
- * Creates a conversion event tied to the tag. Pass the platform's own event type in `type`
+ * Creates a conversion event on a tracking tag, such as a purchase or lead, so ads can measure and optimise toward it.
+ *
+ * Pass the platform's own event type in `type`
  * (e.g. Google `PURCHASE`, LinkedIn `ADD_TO_CART`, X `CHECKOUT_INITIATED`) or a neutral
  * `siteEvent` the platform maps to its closest type. Each platform stores a subset of the
  * optional fields; sending one it does not store answers 400 naming the supported fields.
@@ -14991,6 +15517,8 @@ export const createTrackingTagEvent = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Update a conversion event
+ * Changes a conversion event's settings, such as its name or default value, where the platform allows edits.
+ *
  * Partial update; at least one field. A field the platform does not store answers 400.
  *
  * OpenAI Ads answers 501: OpenAI documents only list and create for event settings, and
@@ -15028,7 +15556,9 @@ export const updateTrackingTagEvent = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Delete a conversion event
- * Removes the conversion event. Platforms without a hard delete archive or disable it
+ * Removes a conversion event from a tracking tag, or archives or disables it on platforms that have no hard delete.
+ *
+ * Platforms without a hard delete archive or disable it
  * instead; `state` in the response says which (`deleted`, `archived`, `disabled`).
  *
  * OpenAI Ads answers 501: there is no delete or archive route for event settings
@@ -15066,7 +15596,9 @@ export const deleteTrackingTagEvent = <ThrowOnError extends boolean = false>(opt
 
 /**
  * List tag users
- * People and system users of the owning business with access to the tag. Platforms without
+ * Lists the people and system users in the owning Meta business who have access to a pixel.
+ *
+ * Platforms without
  * tag user assignment answer 501.
  *
  * Meta: the pixel's assigned users in its owning Business Manager. A pixel on a personal ad
@@ -15084,7 +15616,9 @@ export const listTrackingTagUsers = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Assign a user to a tag
- * Gives a user of the owning business access to the tag. Assigning an already assigned user
+ * Gives a person in the owning Meta business access to a pixel, or replaces the tasks they already have on it.
+ *
+ * Assigning an already assigned user
  * replaces their task set.
  *
  * Meta: `tasks` are `AA_ANALYZE`, `ADVERTISE`, `ANALYZE`, `EDIT`, `UPLOAD`; `userId` is the
@@ -15117,7 +15651,9 @@ export const removeTrackingTagUser = <ThrowOnError extends boolean = false>(opti
 
 /**
  * List partner businesses of a tag
- * Other businesses the tag is shared with. Read-only. Platforms without partner sharing
+ * Lists the partner businesses a Meta pixel is shared with (read-only, sharing with new partners is not supported).
+ *
+ * Read-only. Platforms without partner sharing
  * answer 501.
  *
  * Meta: the pixel's shared agencies. Sharing a pixel with a new partner is not available:
@@ -15134,7 +15670,9 @@ export const listTrackingTagPartners = <ThrowOnError extends boolean = false>(op
 
 /**
  * Get tag diagnostics
- * The platform's health checks for the tag. Platforms without tag diagnostics answer 501.
+ * Shows Meta's health checks for a pixel, such as events missing parameters or product ids that do not match your catalogs.
+ *
+ * Platforms without tag diagnostics answer 501.
  *
  * Meta: the pixel's checks from Events Manager (`da_checks`), e.g. whether events miss
  * parameters or their content ids do not match the pixel's catalogs.
@@ -15149,8 +15687,9 @@ export const getTrackingTagDiagnostics = <ThrowOnError extends boolean = false>(
 
 /**
  * Get aggregated event stats
- * Returns event counts / health for the tag, where the platform exposes
- * them. Meta: aggregated counts (`GET /{pixel_id}/stats`), rows passed
+ * Shows event counts or health for a tracking tag so you can confirm it is firing, where the platform reports them.
+ *
+ * Meta: aggregated counts (`GET /{pixel_id}/stats`), rows passed
  * through as-is; their shape depends on the `aggregation` requested.
  * Platforms without a stats API answer 501.
  *
@@ -16422,7 +16961,10 @@ export const listTikTokAdPixels = <ThrowOnError extends boolean = false>(options
 
 /**
  * List partnership ad content
- * Private beta. Lists creator Instagram posts available to the advertiser for Partnership Ads. Supply creatorUsername or postUrl. Requires instagram_branded_content_ads_brand permission and an advertiser Instagram Business Account.
+ * Lists a creator's Instagram posts you can run as Partnership Ads, looked up by creator or post link (private beta).
+ *
+ * Lists creator Instagram posts available to the advertiser for Partnership Ads. Supply creatorUsername or postUrl. Requires instagram_branded_content_ads_brand permission and an advertiser Instagram Business Account.
+ *
  */
 export const listPartnershipAdContent = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListPartnershipAdContentData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListPartnershipAdContentResponse, ListPartnershipAdContentError, ThrowOnError>({
@@ -16433,7 +16975,10 @@ export const listPartnershipAdContent = <ThrowOnError extends boolean = false>(o
 
 /**
  * List partnership permissions
- * Private beta. Lists granted or pending creator permissions for the advertiser Instagram Business Account. Requires instagram_branded_content_ads_brand permission.
+ * Lists the creators who have granted, or have pending, permission for your Instagram account to run Partnership Ads with them (private beta).
+ *
+ * Lists granted or pending creator permissions for the advertiser Instagram Business Account. Requires instagram_branded_content_ads_brand permission.
+ *
  */
 export const listPartnershipAdPermissions = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListPartnershipAdPermissionsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListPartnershipAdPermissionsResponse, ListPartnershipAdPermissionsError, ThrowOnError>({
@@ -16444,7 +16989,10 @@ export const listPartnershipAdPermissions = <ThrowOnError extends boolean = fals
 
 /**
  * Set partnership permission
- * Private beta. Requests permission from a creator or revokes it when revoke is true. Requests require the creator to approve in Instagram. Requires instagram_branded_content_ads_brand permission.
+ * Asks a creator for permission to run Partnership Ads with their content, or revokes it (private beta).
+ *
+ * Requests permission from a creator or revokes it when revoke is true. Requests require the creator to approve in Instagram. Requires instagram_branded_content_ads_brand permission.
+ *
  */
 export const setPartnershipAdPermission = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<SetPartnershipAdPermissionData, ThrowOnError>) => {
     return (options?.client ?? client).post<SetPartnershipAdPermissionResponse, SetPartnershipAdPermissionError, ThrowOnError>({
