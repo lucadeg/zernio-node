@@ -135,11 +135,11 @@ export type Ad = {
         amount?: number;
         type?: 'daily' | 'lifetime';
         /**
-         * LinkedIn only. The parent campaign's `dailyBudget`. LinkedIn allows a daily AND a lifetime budget on the same campaign, which `amount`/`type` cannot express (daily wins there); read `daily` and `lifetime` to see both.
+         * LinkedIn and X only. The daily budget (LinkedIn: the parent campaign's `dailyBudget`; X: the line item's, or the campaign's when the line item has none). Both allow a daily AND a lifetime budget together, which `amount`/`type` cannot express (daily wins there); read `daily` and `lifetime` to see both.
          */
         daily?: number;
         /**
-         * LinkedIn only. The parent campaign's `totalBudget`, readable even when a daily budget is also set.
+         * LinkedIn and X only. The lifetime total (LinkedIn: the parent campaign's `totalBudget`; X: `total_budget_amount_local_micro`, for example the `lifetimeBudgetCap` of a boost), readable even when a daily budget is also set.
          */
         lifetime?: number;
         /**
@@ -1405,11 +1405,11 @@ export type AdTreeAdSet = {
         amount?: number;
         type?: 'daily' | 'lifetime';
         /**
-         * LinkedIn only. The campaign's `dailyBudget`. LinkedIn allows a daily AND a lifetime budget on the same campaign, which `amount`/`type` cannot express (daily wins there); read `daily` and `lifetime` to see both.
+         * LinkedIn and X only. The daily budget (LinkedIn: the campaign's `dailyBudget`; X: the line item's `daily_budget_amount_local_micro`). Both allow a daily AND a lifetime budget together, which `amount`/`type` cannot express (daily wins there); read `daily` and `lifetime` to see both.
          */
         daily?: number;
         /**
-         * LinkedIn only. The campaign's `totalBudget`, readable even when a daily budget is also set.
+         * LinkedIn and X only. The lifetime total (LinkedIn: the campaign's `totalBudget`; X: the line item's `total_budget_amount_local_micro`), readable even when a daily budget is also set.
          */
         lifetime?: number;
         /**
@@ -9067,7 +9067,7 @@ export type ParameterCatalogTokenAccountId = string;
 export type ParameterIdempotencyKeyHeader = string;
 
 /**
- * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description.
+ * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description. On X the budget is read live in the same read: on GET /v1/ads/{adId} `budget`, `adSetBudget`, `campaignBudget` and `budgetLevel` are the line item and campaign budgets X holds now (stored like the switches); on the ad set and campaign listings `budget` is the one that line item or campaign holds now (returned, not stored); a row whose budget the other level holds keeps its synced `budget`.
  */
 export type ParameterLiveStatusRead = boolean;
 
@@ -41028,7 +41028,7 @@ export type ListAdCampaignsData = {
         includeEmpty?: boolean;
         limit?: number;
         /**
-         * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description.
+         * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description. On X the budget is read live in the same read: on GET /v1/ads/{adId} `budget`, `adSetBudget`, `campaignBudget` and `budgetLevel` are the line item and campaign budgets X holds now (stored like the switches); on the ad set and campaign listings `budget` is the one that line item or campaign holds now (returned, not stored); a row whose budget the other level holds keeps its synced `budget`.
          */
         live?: boolean;
         /**
@@ -41509,11 +41509,15 @@ export type UpdateAdCampaignError = (unknown | ErrorResponse);
 
 export type DeleteAdCampaignData = {
     body: {
-        platform: 'facebook' | 'instagram' | 'google';
+        platform: 'facebook' | 'instagram' | 'google' | 'twitter';
         /**
          * Zernio SocialAccount id owning the ad account. Required only to delete an EMPTY campaign (zero ads), which has no local Ad documents to resolve a token from.
          */
         accountId?: string;
+        /**
+         * X only, for an EMPTY campaign that was never synced: the X ad account id the campaign belongs to (lowercase letters and digits). The synced campaign's ad account wins when there is one. Also accepted on the query string.
+         */
+        adAccountId?: string;
     };
     path: {
         /**
@@ -41966,7 +41970,7 @@ export type ListAdSetsData = {
          */
         campaignId?: string;
         /**
-         * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description.
+         * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description. On X the budget is read live in the same read: on GET /v1/ads/{adId} `budget`, `adSetBudget`, `campaignBudget` and `budgetLevel` are the line item and campaign budgets X holds now (stored like the switches); on the ad set and campaign listings `budget` is the one that line item or campaign holds now (returned, not stored); a row whose budget the other level holds keeps its synced `budget`.
          */
         live?: boolean;
         platform?: 'facebook' | 'instagram' | 'tiktok' | 'linkedin' | 'pinterest' | 'google' | 'twitter' | 'openai';
@@ -41992,11 +41996,11 @@ export type ListAdSetsResponse = ({
             amount?: number;
             type?: 'daily' | 'lifetime';
             /**
-             * LinkedIn only. The campaign's `dailyBudget`. LinkedIn allows a daily AND a lifetime budget on the same campaign, which `amount`/`type` cannot express (daily wins there); read `daily` and `lifetime` to see both.
+             * LinkedIn and X only. The daily budget (LinkedIn: the campaign's `dailyBudget`; X: the line item's `daily_budget_amount_local_micro`). Both allow a daily AND a lifetime budget together, which `amount`/`type` cannot express (daily wins there); read `daily` and `lifetime` to see both.
              */
             daily?: number;
             /**
-             * LinkedIn only. The campaign's `totalBudget`, readable even when a daily budget is also set.
+             * LinkedIn and X only. The lifetime total (LinkedIn: the campaign's `totalBudget`; X: the line item's `total_budget_amount_local_micro`), readable even when a daily budget is also set.
              */
             lifetime?: number;
             /**
@@ -42314,11 +42318,11 @@ export type UpdateAdSetData = {
             type?: 'daily' | 'lifetime';
         };
         /**
-         * Writes the ad set's own on/off switch (Meta: `configured_status`) on Meta and LinkedIn, whatever delivery status its ads report. Omit if not toggling delivery state.
+         * Writes the ad set's own on/off switch (Meta: `configured_status`; X: the line item's `entity_status` ACTIVE / PAUSED), whatever delivery status its ads report. Omit if not toggling delivery state.
          */
         status?: 'active' | 'paused';
         /**
-         * Rename the ad set (Meta only; other platforms return 501). At least one of budget/status/bidStrategy/name is required.
+         * Rename the ad set (on X, the line item `name`). Platforms without a rename return 501. At least one of budget/status/bidStrategy/name is required.
          */
         name?: string;
         /**
@@ -42328,8 +42332,13 @@ export type UpdateAdSetData = {
          * automatically. On OpenAI, LOWEST_COST_WITH_BID_CAP and COST_CAP both map to
          * the ad group's `bidding_config.max_bid_micros` (one knob covers both);
          * LOWEST_COST_WITH_MIN_ROAS is rejected with 422 (OpenAI has no ROAS-based
-         * bidding). Other platforms (linkedin, pinterest, google, twitter) return 501
-         * Not Implemented when bidStrategy is set.
+         * bidding). On X it writes the line item's `bid_strategy`:
+         * LOWEST_COST_WITHOUT_CAP = AUTO, LOWEST_COST_WITH_BID_CAP = MAX and
+         * COST_CAP = TARGET, with `bidAmount` as `bid_amount_local_micro`;
+         * LOWEST_COST_WITH_MIN_ROAS is rejected with 422. X decides which strategy
+         * the line item's objective allows (TARGET only on REACH, FOLLOWERS and
+         * WEBSITE_CLICKS, MAX not on REACH or FOLLOWERS). Other platforms
+         * (linkedin, pinterest, google) return 501 Not Implemented when bidStrategy is set.
          *
          */
         bidStrategy?: (BidStrategy);
@@ -42356,7 +42365,7 @@ export type UpdateAdSetData = {
         /**
          * Bid cap in WHOLE currency units (USD: 5 = $5.00; JPY: 100 = ¥100). Required when
          * bidStrategy is LOWEST_COST_WITH_BID_CAP or COST_CAP. Internally converted to Meta's
-         * smallest-denomination integer, or (on OpenAI) to micros (× 1,000,000). Meta only:
+         * smallest-denomination integer, or (on OpenAI and X) to micros (× 1,000,000). Meta only:
          * may be sent alone, WITHOUT bidStrategy, to update the cap amount on an ad set whose
          * parent campaign is COST_CAP or LOWEST_COST_WITH_BID_CAP (the strategy is inherited
          * from the campaign and is left untouched).
@@ -42687,7 +42696,7 @@ export type GetAdData = {
     };
     query?: {
         /**
-         * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description.
+         * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description. On X the budget is read live in the same read: on GET /v1/ads/{adId} `budget`, `adSetBudget`, `campaignBudget` and `budgetLevel` are the line item and campaign budgets X holds now (stored like the switches); on the ad set and campaign listings `budget` is the one that line item or campaign holds now (returned, not stored); a row whose budget the other level holds keeps its synced `budget`.
          */
         live?: boolean;
     };
@@ -47174,6 +47183,10 @@ export type BoostPostData = {
          */
         budgetType?: 'daily' | 'lifetime';
         /**
+         * X only. A lifetime total, in whole currency units, that caps a daily budget (budgetType daily): the line item gets both daily_budget_amount_local_micro and total_budget_amount_local_micro, and stops spending once the total is reached. Must be at least budgetAmount. Read back as budget.daily and budget.lifetime. 400 on a lifetime budget or on another platform.
+         */
+        lifetimeBudgetCap?: number;
+        /**
          * Alias of budgetAmount + budgetType, kept for existing callers
          * @deprecated
          */
@@ -47209,7 +47222,7 @@ export type BoostPostData = {
          */
         startDate?: string;
         /**
-         * Ad-set end time (ISO 8601), mapped to the ad set's `end_time`. Required for lifetime budgets. On Meta, TikTok, X and Pinterest a value without an offset (`YYYY-MM-DD`, `YYYY-MM-DD HH:MM:SS` or `YYYY-MM-DDTHH:MM:SS`) is read in the ad account timezone, and a date-only end runs to 23:59:59 local. Same field as on POST /v1/ads/create.
+         * Ad-set end time (ISO 8601), mapped to the ad set's `end_time` (on X, the line item's `end_time`; X campaigns carry no flight dates). Required for lifetime budgets. On Meta, TikTok, X and Pinterest a value without an offset (`YYYY-MM-DD`, `YYYY-MM-DD HH:MM:SS` or `YYYY-MM-DDTHH:MM:SS`) is read in the ad account timezone, and a date-only end runs to 23:59:59 local. Same field as on POST /v1/ads/create.
          */
         endDate?: string;
         /**

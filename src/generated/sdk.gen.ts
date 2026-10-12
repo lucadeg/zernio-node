@@ -10054,9 +10054,15 @@ export const updateAdCampaign = <ThrowOnError extends boolean = false>(options: 
  * to resolve, so it is invisible to `/v1/ads/tree` and this endpoint would
  * 404. That state is produced by the two-step create flow (campaign, then
  * ads via `existingCampaignId`) whenever Meta rejects the ad step. To
- * delete such a shell, send `accountId` in the body: we skip the local
- * lookup entirely and forward the delete to Meta. `accountId` is ignored
- * when the campaign does have ads.
+ * delete such a shell, send `accountId` in the body or the query string:
+ * we skip the local lookup entirely and forward the delete to Meta, or to
+ * X when `accountId` is an X or X Ads connection. On X the ad account comes
+ * from the synced campaign, which wins over `adAccountId`; when the campaign
+ * was never synced, send `adAccountId` too. Before deleting, Zernio asks X
+ * whether the campaign still holds undeleted line items (ads not synced
+ * yet); if it does the answer is 409 and nothing is deleted, so sync the ad
+ * account and retry. Other platforms answer 501 for an empty campaign.
+ * `accountId` is ignored when the campaign does have ads.
  *
  */
 export const deleteAdCampaign = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdCampaignData, ThrowOnError>) => {
@@ -10714,7 +10720,7 @@ export const updateAd = <ThrowOnError extends boolean = false>(options: OptionsL
  *
  * Deletes the ad on the platform and marks it as cancelled in the database. The ad is preserved for history. OpenAI Ads has no delete API; the ad is archived instead (a terminal state, the closest equivalent).
  *
- * Only the ad is deleted; a campaign or ad set is never deleted while it still holds another ad. On Meta, when the ad set and campaign were created by Zernio (by `POST /v1/ads/create` or `POST /v1/ads/boost`) and Meta lists no other ad in the ad set (archived ads count), the emptied ad set is deleted too, then the campaign once it holds no other ad set. Parents created outside Zernio, and the parents of an ad imported from the platform, are always kept. On LinkedIn the ad is a creative inside a campaign inside a campaign group: the creative is always removed, the campaign only when Zernio created it and LinkedIn lists no other creative in it that is not archived, canceled or deleted, and the campaign group only when Zernio created it and LinkedIn lists no other campaign in it that is not canceled or deleted (archived campaigns count). If the creative itself cannot be removed the request fails and no parent is touched. To delete a whole campaign on purpose use `DELETE /v1/ads/campaigns/{campaignId}`.
+ * Only the ad is deleted; a campaign or ad set is never deleted while it still holds another ad. On Meta, when the ad set and campaign were created by Zernio (by `POST /v1/ads/create` or `POST /v1/ads/boost`) and Meta lists no other ad in the ad set (archived ads count), the emptied ad set is deleted too, then the campaign once it holds no other ad set. Parents created outside Zernio, and the parents of an ad imported from the platform, are always kept. On LinkedIn the ad is a creative inside a campaign inside a campaign group: the creative is always removed, the campaign only when Zernio created it and LinkedIn lists no other creative in it that is not archived, canceled or deleted, and the campaign group only when Zernio created it and LinkedIn lists no other campaign in it that is not canceled or deleted (archived campaigns count). If the creative itself cannot be removed the request fails and no parent is touched. On X the ad is a promoted post inside a line item inside a campaign: the promoted post is always removed, the line item only when Zernio created it (by `POST /v1/ads/create` or `POST /v1/ads/boost`) and X lists no other undeleted promoted post in it, and the campaign only when Zernio created it and X lists no other undeleted line item in it. If X refuses the promoted post delete the request fails and no parent is touched. To delete a whole campaign on purpose use `DELETE /v1/ads/campaigns/{campaignId}`.
  *
  */
 export const deleteAd = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteAdData, ThrowOnError>) => {
