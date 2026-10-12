@@ -5473,7 +5473,8 @@ export type ErrorResponse = {
     /**
      * Additional structured context (e.g. field-level validation errors), for example
      * `privateReplyConsumed` on the private-reply endpoint's 400 when the comment's
-     * single reply is already spent.
+     * single reply is already spent, and `privateReplyOutcome: "unknown"` on its 502 when Meta
+     * answered a server error and the reply may have been delivered.
      *
      * On a Google Ads 429 it carries `quotaExhausted: true`, which marks the failure as
      * Google's own ads quota rather than a Zernio rate limit, so you can keep calling

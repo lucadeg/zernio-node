@@ -4936,6 +4936,9 @@ export const unlikePost = <ThrowOnError extends boolean = false>(options: Option
  * non-followers and add buttons once they reply. `quickReplies` and `buttons` are mutually
  * exclusive. When the comment's single private reply is spent (by this call or an earlier
  * one) the 400 carries `details.privateReplyConsumed: true`; never retry it.
+ * A 502 means Meta answered a server error after receiving the reply; it carries
+ * `details.privateReplyOutcome: "unknown"`, the reply is usually delivered and the comment's
+ * private reply spent, so check the conversation before retrying.
  *
  */
 export const sendPrivateReplyToComment = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<SendPrivateReplyToCommentData, ThrowOnError>) => {
