@@ -9636,6 +9636,10 @@ export type Profile = {
      * IANA timezone new posts on this profile use when the request names no `timezone`. Null means UTC.
      */
     timezone?: (string) | null;
+    /**
+     * Your own identifier for this profile, set on create or update. Null when none is set.
+     */
+    externalId?: (string) | null;
     isDefault?: boolean;
     /**
      * Only present when includeOverLimit=true. Indicates if this profile exceeds the plan limit.
@@ -19223,6 +19227,10 @@ export type GetUserError = (ErrorResponse | unknown | {
 export type ListProfilesData = {
     query?: {
         /**
+         * Exact-match filter on the externalId you set on the profile, to find the profile of one of your tenants without storing its Zernio id. Team members can each own a profile with the same externalId, so the result is a list.
+         */
+        externalId?: string;
+        /**
          * When true, includes over-limit profiles (marked with isOverLimit: true).
          */
         includeOverLimit?: boolean;
@@ -19254,6 +19262,10 @@ export type CreateProfileData = {
          * IANA timezone new posts on this profile use when they name no `timezone`. Omit to keep UTC. An unknown name returns 400.
          */
         timezone?: string;
+        /**
+         * Your own identifier for this profile, typically the id of the tenant or client it serves in your system (1 to 255 characters, trimmed). Unique among the profiles of the user who owns the profile: a duplicate returns 409 profile_external_id_conflict. Look a profile up by it with GET /v1/profiles?externalId=.
+         */
+        externalId?: string;
     };
     headers?: {
         /**
@@ -19346,6 +19358,10 @@ export type UpdateProfileData = {
          * IANA timezone new posts on this profile use when they name no `timezone`. Set to null to go back to UTC. An unknown name returns 400.
          */
         timezone?: (string) | null;
+        /**
+         * Your own identifier for this profile (1 to 255 characters, trimmed). Set to null to clear it. A value another profile of the same owner already holds returns 409 profile_external_id_conflict.
+         */
+        externalId?: (string) | null;
         isDefault?: boolean;
     };
     path: {
