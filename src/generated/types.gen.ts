@@ -38745,7 +38745,7 @@ export type AddBroadcastRecipientsError = (unknown | ErrorResponse | {
     error?: string;
 });
 
-export type CreateSupportRunData = {
+export type AskSupportQuestionData = {
     body: {
         /**
          * The question. Leading and trailing whitespace is trimmed.
@@ -38776,7 +38776,7 @@ export type CreateSupportRunData = {
     };
 };
 
-export type CreateSupportRunResponse = ({
+export type AskSupportQuestionResponse = ({
     runId: string;
     threadId: string;
     status: 'queued';
@@ -38786,17 +38786,17 @@ export type CreateSupportRunResponse = ({
     pollAfterSeconds: number;
 });
 
-export type CreateSupportRunError = (ErrorResponse);
+export type AskSupportQuestionError = (ErrorResponse);
 
-export type GetSupportRunData = {
+export type GetSupportAnswerData = {
     path: {
         runId: string;
     };
 };
 
-export type GetSupportRunResponse = (SupportRun);
+export type GetSupportAnswerResponse = (SupportRun);
 
-export type GetSupportRunError = (ErrorResponse);
+export type GetSupportAnswerError = (ErrorResponse);
 
 export type ListWorkflowsData = {
     query?: {

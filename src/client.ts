@@ -28,6 +28,7 @@ import {
   applyGoogleRecommendations,
   approveWhatsAppGroupJoinRequests,
   archiveLeadForm,
+  askSupportQuestion,
   assignAdAccountUser,
   assignGoogleBusinessLocation,
   assignPageUser,
@@ -149,7 +150,6 @@ import {
   createSipTrunk,
   createSmsSenderId,
   createStandaloneAd,
-  createSupportRun,
   createTestLead,
   createTrackingTag,
   createTrackingTagEvent,
@@ -446,7 +446,7 @@ import {
   getSmsRegistration,
   getSmsUsage,
   getSubredditRules,
-  getSupportRun,
+  getSupportAnswer,
   getTelegramCommands,
   getTelegramConnectStatus,
   getTikTokAccountInsights,
@@ -1961,11 +1961,11 @@ export class Zernio {
   };
 
   /**
-   * supportruns API
+   * supportassistant API
    */
-  supportruns = {
-    createSupportRun: this._bind(createSupportRun),
-    getSupportRun: this._bind(getSupportRun),
+  supportassistant = {
+    askSupportQuestion: this._bind(askSupportQuestion),
+    getSupportAnswer: this._bind(getSupportAnswer),
   };
 
   /**

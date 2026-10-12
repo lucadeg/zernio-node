@@ -1200,11 +1200,11 @@ try {
 | `sms.uploadSmsOptInProofFile()` | Upload opt-in form proof |
 | `sms.verifySmsRegistrationOtp()` | Submit the sole-prop OTP |
 
-### Support Runs
+### Support Assistant
 | Method | Description |
 |--------|-------------|
-| `supportRuns.createSupportRun()` | Start a support run (private beta) |
-| `supportRuns.getSupportRun()` | Get a support run (private beta) |
+| `supportAssistant.getSupportAnswer()` | Get a support answer (private beta) |
+| `supportAssistant.askSupportQuestion()` | Ask a support question (private beta) |
 
 ### Tracking Tags
 | Method | Description |
