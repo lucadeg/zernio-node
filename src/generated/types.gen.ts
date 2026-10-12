@@ -10723,7 +10723,7 @@ export type SupportRun = {
     answer: (string) | null;
     usage: SupportRunUsage;
     /**
-     * The amount billed for the run, in USD: the tokens in `usage` at the Support Assistant rates (see Ask a support question), never above `maxCostUsd`. 0 for a failed run.
+     * The exact amount charged for the question, in USD, never above `maxCostUsd`. 0 for a failed run.
      */
     costUsd: number;
     /**
