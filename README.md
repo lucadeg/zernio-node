@@ -1203,8 +1203,8 @@ try {
 ### Support Assistant
 | Method | Description |
 |--------|-------------|
-| `supportAssistant.getSupportAnswer()` | Get a support answer (private beta) |
-| `supportAssistant.askSupportQuestion()` | Ask a support question (private beta) |
+| `supportAssistant.getSupportAnswer()` | Get a support answer |
+| `supportAssistant.askSupportQuestion()` | Ask a support question |
 
 ### Tracking Tags
 | Method | Description |

@@ -1458,6 +1458,13 @@ export const verifyWhatsAppNumber = <ThrowOnError extends boolean = false>(optio
  *
  * A failing or stalled analytics sync (see `analyticsSync`) raises a healthy account to at least `warning`.
  *
+ * On Facebook, Instagram and Threads the token is also probed live. A probe Meta refuses with a
+ * dead-token error sets `tokenStatus.valid` to `false` and names Meta's code, subcode and
+ * fbtrace in `issues`, unless an analytics sync succeeded with that token in the last six
+ * hours: then the token stays `valid` and `issues` reports the probe as inconclusive, since
+ * Meta answers a transient 190 to live tokens now and then. Neither verdict disconnects the
+ * account; that happens only when a real operation fails, and `account.disconnected` is sent.
+ *
  * For WhatsApp accounts the response also includes `platformConnection`, a live probe of the
  * Meta link behind the channel (the same read as `GET /v1/whatsapp/number-info`). The OAuth
  * token can be perfectly valid while Meta refuses to serve the phone-number object (for
@@ -9014,8 +9021,32 @@ export const addBroadcastRecipients = <ThrowOnError extends boolean = false>(opt
 };
 
 /**
- * Ask a support question (private beta)
- * Private beta: returns 403 `feature_not_available` unless enabled for your account. Asks Ana, the Zernio support agent, a question about your workspace. Each question starts a run that answers asynchronously: this returns 202 with a `runId`, and the answer arrives through the `support.run.completed` and `support.run.failed` webhooks. `GET /v1/support/runs/{runId}` is the fallback. Pass `threadId` to continue an earlier conversation, and `context` to point Ana at a post, account or profile. Billed when the run finishes at the model cost plus 20%, never above `maxCostUsd`; failed runs are free. When Ana finds a problem on Zernio's side she opens a support ticket with the team (see `supportTicket` on the run) and the run ends as `needs_human`. Requires an unrestricted API key, usage-based billing and a card on file. Limits per account: 3 active runs and $100 of runs per UTC month. Send an Idempotency-Key header to make retries safe.
+ * Ask a support question
+ * Asks Ana, the Zernio support agent, a question about your workspace. Each question
+ * starts a run that answers asynchronously: this returns 202 with a `runId`, and the
+ * answer arrives through the `support.run.completed` and `support.run.failed` webhooks.
+ * `GET /v1/support/runs/{runId}` is the fallback. Pass `threadId` to continue an earlier
+ * conversation, and `context` to point Ana at a post, account or profile. When Ana finds
+ * a problem on Zernio's side she opens a support ticket with the team (see
+ * `supportTicket` on the run) and the run ends as `needs_human`.
+ *
+ * **Pricing.** Each question is billed once, when its run finishes, for the tokens Ana used:
+ *
+ * - Input: $6 per million tokens
+ * - Output: $30 per million tokens
+ * - Cache reads: $0.60 per million tokens
+ * - Cache writes: $7.50 per million tokens
+ *
+ * Most questions cost between $0.10 and $0.50. A run never bills more than its
+ * `maxCostUsd` ($0.50 to $3, $3 by default): near the cap Ana stops investigating and
+ * answers with what she found. Runs that end as `needs_human` are billed like any other;
+ * failed runs are free. The run's `usage` holds the token counts and `costUsd` the amount
+ * billed. Charges appear as "Support API" on your invoice.
+ *
+ * Requires an unrestricted API key, usage-based billing and a card on file. Limits per
+ * account: 3 active runs and $100 of runs per UTC month. Send an Idempotency-Key header
+ * to make retries safe.
+ *
  */
 export const askSupportQuestion = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<AskSupportQuestionData, ThrowOnError>) => {
     return (options?.client ?? client).post<AskSupportQuestionResponse, AskSupportQuestionError, ThrowOnError>({
@@ -9025,8 +9056,8 @@ export const askSupportQuestion = <ThrowOnError extends boolean = false>(options
 };
 
 /**
- * Get a support answer (private beta)
- * Private beta: returns 403 `feature_not_available` unless enabled for your account. Returns a run started by your team, with Ana's answer once it is ready. Prefer the `support.run.completed` and `support.run.failed` webhooks; use this as the fallback, waiting `pollAfterSeconds` between polls. `costUsd` is the amount billed: the model cost plus 20%, never above `maxCostUsd`, and 0 for a failed run.
+ * Get a support answer
+ * Returns a run started by your team, with Ana's answer once it is ready. Prefer the `support.run.completed` and `support.run.failed` webhooks; use this as the fallback, waiting `pollAfterSeconds` between polls. `costUsd` is the amount billed for the question, never above `maxCostUsd`, and 0 for a failed run (rates on Ask a support question).
  */
 export const getSupportAnswer = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetSupportAnswerData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetSupportAnswerResponse, GetSupportAnswerError, ThrowOnError>({
