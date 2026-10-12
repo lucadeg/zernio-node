@@ -9443,7 +9443,7 @@ export const updateCommentAutomation = <ThrowOnError extends boolean = false>(op
 
 /**
  * Delete automation
- * Permanently delete an automation and all its trigger logs.
+ * Delete an automation. Its trigger logs are kept so tracked links already sent in DMs keep redirecting; they are removed with the account.
  */
 export const deleteCommentAutomation = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<DeleteCommentAutomationData, ThrowOnError>) => {
     return (options?.client ?? client).delete<DeleteCommentAutomationResponse, DeleteCommentAutomationError, ThrowOnError>({
