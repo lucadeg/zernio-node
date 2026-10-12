@@ -10718,6 +10718,10 @@ export type SupportRun = {
      */
     stopReason: ('answered' | 'human_review' | 'cost_cap' | 'deadline' | 'max_iterations' | 'error' | 'expired') | null;
     /**
+     * The question as asked, with leading and trailing whitespace trimmed. Null only on runs created before this field was added.
+     */
+    question: (string) | null;
+    /**
      * The assistant's answer. Null while the run is in progress or when it failed.
      */
     answer: (string) | null;
@@ -13129,8 +13133,11 @@ export type WebhookPayloadComment = {
         /**
          * Ad context. Present only when the comment was made on paid content.
          * Instagram: populated from the webhook payload's value.media.ad_id, value.media.ad_title and value.media.original_media_id, each only when Meta includes it.
-         * Facebook: populated via a Graph API lookup of the parent post's promotion_status.
-         * Absent for comments on organic posts that are not currently promoted.
+         * Facebook: populated from a Graph API lookup of the parent post. Present when the post is an
+         * ad dark post (isDarkPost true, whatever its promotionStatus) or an organic post that is or was
+         * boosted (promotionStatus "active", "extendable" or "finished"). Meta does not link a dark post
+         * back to its ad, so id and title are never set on Facebook.
+         * Absent for comments on organic posts that are not promoted.
          *
          */
         ad?: {
@@ -13147,12 +13154,16 @@ export type WebhookPayloadComment = {
              */
             originalMediaId?: string;
             /**
-             * Facebook promotion status returned by Graph API. Common values:
-             * "active" (organic post currently boosted), "ineligible" (dark
-             * post or ad creative, not promotable because it already is an ad).
+             * Facebook only. The parent post's promotion_status as the Graph API returns it, for example
+             * "active" (organic post currently boosted). Ad dark posts usually report "inactive" and
+             * sometimes "ineligible", so use isDarkPost, not this value, to tell an ad comment apart.
              *
              */
             promotionStatus?: string;
+            /**
+             * Facebook only: true when the post is an unpublished ad creative (dark post), false for a boosted organic post.
+             */
+            isDarkPost?: boolean;
         };
         /**
          * Facebook only. Present on graphic-only comments (sticker, GIF, photo) that
