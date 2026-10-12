@@ -10705,7 +10705,7 @@ export type SupportRun = {
      */
     threadId: string;
     /**
-     * queued and running are in progress. needs_human means Ana handed the question to a person instead of answering.
+     * queued and running are in progress. needs_human means Ana handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
      */
     status: 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
     /**
@@ -10729,13 +10729,19 @@ export type SupportRun = {
     startedAt: (string) | null;
     finishedAt: (string) | null;
     /**
+     * Set when Ana opened a support ticket with the Zernio team. Null otherwise. A teammate follows up by email with the user whose API key started the run.
+     */
+    supportTicket: {
+        openedAt: string;
+    } | null;
+    /**
      * Seconds to wait before polling again. Present only while the run is queued or running.
      */
     pollAfterSeconds?: number;
 };
 
 /**
- * queued and running are in progress. needs_human means Ana handed the question to a person instead of answering.
+ * queued and running are in progress. needs_human means Ana handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
  */
 export type status29 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
 
