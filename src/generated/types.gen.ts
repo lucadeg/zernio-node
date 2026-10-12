@@ -43351,11 +43351,11 @@ export type GetAdReviewResponse = ({
     platformAdId?: string;
     review?: {
         /**
-         * TikTok `is_approved`.
+         * TikTok `is_approved`. Google and Meta: derived from the platform status (see the description).
          */
         approved?: (boolean) | null;
         /**
-         * TikTok `review_status`, verbatim: ALL_AVAILABLE (approved everywhere), PART_AVAILABLE (approved for part of the targeting), UNAVAILABLE (rejected).
+         * TikTok `review_status`, verbatim: ALL_AVAILABLE (approved everywhere), PART_AVAILABLE (approved for part of the targeting), UNAVAILABLE (rejected). Google: `review_status`. Meta: the ad's `effective_status`.
          */
         reviewStatus?: (string) | null;
         forbiddenPlacements?: Array<(string)>;
@@ -43413,6 +43413,31 @@ export type GetAdReviewResponse = ({
             constraints?: Array<{
                 [key: string]: unknown;
             }>;
+        }>;
+        /**
+         * Meta only. The Ad's `ad_review_feedback`, verbatim. Both maps are empty when Meta returned no feedback (approved or in-review ad).
+         */
+        reviewFeedback?: {
+            /**
+             * Meta `global`: policy or reason -> Meta's explanation.
+             */
+            global?: {
+                [key: string]: (string);
+            };
+            /**
+             * Meta `placement_specific`: placement (facebook, instagram, ...) -> reason -> Meta's explanation.
+             */
+            placementSpecific?: {
+                [key: string]: {
+                    [key: string]: (string);
+                };
+            };
+        };
+        /**
+         * Meta only. The Ad's `issues_info` objects (`error_code`, `error_message`, `error_summary`, `error_type`, `level`), verbatim.
+         */
+        issues?: Array<{
+            [key: string]: unknown;
         }>;
         /**
          * When the verdict was read from the platform.

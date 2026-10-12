@@ -10904,7 +10904,21 @@ export const getAdPreviews = <ThrowOnError extends boolean = false>(options: Opt
  * PROHIBITED topic is also listed in `rejections` (reason = the topic). The `forbidden*`
  * arrays are TikTok-only and always empty on Google.
  *
- * TikTok uses `/ad/review_info/`; every other platform returns 501. On TikTok, use it alongside the ad's
+ * **Meta** (Facebook and Instagram ads): reads the Ad's `ad_review_feedback`, `effective_status`
+ * and `issues_info` live. `reviewStatus` is Meta's `effective_status` verbatim (ACTIVE, PAUSED,
+ * PENDING_REVIEW, DISAPPROVED, PREAPPROVED, WITH_ISSUES, IN_PROCESS, ...); `approved` is true for
+ * ACTIVE and PREAPPROVED, false for DISAPPROVED, null otherwise. `reviewFeedback` carries Meta's
+ * feedback verbatim: `global` (reason -> explanation) and `placementSpecific` (placement ->
+ * reason -> explanation). Each global reason is listed in `rejections`, and so is each
+ * placement-specific reason, with that placement in its `forbiddenPlacements`; the review's
+ * `forbiddenPlacements` lists every placement with feedback. When Meta returns no feedback (usually
+ * an ad in review or approved everywhere), the status comes back with empty `rejections` and empty
+ * `reviewFeedback` maps; an ACTIVE ad rejected on one placement still carries that placement's
+ * feedback. A deleted ad answers 404. `issues` is Meta's
+ * `issues_info` verbatim. `forbiddenAges`, `forbiddenLocations` and `forbiddenOperatingSystems`
+ * are always empty on Meta.
+ *
+ * TikTok uses `/ad/review_info/`. Platforms other than TikTok, Google and Meta return 501. On TikTok, use it alongside the ad's
  * `platformStatus`: TikTok reports `AD_STATUS_AUDIT` while the ad is in review and
  * `AD_STATUS_AD_PRE_ONLINE` once it passed and is about to deliver (both map to
  * `status: pending_review`); `AD_STATUS_AUDIT_DENY` maps to `rejected`.
