@@ -658,6 +658,7 @@ import {
   listSmsRegistrations,
   listSmsSenderIds,
   listSnapchatProfiles,
+  listSupportAnswers,
   listTikTokAdPixels,
   listTikTokCommercialMusic,
   listTrackingTagEvents,
@@ -1964,6 +1965,7 @@ export class Zernio {
    * supportassistant API
    */
   supportassistant = {
+    listSupportAnswers: this._bind(listSupportAnswers),
     askSupportQuestion: this._bind(askSupportQuestion),
     getSupportAnswer: this._bind(getSupportAnswer),
   };

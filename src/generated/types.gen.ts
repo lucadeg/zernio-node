@@ -38761,6 +38761,33 @@ export type AddBroadcastRecipientsError = (unknown | ErrorResponse | {
     error?: string;
 });
 
+export type ListSupportAnswersData = {
+    query: {
+        /**
+         * Pass `nextCursor` from the previous page.
+         */
+        cursor?: string;
+        /**
+         * Runs per page.
+         */
+        limit?: number;
+        /**
+         * The thread to list, as returned by `POST /v1/support/runs`.
+         */
+        threadId: string;
+    };
+};
+
+export type ListSupportAnswersResponse = ({
+    runs: Array<SupportRun>;
+    /**
+     * Pass as `cursor` to get the next page. Null on the last page.
+     */
+    nextCursor: (string) | null;
+});
+
+export type ListSupportAnswersError = (ErrorResponse);
+
 export type AskSupportQuestionData = {
     body: {
         /**

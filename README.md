@@ -1203,6 +1203,7 @@ try {
 ### Support Assistant
 | Method | Description |
 |--------|-------------|
+| `supportAssistant.listSupportAnswers()` | List a thread's support answers |
 | `supportAssistant.getSupportAnswer()` | Get a support answer |
 | `supportAssistant.askSupportQuestion()` | Ask a support question |
 
