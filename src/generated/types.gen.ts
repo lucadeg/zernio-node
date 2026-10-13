@@ -4505,8 +4505,9 @@ export type CtwaAdRequestBody = {
     /**
      * Messaging and CTWA only (a 400 on POST /v1/ads/call). A hand-built carousel
      * of 2-10 image cards, sent to Meta in the order given as
-     * `link_data.child_attachments` (Meta may reorder them for performance, since
-     * `multi_share_optimized` defaults to true and no field fixes the order today); every
+     * `link_data.child_attachments` (by default Meta may reorder them for performance,
+     * since `multi_share_optimized` defaults to true; `optimizeCardOrder: false` keeps
+     * the order given); every
      * card (and the carousel itself) carries the destination's messaging call to
      * action (WHATSAPP_MESSAGE, MESSAGE_PAGE or INSTAGRAM_MESSAGE), so a tap on any
      * card opens the conversation. Replaces `imageUrl` / `video` (sending either is
@@ -4519,6 +4520,16 @@ export type CtwaAdRequestBody = {
      *
      */
     carouselCards?: Array<MessagingCarouselCard>;
+    /**
+     * Only with `carouselCards` (a 400 without them). Sets the creative's
+     * `link_data.multi_share_optimized`. `false` keeps the cards in the order given;
+     * Meta then takes at most 5 cards, so `false` with more than 5 `carouselCards` is a
+     * 400. `true` lets Meta pick and reorder the cards for performance (up to 10).
+     * Omitted, nothing is sent and Meta's default (`true`) applies. Single-creative
+     * shape; for `creatives[]` set it per entry.
+     *
+     */
+    optimizeCardOrder?: boolean;
     /**
      * Multi-creative shape: N CTWA ads under one campaign + one
      * ad set, sharing budget and targeting. Mutually exclusive
@@ -45517,6 +45528,10 @@ export type CreateAdCreativeData = {
             callToAction?: string;
         }>;
         /**
+         * Only with `carouselCards` (a 400 without them). Sets `link_data.multi_share_optimized`: `false` keeps the cards in the order given, and Meta then takes at most 5 cards, so `false` with more than 5 cards is a 400; `true` lets Meta reorder them for performance. Omitted, nothing is sent and Meta's default (`true`) applies.
+         */
+        optimizeCardOrder?: boolean;
+        /**
          * Appended to every outbound URL (e.g. utm_source=fb).
          */
         urlTags?: string;
@@ -48723,9 +48738,9 @@ export type CreateStandaloneAdData = {
          *
          * Meta only. Hand-built carousel: 2-10 authored cards, sent in the order given as
          * the creative's `link_data.child_attachments`. Unlike `dynamicCreative`,
-         * you author every card's copy and link, but Meta may still reorder the cards
-         * for performance (`multi_share_optimized` defaults to true and Zernio does not
-         * send it), and no field fixes the order today. Requires top-level `body`
+         * you author every card's copy and link, but by default Meta may still reorder the
+         * cards for performance (`multi_share_optimized` defaults to true); send
+         * `optimizeCardOrder: false` to keep the order given. Requires top-level `body`
          * and `callToAction`; `linkUrl` is also required UNLESS `leadGenFormId` is set. Those
          * become the ad's own Destination and button (`link_data.link` / `link_data.call_to_action`),
          * and double as the per-card fallback when a card omits its own.
@@ -48759,6 +48774,16 @@ export type CreateStandaloneAdData = {
              */
             callToAction?: string;
         }>;
+        /**
+         * Meta only (a 400 on any other platform), and only with `carouselCards` (a 400
+         * without them). Sets the creative's `link_data.multi_share_optimized`. `false`
+         * keeps the cards in the order given; Meta then takes at most 5 cards, so `false`
+         * with more than 5 `carouselCards` is a 400. `true` lets Meta pick and reorder the
+         * cards for performance (up to 10). Omitted, nothing is sent and Meta's default
+         * (`true`) applies.
+         *
+         */
+        optimizeCardOrder?: boolean;
         /**
          * Meta only. Language the top-level copy is written in (e.g. `en`, `pt_BR`), used by the `translations` default rule. Defaults to `en`. Meta rejects a language asset feed whose default rule carries no locales of its own. Must NOT also appear as an entry in `translations`.
          */
