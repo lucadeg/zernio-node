@@ -9001,7 +9001,7 @@ export const sendBroadcast = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Schedule broadcast for later
- * Schedule a draft broadcast to be sent at a future date and time.
+ * Schedule a draft broadcast, or move the date of an already scheduled one, to a future date and time.
  */
 export const scheduleBroadcast = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ScheduleBroadcastData, ThrowOnError>) => {
     return (options?.client ?? client).post<ScheduleBroadcastResponse, ScheduleBroadcastError, ThrowOnError>({
