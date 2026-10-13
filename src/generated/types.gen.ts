@@ -16868,6 +16868,10 @@ export type GetAnalyticsData = {
          */
         source?: 'all' | 'late' | 'external';
         /**
+         * Comma-separated tags (at most 20). Lists only posts created through Zernio that carry every listed tag, matched exactly and case-sensitively. Up to 200 published posts can match within the date range; more returns 400 asking to narrow fromDate and toDate. Ignored when postId is set.
+         */
+        tags?: string;
+        /**
          * Inclusive upper bound (YYYY-MM-DD). Defaults to today if omitted.
          */
         toDate?: string;
