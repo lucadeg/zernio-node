@@ -38909,12 +38909,16 @@ export type AskSupportQuestionData = {
          */
         threadId?: string;
         /**
-         * Ids the assistant should look at. Each must belong to your workspace.
+         * Ids the assistant should look at. postId, accountId and profileId must belong to your workspace (404 otherwise).
          */
         context?: {
             postId?: string;
             accountId?: string;
             profileId?: string;
+            /**
+             * The X-Request-Id of a call you want explained. The assistant reads that request's logged record. Not checked up front.
+             */
+            requestId?: string;
         };
         /**
          * Cost cap for this run, in USD. The run stops at the cap and bills at most this amount.

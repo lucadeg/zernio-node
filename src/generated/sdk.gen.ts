@@ -9060,7 +9060,7 @@ export const listSupportAnswers = <ThrowOnError extends boolean = false>(options
  * starts a run that answers asynchronously: this returns 202 with a `runId`, and the
  * answer arrives through the `support.run.completed` and `support.run.failed` webhooks.
  * `GET /v1/support/runs/{runId}` is the fallback. Pass `threadId` to continue an earlier
- * conversation, and `context` to point the assistant at a post, account or profile.
+ * conversation, and `context` to point the assistant at a post, account, profile or a failed request (its `X-Request-Id`).
  * When the assistant finds a problem on Zernio's side it opens a support ticket with
  * the team (see `supportTicket` on the run) and the run ends as `needs_human`.
  *
