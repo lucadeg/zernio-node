@@ -18807,6 +18807,10 @@ export type ListPostsData = {
         source?: 'zernio' | 'external';
         status?: 'draft' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
         /**
+         * Comma-separated tags (at most 20). Returns only posts carrying every listed tag, matched exactly and case-sensitively against the tags set when the post was created. An empty value means no tag filter. `tag` is accepted as an alias.
+         */
+        tags?: string;
+        /**
          * Zero-padded YYYY-MM-DD, or a full ISO 8601 datetime. An empty value means no date filter; any other malformed value returns 400. The same name the other date-window filters use (ads, analytics).
          */
         toDate?: string;
