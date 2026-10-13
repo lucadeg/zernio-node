@@ -49252,7 +49252,7 @@ export type ListLeadsError = (ErrorResponse | unknown);
 export type ListLeadFormsData = {
     query: {
         /**
-         * Connected Meta ads, Facebook or LinkedIn ads account ID. A Meta ads connection resolves its Page through the Facebook account linked to the same profile.
+         * Connected Meta ads, Facebook, Instagram or LinkedIn ads account ID. A Meta ads connection resolves its Page through the Facebook account linked to the same profile; an Instagram account uses the Page its ads run under (its own linked Page, else the Facebook or business-login Meta ads account on the same profile).
          */
         accountId: string;
         /**
@@ -49471,7 +49471,7 @@ export type GetLeadFormData = {
     };
     query: {
         /**
-         * Connected Meta ads, facebook or linkedin ads account id (selects the platform). A Meta ads connection resolves its Page through the Facebook account linked to the same profile.
+         * Connected Meta ads, facebook, instagram or linkedin ads account id (selects the platform). A Meta ads connection resolves its Page through the Facebook account linked to the same profile; an Instagram account uses the Page its ads run under (its own linked Page, else the Facebook or business-login Meta ads account on the same profile).
          */
         accountId: string;
         /**
@@ -49500,7 +49500,7 @@ export type ArchiveLeadFormData = {
     };
     query: {
         /**
-         * Connected Meta ads, facebook or linkedin ads account id (selects the platform). A Meta ads connection resolves its Page through the Facebook account linked to the same profile.
+         * Connected Meta ads, facebook, instagram or linkedin ads account id (selects the platform). A Meta ads connection resolves its Page through the Facebook account linked to the same profile; an Instagram account uses the Page its ads run under (its own linked Page, else the Facebook or business-login Meta ads account on the same profile).
          */
         accountId: string;
     };
