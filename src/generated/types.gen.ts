@@ -16498,6 +16498,10 @@ export type YouTubePlatformData = {
      */
     containsSyntheticMedia?: boolean;
     /**
+     * Set false to skip notifying subscribers about this upload (YouTube's notifySubscribers). Defaults to true.
+     */
+    notifySubscribers?: boolean;
+    /**
      * YouTube video category ID. Defaults to 22 (People & Blogs). Common: 1 (Film), 2 (Autos), 10 (Music), 15 (Pets), 17 (Sports), 20 (Gaming), 23 (Comedy), 24 (Entertainment), 25 (News), 26 (Howto), 27 (Education), 28 (Science & Tech).
      */
     categoryId?: string;
