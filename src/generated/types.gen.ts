@@ -10750,6 +10750,10 @@ export type SupportRun = {
      * The assistant's answer. Null while the run is in progress or when it failed.
      */
     answer: (string) | null;
+    /**
+     * The answer as structured fields you can route on. Null while in progress, when the run failed or went to a person (needs_human), or when no diagnosis could be produced.
+     */
+    diagnosis: (SupportRunDiagnosis | null);
     usage: SupportRunUsage;
     /**
      * The exact amount charged for the question, in USD, never above `maxCostUsd`. 0 for a failed run.
@@ -10783,6 +10787,39 @@ export type status29 = 'queued' | 'running' | 'completed' | 'needs_human' | 'fai
  * Why the run stopped. Null while it is in progress.
  */
 export type stopReason = 'answered' | 'human_review' | 'cost_cap' | 'deadline' | 'max_iterations' | 'error' | 'expired';
+
+export type SupportRunDiagnosis = {
+    /**
+     * What kind of problem the answer describes. New values may be added: treat any value you do not recognize as `other`.
+     */
+    category: 'account_connection' | 'content_rejected' | 'rate_limited' | 'platform_issue' | 'zernio_issue' | 'billing' | 'configuration' | 'how_to' | 'other';
+    /**
+     * The cause the answer gives, in one sentence. Null when the answer reports no problem, for example a how-to question.
+     */
+    cause: (string) | null;
+    /**
+     * The steps the answer recommends, in order. Empty when it recommends none.
+     */
+    fixSteps: Array<(string)>;
+    /**
+     * Links to docs.zernio.com that the answer itself cites. Empty when it cites none.
+     */
+    docsLinks: Array<(string)>;
+    /**
+     * Who has to act to resolve it: you (`integrator`), your end user, Zernio, the social platform, or nobody. New values may be added: treat any value you do not recognize as `none`.
+     */
+    whoMustAct: 'integrator' | 'end_user' | 'zernio' | 'platform' | 'none';
+};
+
+/**
+ * What kind of problem the answer describes. New values may be added: treat any value you do not recognize as `other`.
+ */
+export type category = 'account_connection' | 'content_rejected' | 'rate_limited' | 'platform_issue' | 'zernio_issue' | 'billing' | 'configuration' | 'how_to' | 'other';
+
+/**
+ * Who has to act to resolve it: you (`integrator`), your end user, Zernio, the social platform, or nobody. New values may be added: treat any value you do not recognize as `none`.
+ */
+export type whoMustAct = 'integrator' | 'end_user' | 'zernio' | 'platform' | 'none';
 
 export type SupportRunUsage = {
     inputTokens: number;
@@ -15505,7 +15542,7 @@ export type changeType = 'scheduled' | 'applied';
 /**
  * The category right now, regardless of changeType.
  */
-export type category = 'UTILITY' | 'MARKETING' | 'AUTHENTICATION';
+export type category2 = 'UTILITY' | 'MARKETING' | 'AUTHENTICATION';
 
 /**
  * Present only when changeType is `applied`. The category before this change.
