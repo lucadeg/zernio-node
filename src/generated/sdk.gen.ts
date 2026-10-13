@@ -10096,8 +10096,10 @@ export const updateAdCampaign = <ThrowOnError extends boolean = false>(options: 
  * from the synced campaign, which wins over `adAccountId`; when the campaign
  * was never synced, send `adAccountId` too. Before deleting, Zernio asks X
  * whether the campaign still holds undeleted line items (ads not synced
- * yet); if it does the answer is 409 and nothing is deleted, so sync the ad
- * account and retry. Other platforms answer 501 for an empty campaign.
+ * yet); if it does the answer is 409 `invalid_field_value` on `campaignId`
+ * and nothing is deleted. Sync the ad account and retry when those line items
+ * hold promoted posts; line items without promoted posts never sync, so delete
+ * them in X Ads Manager first. Other platforms answer 501 for an empty campaign.
  * `accountId` is ignored when the campaign does have ads.
  *
  * Reddit Ads has no delete: the campaign is archived instead (`configured_status`
