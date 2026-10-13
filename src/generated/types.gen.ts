@@ -29541,7 +29541,7 @@ export type GetMessageAttachmentError = (unknown | ErrorResponse);
 export type ListInboxCommentsData = {
     query?: {
         /**
-         * Filter by specific account ID
+         * Filter by specific account ID. With `platform=metaads` it takes the Meta Ads account ID, or the Facebook or Instagram account ID the Meta Ads connection belongs to, which returns that Meta Ads connection's ad rows. A Facebook or Instagram account with no Meta Ads connection returns no rows; an account on any other platform returns 400.
          */
         accountId?: string;
         cursor?: string;
