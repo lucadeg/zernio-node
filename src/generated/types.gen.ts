@@ -4412,7 +4412,9 @@ export type CtwaAdRequestBody = {
     whatsappPhoneNumber?: string;
     /**
      * Single-creative shape only. Mutually exclusive with
-     * `creatives[]`.
+     * `creatives[]`. Required on a single image or video ad (including
+     * one built with `placementAssets`); not used by a `carouselCards`
+     * ad and not accepted with an existing post reference.
      *
      */
     headline?: string;
@@ -4502,7 +4504,9 @@ export type CtwaAdRequestBody = {
     };
     /**
      * Messaging and CTWA only (a 400 on POST /v1/ads/call). A hand-built carousel
-     * of 2-10 image cards, sent to Meta as `link_data.child_attachments`; every
+     * of 2-10 image cards, sent to Meta in the order given as
+     * `link_data.child_attachments` (Meta may reorder them for performance, since
+     * `multi_share_optimized` defaults to true and no field fixes the order today); every
      * card (and the carousel itself) carries the destination's messaging call to
      * action (WHATSAPP_MESSAGE, MESSAGE_PAGE or INSTAGRAM_MESSAGE), so a tap on any
      * card opens the conversation. Replaces `imageUrl` / `video` (sending either is
@@ -4579,7 +4583,7 @@ export type CtwaAdRequestBody = {
             thumbnailUrl?: string;
         };
         /**
-         * Custom chat welcome message for this entry. See the top-level `welcomeMessage` for the single-creative shape.
+         * Custom chat welcome message for this entry: `text` plus exactly one of `prefillText` or `quickReplies` (400 otherwise). Same shape as the top-level `welcomeMessage` of the single-creative shape.
          */
         welcomeMessage?: {
             /**
@@ -4587,9 +4591,22 @@ export type CtwaAdRequestBody = {
              */
             text: string;
             /**
-             * Message put into the user's text input, ready to send. Replaces Meta's default.
+             * Message put into the user's text input, ready to send. Replaces Meta's default. Exactly one of prefillText or quickReplies.
              */
-            prefillText: string;
+            prefillText?: string;
+            /**
+             * Tappable chips under the greeting instead of a prefilled message. Exactly one of prefillText or quickReplies.
+             */
+            quickReplies?: Array<{
+                /**
+                 * Chip label the person taps.
+                 */
+                title: string;
+                /**
+                 * Opaque string you choose; delivered on the message.received webhook as interactiveMetadata.quickReplyPayload when the chip is tapped.
+                 */
+                payload: string;
+            }>;
         };
         /**
          * A 2-10 card carousel for this entry instead of `imageUrl` / `video`; `body` is required. Same rules as the top-level `carouselCards`. Carousel and single-media entries can be mixed on one ad set.
@@ -9087,7 +9104,7 @@ export type ParameterCatalogProductId = string;
 export type ParameterCatalogTokenAccountId = string;
 
 /**
- * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+ * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
  */
 export type ParameterIdempotencyKeyHeader = string;
 
@@ -14507,9 +14524,12 @@ export type WebhookPayloadMessageSent = {
          * on the inbox analytics endpoints, and the same value a later
          * GET on this message returns.
          *
-         * Always present, and `null` whenever the lineage is unknown: a
-         * message sent from the platform's own app, and every message
-         * stored before this field shipped (2026-08). Existing messages
+         * Always present, and `null` whenever the lineage is unknown: any
+         * outgoing message not sent through Zernio (one typed in the
+         * platform's own app, a Meta automated reply such as an instant
+         * reply or away message, the echo of a click-to-message ad's
+         * greeting), and every message stored before this field shipped
+         * (2026-08). Existing messages
          * are NOT backfilled, so treat `null` as "unknown", never as
          * "sent by a human".
          *
@@ -19413,7 +19433,7 @@ export type CreateProfileData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -28753,7 +28773,7 @@ export type SendInboxMessageData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -29144,7 +29164,7 @@ export type RemoveMessageReactionError = (unknown | ErrorResponse);
 export type UploadMediaDirectData = {
     body: {
         /**
-         * The file to upload (max 25MB)
+         * The file to upload (about 4.5 MB at most in practice; use POST /v1/media/presign for larger files)
          */
         file: (Blob | File);
         /**
@@ -29877,7 +29897,7 @@ export type ReplyToInboxPostData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -30784,7 +30804,7 @@ export type ReplyToInboxReviewData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -31410,7 +31430,7 @@ export type InitiateWhatsAppCallData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -31673,7 +31693,7 @@ export type CreateVoiceCallData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -32351,7 +32371,7 @@ export type SendSmsData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -32410,7 +32430,7 @@ export type CreateRcsAgentData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -32554,7 +32574,7 @@ export type SendRcsMessageData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -32758,7 +32778,7 @@ export type CreateBrandedCallingEnterpriseData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -32854,7 +32874,7 @@ export type CreateBrandedCallingIdentityData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -38968,7 +38988,7 @@ export type AskSupportQuestionData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -47778,7 +47798,7 @@ export type BoostPostData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -48700,9 +48720,11 @@ export type CreateStandaloneAdData = {
          * (card `callToAction`, falling back to the top-level one) and caption (card
          * `headline`, else `description`). `headline` is still required.
          *
-         * Meta only. Hand-built carousel: 2-10 authored cards in DETERMINISTIC order, mapped to
+         * Meta only. Hand-built carousel: 2-10 authored cards, sent in the order given as
          * the creative's `link_data.child_attachments`. Unlike `dynamicCreative`,
-         * you control the card order and per-card copy/link. Requires top-level `body`
+         * you author every card's copy and link, but Meta may still reorder the cards
+         * for performance (`multi_share_optimized` defaults to true and Zernio does not
+         * send it), and no field fixes the order today. Requires top-level `body`
          * and `callToAction`; `linkUrl` is also required UNLESS `leadGenFormId` is set. Those
          * become the ad's own Destination and button (`link_data.link` / `link_data.call_to_action`),
          * and double as the per-card fallback when a card omits its own.
@@ -49145,7 +49167,7 @@ export type CreateStandaloneAdData = {
     };
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -52404,7 +52426,7 @@ export type CreateMessagingAdData = {
 });
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -52438,7 +52460,7 @@ export type CreateCallAdData = {
 });
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };
@@ -52452,7 +52474,7 @@ export type CreateCtwaAdData = {
     body: CtwaAdRequestBody;
     headers?: {
         /**
-         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409.
+         * Optional client-generated unique key (e.g. a UUID) that makes retries safe. Same key + same body replays the original response; same key + different body → 422; key still processing → 409. A request cut off mid-handler (for example by a function timeout) can leave its key in progress, answering 409 until the key expires after 24 hours.
          */
         'Idempotency-Key'?: string;
     };

@@ -4379,7 +4379,10 @@ export const removeMessageReaction = <ThrowOnError extends boolean = false>(opti
  * The URL can be used as attachmentUrl when sending inbox messages.
  *
  * Files are stored in temporary storage and auto-delete after 7 days.
- * Maximum file size is 25MB.
+ * The effective maximum is about 4.5 MB: the multipart body goes through
+ * the hosting platform's request body limit, which answers 413 before the
+ * endpoint's own 25 MB check is reached. For larger files use
+ * POST /v1/media/presign and upload straight to storage.
  *
  * Unlike /v1/media/upload (which uses upload tokens for end-user flows),
  * this endpoint takes your API key in the Authorization header, for programmatic use.
@@ -12810,11 +12813,23 @@ export const replaceGoogleListingGroupFilters = <ThrowOnError extends boolean = 
  *
  * Per-platform required fields, budget minimums, and video-ad rules are documented on each property below.
  *
+ * **Meta required fields per shape** (a missing one is a 400 naming it in `param`):
+ *
+ * - Every shape that builds a new ad set (no `adSetId`, `existingCampaignId` or `buyingType: "RESERVED"`): `budgetAmount` and `budgetType`, plus `endDate` for a lifetime budget.
+ * - Single image or video (the default), also with `adSetId`: `headline` (max 255), `body`, `callToAction`, exactly one of `imageUrl` / `video` (none for goal `catalog_sales`), and `linkUrl` unless the goal is `lead_generation` or `page_visits` or `leadGenFormId` is set.
+ * - `bodies[]` / `headlines[]` text variations: `body`, one list with 2+ items, `callToAction`, `imageUrl` or `video`, and `linkUrl` unless the goal is `lead_generation` or `leadGenFormId` is set. `headline` is not required.
+ * - `placementAssets`: `headline`, `body`, `callToAction`, and `linkUrl` with the same exemptions as the single shape; the media comes from `placementAssets`.
+ * - `carouselCards`: `body`, `callToAction`, and `linkUrl` unless the goal is `lead_generation` or `leadGenFormId` is set. `headline` is not required.
+ * - `creatives[]`: per entry `headline`, `body`, `callToAction`, `imageUrl` or `video`, and `linkUrl` unless the goal is `lead_generation`. Top-level `body` is not required.
+ * - `dynamicCreative`: `imageUrls` or `videoUrls`, `callToActionTypes`, and `linkUrls` unless the goal is `lead_generation`. Top-level `body` is not required.
+ * - `existingCreativeId`: no creative fields. Goal `page_likes`: `body` only.
+ * - Goal `lead_generation` always needs `leadGenFormId`, except with `existingCreativeId`.
+ *
  * LinkedIn creates a Single Image or Single Video Ad backed by a Direct Sponsored Content "dark post" authored by a Company Page (see `organizationId`). Supported goals are engagement, traffic, awareness, and video_views (video ads use the `video` field; video_views requires a video), and traffic ads require `linkUrl`.
  *
  * Reddit Ads (`accountId` of a `redditads` connection, `adAccountId` like `a2_abc123`) creates a campaign, an ad group carrying the budget, schedule, targeting and pixel, and an ad running a new promoted post authored by the ad account's first profile (422 when it has none). The creative format follows the body: `carouselCards` builds a carousel, `video` a video ad, `imageUrl` an image ad, and none of them a text ad, which cannot link out (`linkUrl` is a 400 there; `body` is required). Only the legacy single-creative shape is available: `creatives[]`, `adSetId`, `existingCampaignId` and `validateOnly` are refused. Reddit throttling surfaces as 429 `rate_limited` with `platform: reddit`; retry after a delay. To promote an existing Reddit post use POST /v1/ads/boost.
  *
- * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). Keys are scoped to your credential and expire after 24h.
+ * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). If the first request is cut off mid-create (for example by a function timeout), its key can stay in progress and keep returning 409 until it expires; use a new key to retry sooner, after checking whether the ad was created. Keys are scoped to your credential and expire after 24h.
  *
  */
 export const createStandaloneAd = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateStandaloneAdData, ThrowOnError>) => {
@@ -14429,9 +14444,19 @@ export const sendWhatsAppConversion = <ThrowOnError extends boolean = false>(opt
  * `accountId` is a Facebook, Instagram or Meta ads (business login) connection;
  * `pageId` picks the Page when that connection was granted several.
  *
+ * **Required fields per shape** (a missing one is a 400 naming it in `param`):
+ *
+ * - Always `accountId`, `adAccountId`, `name`, and exactly one of `destination` / `destinations`.
+ * - `budgetAmount` and `budgetType` unless `adSetId` or `existingCampaignId` is set, plus `endDate` for a lifetime budget.
+ * - Single image or video: `headline`, `body`, and exactly one of `imageUrl` / `video`. With `placementAssets`, `headline` and `body` only (the media comes from `placementAssets`).
+ * - `carouselCards`: `body` and the 2-10 cards; `headline` is optional, `imageUrl` / `video` / top-level `description` are a 400.
+ * - Existing post (`platformPostId` or `objectStoryId`): no copy or media fields.
+ * - `creatives[]`: the same rules per entry, with no top-level creative fields.
+ * - `welcomeMessage`, when sent: `text` plus exactly one of `prefillText` / `quickReplies`.
+ *
  * **WhatsApp number prerequisite.** For the WhatsApp destination, link the WhatsApp number to the Facebook Page used for the ad before creating it: Meta checks the pairing at creation. Link it from the WhatsApp Business app (Settings > Business tools > Facebook & Instagram) or from the Page settings (Linked accounts > WhatsApp). Linking does not affect the number's WhatsApp connection in Zernio (Cloud API or coexistence), so no reconnect or re-sync is needed. If Meta creates a new ad set without the requested `whatsappPhoneNumber`, the 201 response carries a `warnings` entry. This can happen even when the number is linked (Meta can drop a Page's second linked number).
  *
- * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). Keys are scoped to your credential and expire after 24h.
+ * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). If the first request is cut off mid-create (for example by a function timeout), its key can stay in progress and keep returning 409 until it expires; use a new key to retry sooner, after checking whether the ad was created. Keys are scoped to your credential and expire after 24h.
  */
 export const createMessagingAd = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateMessagingAdData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateMessagingAdResponse, CreateMessagingAdError, ThrowOnError>({
@@ -14449,7 +14474,7 @@ export const createMessagingAd = <ThrowOnError extends boolean = false>(options:
  * and the campaign objective defaults to OUTCOME_LEADS.
  * Supports the same single-creative and multi-creative shapes as CTWA.
  *
- * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). Keys are scoped to your credential and expire after 24h.
+ * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). If the first request is cut off mid-create (for example by a function timeout), its key can stay in progress and keep returning 409 until it expires; use a new key to retry sooner, after checking whether the ad was created. Keys are scoped to your credential and expire after 24h.
  */
 export const createCallAd = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateCallAdData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateCallAdResponse, CreateCallAdError, ThrowOnError>({
@@ -14481,7 +14506,7 @@ export const createCallAd = <ThrowOnError extends boolean = false>(options: Opti
  *
  * **WhatsApp number prerequisite.** Link the WhatsApp number to the Facebook Page used for the ad before creating it: Meta checks the pairing at creation. Link it from the WhatsApp Business app (Settings > Business tools > Facebook & Instagram) or from the Page settings (Linked accounts > WhatsApp). Linking does not affect the number's WhatsApp connection in Zernio (Cloud API or coexistence), so no reconnect or re-sync is needed. If Meta creates a new ad set without the requested `whatsappPhoneNumber`, the 201 response carries a `warnings` entry. This can happen even when the number is linked (Meta can drop a Page's second linked number).
  *
- * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). Keys are scoped to your credential and expire after 24h.
+ * **Idempotency:** this endpoint is not idempotent at the platform level (a blind retry creates a second campaign/ad set/ad). Send an `Idempotency-Key` header to make retries safe: the first request with a given key creates the ad and we store the response; a retry with the same key replays that exact response (with `Idempotent-Replayed: true`) instead of creating duplicates. Reusing a key with a different body returns 422; a key whose first request is still in flight returns 409 (retry after a short backoff). If the first request is cut off mid-create (for example by a function timeout), its key can stay in progress and keep returning 409 until it expires; use a new key to retry sooner, after checking whether the ad was created. Keys are scoped to your credential and expire after 24h.
  */
 export const createCtwaAd = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateCtwaAdData, ThrowOnError>) => {
     return (options?.client ?? client).post<CreateCtwaAdResponse, CreateCtwaAdError, ThrowOnError>({
