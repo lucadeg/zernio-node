@@ -10643,9 +10643,20 @@ export const getAdsTimeline = <ThrowOnError extends boolean = false>(options: Op
  * - the creative's `effective_object_story_id` (`{pageId}_{postId}` shape, Facebook side)
  * - the creative's `effective_instagram_media_id` (Instagram side)
  *
- * Any of the four resolve to the same ad. Caller doesn't need a translation step.
+ * - an Instagram media id an ad comment arrived on (`comment.platformPostId` of a `comment.received`
+ * carrying `comment.ad.id`), including the extra media Meta creates for placement variants
+ *
+ * Any of these resolve to the same ad. Caller doesn't need a translation step.
  * `creative.creativeFeatures` holds the stored requested settings, which do not confirm
  * platform application.
+ *
+ * **Facebook ad dark posts.** Meta gives an ad with per-placement assets one extra unpublished
+ * post per placement, and comments land on it. Meta exposes no link from that post to its ad.
+ * When exactly one ad on the Page, created before the dark post, carries the same copy as the
+ * post, the dark post id resolves to that ad. Otherwise, when the id is a dark post Zernio has
+ * seen comments on and its Page is connected, the response is `ad: null` plus `darkPost`, which
+ * carries the Meta Ads account and the ad accounts running ads for that Page. Read its comments
+ * with GET /v1/ads/{adId}/comments using the same id.
  *
  * **Status freshness.** `status`, `configuredStatus`, `platformStatus`, `platformAdSetStatus`
  * and `platformCampaignStatus` are the values Zernio last stored. Background sync refreshes
@@ -11269,6 +11280,12 @@ export const updateAdTrackingTags = <ThrowOnError extends boolean = false>(optio
  * param the Instagram side is returned when it exists, otherwise Facebook. The
  * identifiers are read from the ad record (persisted during sync) with a Marketing-API
  * fallback for ads that predate the field.
+ *
+ * Comments can land on extra posts Meta creates for placement variants, which the creative
+ * does not report. On Instagram, every media a `comment.received` for this ad arrived on is
+ * read too; on Facebook, every dark post matched to this ad by its copy. They are merged
+ * newest first. With more than one post, `pagination.cursor` is a Zernio cursor covering all
+ * of them: pass it back unchanged.
  *
  * For Instagram-placed comments, the Instagram account that runs the ad must be connected
  * to Zernio, because those comments are read through that account's token. If no connected

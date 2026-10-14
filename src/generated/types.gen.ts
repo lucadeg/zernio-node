@@ -13372,13 +13372,14 @@ export type WebhookPayloadComment = {
          * Facebook: populated from a Graph API lookup of the parent post. Present when the post is an
          * ad dark post (isDarkPost true, whatever its promotionStatus) or an organic post that is or was
          * boosted (promotionStatus "active", "extendable" or "finished"). Meta does not link a dark post
-         * back to its ad, so id and title are never set on Facebook.
+         * back to its ad, so on Facebook id is set only when exactly one ad on the Page, created before the
+         * dark post, carries the same copy as the post. title is never set on Facebook.
          * Absent for comments on organic posts that are not promoted.
          *
          */
         ad?: {
             /**
-             * Meta ad ID (Instagram only).
+             * Meta ad ID. Instagram: from the webhook. Facebook: only on a dark post matched to a single ad by its copy.
              */
             id?: string;
             /**
@@ -42991,6 +42992,39 @@ export type GetAdResponse = ({
      * Only with `live=true`. When the switches were read from the platform; null when the live read failed and the stored values were returned.
      */
     statusReadAt?: (string) | null;
+    /**
+     * Only when `{adId}` is a Facebook ad dark post with no resolvable ad (then `ad` is null).
+     */
+    darkPost?: {
+        platform?: 'facebook';
+        /**
+         * The dark post id, `{pageId}_{postId}`.
+         */
+        platformPostId?: string;
+        pageId?: string;
+        /**
+         * Always true.
+         */
+        isDarkPost?: boolean;
+        /**
+         * Always null: Meta exposes no link from a placement dark post to its ad.
+         */
+        adId?: (string) | null;
+        /**
+         * Zernio Meta Ads account id for the Page, null when none is connected.
+         */
+        accountId?: (string) | null;
+        /**
+         * Zernio Facebook account id of the Page.
+         */
+        facebookAccountId?: string;
+        /**
+         * Meta ad accounts (`act_...`) with synced ads on this Page.
+         */
+        platformAdAccountIds?: Array<(string)>;
+        firstSeenAt?: string;
+        lastActivityAt?: string;
+    };
 });
 
 export type GetAdError = (ErrorResponse | {
