@@ -107,6 +107,10 @@ export type Ad = {
     name?: string;
     platform?: 'facebook' | 'instagram' | 'tiktok' | 'linkedin' | 'pinterest' | 'google' | 'twitter' | 'openai' | 'reddit';
     /**
+     * Profile the row belongs to: the profile of its owning connection (`accountId`); when that connection no longer exists, the requested profile (`profileId` filter) that reaches the row ad account, else the profile of the oldest connection of the row owner that reaches it.
+     */
+    profileId?: string;
+    /**
      * Delivery status. Derived from the platform `effective_status`, so it inherits ancestor pauses (an ACTIVE ad under a PAUSED campaign reads `paused`). For the ad's own on/off toggle use `configuredStatus`; for the review state use `reviewStatus`.
      */
     status?: (AdStatus);
@@ -620,6 +624,9 @@ export type AdCampaign = {
      */
     platformAdAccountName?: (string) | null;
     accountId?: string;
+    /**
+     * Profile the row belongs to: the profile of its owning connection (`accountId`); when that connection no longer exists, the requested profile (`profileId` filter) that reaches the row ad account, else the profile of the oldest connection of the row owner that reaches it.
+     */
     profileId?: string;
     /**
      * TikTok only. true when the campaign is an Upgraded Smart+ campaign. See AdTreeCampaign.isSmartPlus.
@@ -855,6 +862,9 @@ export type AdKeyword = {
      * Account ID owning the sync
      */
     accountId?: string;
+    /**
+     * Profile the row belongs to: the profile of its owning connection (`accountId`); when that connection no longer exists, the requested profile (`profileId` filter) that reaches the row ad account, else the profile of the oldest connection of the row owner that reaches it.
+     */
     profileId?: string;
     platform?: 'google';
     /**
@@ -1575,6 +1585,9 @@ export type AdTreeCampaign = {
      */
     platformAdAccountName?: (string) | null;
     accountId?: string;
+    /**
+     * Profile the row belongs to: the profile of its owning connection (`accountId`); when that connection no longer exists, the requested profile (`profileId` filter) that reaches the row ad account, else the profile of the oldest connection of the row owner that reaches it.
+     */
     profileId?: string;
     /**
      * TikTok only. true when the campaign is an Upgraded Smart+ campaign (TikTok lists it on /smart_plus/campaign/get/), false when it is not. Set by ads sync, so the key is absent on other platforms and on TikTok campaigns not synced since this field shipped. On Smart+ objects Zernio can pause, resume, rename, delete and change the budget of the campaign and ad set, and pause or resume an ad; other edits answer 422 and belong in TikTok Ads Manager.
@@ -42143,6 +42156,9 @@ export type ListAdSetsResponse = ({
         platformCampaignId?: (string) | null;
         platformAdAccountId?: string;
         accountId?: (string) | null;
+        /**
+         * Profile the row belongs to: the profile of its owning connection (`accountId`); when that connection no longer exists, the requested profile (`profileId` filter) that reaches the row ad account, else the profile of the oldest connection of the row owner that reaches it.
+         */
         profileId?: string;
         currency?: (string) | null;
         budget?: {
