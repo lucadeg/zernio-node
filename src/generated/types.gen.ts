@@ -1755,7 +1755,7 @@ export type AnalyticsDeltaEntry = {
          */
         completionRate: number;
         /**
-         * TikTok business lane: profile views attributed to the post
+         * Instagram feed posts (images and carousels; 0 on Reels and Stories) and TikTok business lane: profile views attributed to the post
          */
         profileViews: number;
         /**
@@ -9459,7 +9459,7 @@ export type PostAnalytics = {
      */
     completionRate?: number;
     /**
-     * TikTok accounts connected through the TikTok for Business app only: profile views from users who reached the profile through this post (T+24-48h). 0 for other platforms.
+     * Instagram feed posts (images and carousels; 0 on Reels and Stories) and TikTok accounts connected through the TikTok for Business app: profile views from users who reached the profile through this post (TikTok T+24-48h). 0 for other platforms.
      */
     profileViews?: number;
     /**
@@ -17966,7 +17966,7 @@ export type GetPostTimelineResponse = ({
          */
         completionRate?: number;
         /**
-         * TikTok business lane: profile views attributed to the post on this date; 0 elsewhere
+         * Instagram feed posts (images and carousels; 0 on Reels and Stories) and TikTok business lane: profile views attributed to the post on this date; 0 elsewhere
          */
         profileViews?: number;
         /**
