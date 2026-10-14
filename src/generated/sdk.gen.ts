@@ -10945,9 +10945,9 @@ export const removeAdGroupAssets = <ThrowOnError extends boolean = false>(option
  *
  * Returns performance analytics for a whole campaign in one call: summary metrics, a daily
  * timeline over the requested date range (summed across the campaign's ads), and optional
- * demographic breakdowns. Breakdowns are fetched live from Meta at the campaign level (one call
- * per dimension, no per-ad fan-out), so an agency dashboard gets campaign-level age/gender/etc.
- * without summing thousands of per-ad reads. `campaignId` is the platform campaign id; pass
+ * demographic breakdowns. Breakdowns are fetched live from Meta, TikTok or LinkedIn at the campaign
+ * level (one call per dimension, no per-ad fan-out), so an agency dashboard gets campaign-level
+ * age/gender/placement/etc. without summing thousands of per-ad reads. `campaignId` is the platform campaign id; pass
  * `platform` when a campaign id could be ambiguous across platforms. If no date range is provided,
  * defaults to the last 90 days. Date range is capped at 730 days max.
  * Google adds searchImpressionShare, searchBudgetLostImpressionShare,
@@ -11188,10 +11188,10 @@ export const getAdInsightsReport = <ThrowOnError extends boolean = false>(option
 
 /**
  * Get ad analytics
- * Returns one ad's performance summary and daily timeline, with optional audience breakdowns on Meta and TikTok.
+ * Returns one ad's performance summary and daily timeline, with optional audience breakdowns on Meta, TikTok and LinkedIn.
  *
  * Includes summary metrics, a daily timeline
- * over the requested date range, and optional demographic breakdowns (Meta and TikTok only).
+ * over the requested date range, and optional demographic breakdowns (Meta, TikTok and LinkedIn only).
  * If no date range is provided, defaults to the last 90 days. Date range is capped at 730 days max.
  *
  */
