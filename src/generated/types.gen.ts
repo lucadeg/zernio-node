@@ -9512,7 +9512,7 @@ export type PostAnalytics = {
      */
     reposts?: number;
     /**
-     * Video length in seconds. Currently Instagram Reels only; combine with igReelsAvgWatchTime (ms) to estimate retention. Null when unknown (other platforms, non-video media, or when Instagram does not expose the media URL, e.g. reels with copyrighted audio).
+     * Video length in seconds. Filled for public YouTube videos once their analytics next refresh (from the Data API; live streams may report null). The YouTube Data API has no Shorts flag: a video over 180 seconds cannot be a Short, but a shorter one may be a regular upload. Also filled for Instagram Reels (combine with igReelsAvgWatchTime (ms) to estimate retention). Null when unknown: platforms that do not report a length, non-video media, or when Instagram does not expose the media URL, e.g. reels with copyrighted audio.
      */
     videoDurationSeconds?: (number) | null;
     /**
