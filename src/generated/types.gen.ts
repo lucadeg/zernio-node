@@ -32649,7 +32649,7 @@ export type LookupSmsNumberResponse = ({
     carrierName?: (string) | null;
     lineType?: 'mobile' | 'landline' | 'voip' | 'toll-free' | 'unknown';
     /**
-     * True when the line type can receive SMS (not a landline).
+     * False for landlines, toll-free numbers, ambiguous fixed-or-mobile lines and carriers whose numbers are not SMS-routable. True is a best guess, not a delivery guarantee.
      */
     smsReachable?: boolean;
 });
