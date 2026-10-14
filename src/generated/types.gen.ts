@@ -7683,23 +7683,44 @@ export type InstagramBusinessDiscovery = {
      * Most recent media first, up to `limit`.
      */
     media: Array<{
-        id?: string;
-        caption?: (string) | null;
+        id: string;
+        caption: (string) | null;
         /**
          * IMAGE, VIDEO or CAROUSEL_ALBUM
          */
-        mediaType?: (string) | null;
+        mediaType: (string) | null;
         /**
          * FEED or REELS
          */
-        mediaProductType?: (string) | null;
-        timestamp?: (string) | null;
-        permalink?: (string) | null;
+        mediaProductType: (string) | null;
+        timestamp: (string) | null;
+        permalink: (string) | null;
         /**
          * Null when the owner hides like counts
          */
-        likeCount?: (number) | null;
-        commentsCount?: (number) | null;
+        likeCount: (number) | null;
+        commentsCount: (number) | null;
+        /**
+         * Temporary CDN URL that expires; download the file rather than storing the link. Null on videos whose audio is licensed music, use thumbnailUrl for the cover.
+         */
+        mediaUrl: (string) | null;
+        /**
+         * Video cover frame, VIDEO only. Temporary CDN URL.
+         */
+        thumbnailUrl: (string) | null;
+        /**
+         * Reels only. Null on images and carousels.
+         */
+        viewCount: (number) | null;
+        /**
+         * Carousel slides in order. Null unless mediaType is CAROUSEL_ALBUM.
+         */
+        children: Array<{
+            id: string;
+            mediaType: (string) | null;
+            mediaUrl: (string) | null;
+            thumbnailUrl: (string) | null;
+        }> | null;
     }>;
 };
 

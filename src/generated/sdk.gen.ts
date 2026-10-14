@@ -2999,6 +2999,8 @@ export const getInstagramAudio = <ThrowOnError extends boolean = false>(options:
  *
  * `likeCount` is null when the owner hides like counts.
  *
+ * Media URLs are temporary, and fields Meta does not return come back as null, never omitted.
+ *
  */
 export const getInstagramBusinessDiscovery = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetInstagramBusinessDiscoveryData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetInstagramBusinessDiscoveryResponse, GetInstagramBusinessDiscoveryError, ThrowOnError>({
