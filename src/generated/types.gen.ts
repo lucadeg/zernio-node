@@ -28102,6 +28102,33 @@ export type UpdateInboxConversationResponse = ({
 
 export type UpdateInboxConversationError = (ErrorResponse | unknown);
 
+export type DeleteInboxConversationData = {
+    path: {
+        /**
+         * Opaque conversation identifier, accepted verbatim from the list endpoint or from the conversationId on inbox webhooks. Format not to be assumed.
+         */
+        conversationId: string;
+    };
+    query: {
+        /**
+         * Account ID
+         */
+        accountId: string;
+    };
+};
+
+export type DeleteInboxConversationResponse = ({
+    success?: boolean;
+    data?: {
+        id?: string;
+        accountId?: string;
+        platform?: string;
+        deletedMessages?: number;
+    };
+});
+
+export type DeleteInboxConversationError = (ErrorResponse | unknown);
+
 export type GetInboxConversationMessagesData = {
     path: {
         /**

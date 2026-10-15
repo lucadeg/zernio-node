@@ -1039,6 +1039,7 @@ try {
 | `messages.getInboxConversationMessages()` | List messages |
 | `messages.getMessageAttachment()` | Resolve message attachment |
 | `messages.updateInboxConversation()` | Update conversation status |
+| `messages.deleteInboxConversation()` | Delete conversation |
 | `messages.deleteInboxMessage()` | Delete message |
 | `messages.acceptConversationRequest()` | Accept a message request |
 | `messages.addMessageReaction()` | Add reaction |
