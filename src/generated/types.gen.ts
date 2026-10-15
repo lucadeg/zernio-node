@@ -42263,7 +42263,7 @@ export type ListAdSetsResponse = ({
         adSetName?: (string) | null;
         status?: (string) | null;
         /**
-         * Raw platform ad set status. On TikTok the ad group's own switch `operation_status` (ENABLE / DISABLE), independent of its campaign.
+         * Raw platform ad set status. On TikTok the ad group's own switch `operation_status` (ENABLE / DISABLE), independent of its campaign. On Meta and Reddit the ad set's `effective_status` (e.g. CAMPAIGN_PAUSED).
          */
         platformAdSetStatus?: (string) | null;
         platformCampaignId?: (string) | null;
@@ -42604,7 +42604,7 @@ export type UpdateAdSetData = {
          */
         status?: 'active' | 'paused';
         /**
-         * Rename the ad set (on X, the line item `name`). Platforms without a rename return 501. At least one of budget/status/bidStrategy/name is required.
+         * Rename the ad set on any supported platform: Meta, Google (the ad group), TikTok, LinkedIn (the campaign), Pinterest, X (the line item `name`), OpenAI and Reddit; platforms without a rename return 501. The new name is stored right away, so GET /v1/ads/ad-sets and GET /v1/ads/tree return it without a sync. At least one of budget/status/bidStrategy/name is required.
          */
         name?: string;
         /**
@@ -42761,7 +42761,7 @@ export type UpdateAdSetResponse = ({
      */
     status?: 'active' | 'paused';
     /**
-     * The ad set's own switch read back from the platform; null when it could not be read.
+     * The ad set's status read back from the platform, as in PUT /v1/ads/ad-sets/{adSetId}/status (Meta and Reddit return the ad set's effective_status); null when it could not be read.
      */
     platformAdSetStatus?: (string) | null;
     platformCampaignStatus?: (string) | null;
@@ -42823,7 +42823,7 @@ export type UpdateAdSetStatusResponse = ({
      */
     status?: 'active' | 'paused';
     /**
-     * The ad set's own switch as read back from the platform, in the raw platform vocabulary (Meta effective_status, TikTok ENABLE / DISABLE, Google ENABLED / PAUSED, LinkedIn and Pinterest ACTIVE / PAUSED, ChatGPT (OpenAI) status, Reddit configured_status). Null when the platform could not be read, which is always the case on X.
+     * The ad set's own switch as read back from the platform, in the raw platform vocabulary (Meta effective_status, TikTok ENABLE / DISABLE, Google ENABLED / PAUSED, LinkedIn and Pinterest ACTIVE / PAUSED, ChatGPT (OpenAI) status, Reddit effective_status such as CAMPAIGN_PAUSED, as GET /v1/ads/ad-sets returns it). Null when the platform could not be read, which is always the case on X.
      */
     platformAdSetStatus?: (string) | null;
     /**
