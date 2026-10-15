@@ -5219,7 +5219,7 @@ export type CtwaMultiResponse = {
     platformAdSetId: string;
     message: string;
     /**
-     * Present when Meta created the ad set differently from the request. Today: Meta kept the ad set without the requested `whatsappPhoneNumber` in its promoted_object (the ads still carry it on their WhatsApp button).
+     * Present when Meta created the ad set differently from the request: Meta kept the ad set without the requested `whatsappPhoneNumber` in its promoted_object (the ads still carry it on their WhatsApp button), or the ad set joined a CBO campaign (`existingCampaignId`) whose own bid strategy applies, so a different `bidStrategy` or a `roasAverageFloor` that strategy cannot take was not applied.
      */
     warnings?: Array<(string)>;
 };
@@ -5242,7 +5242,7 @@ export type CtwaSingleResponse = {
     };
     message: string;
     /**
-     * Present when Meta created the ad set differently from the request. Today: Meta kept the ad set without the requested `whatsappPhoneNumber` in its promoted_object (the ads still carry it on their WhatsApp button).
+     * Present when Meta created the ad set differently from the request: Meta kept the ad set without the requested `whatsappPhoneNumber` in its promoted_object (the ads still carry it on their WhatsApp button), or the ad set joined a CBO campaign (`existingCampaignId`) whose own bid strategy applies, so a different `bidStrategy` or a `roasAverageFloor` that strategy cannot take was not applied.
      */
     warnings?: Array<(string)>;
 };
@@ -42654,6 +42654,8 @@ export type UpdateAdSetData = {
         /**
          * Minimum ROAS as a decimal multiplier (2.0 = 2.0x). Required when bidStrategy is
          * LOWEST_COST_WITH_MIN_ROAS. Sent to Meta as `bid_constraints.roas_average_floor` × 10000.
+         * Meta only: may be sent alone, WITHOUT bidStrategy, to update the floor on an ad set
+         * whose strategy (its own, or the campaign's under CBO) is LOWEST_COST_WITH_MIN_ROAS.
          * Not supported on OpenAI (422).
          *
          */

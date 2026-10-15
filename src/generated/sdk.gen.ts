@@ -10480,9 +10480,14 @@ export const getAdSetDetails = <ThrowOnError extends boolean = false>(options: O
  * - `LOWEST_COST_WITH_BID_CAP` / `COST_CAP`: `bidAmount` REQUIRED (whole currency units).
  * - `LOWEST_COST_WITH_MIN_ROAS`: `roasAverageFloor` REQUIRED (decimal multiplier, e.g. 2.0 = 2.0x ROAS).
  * - Meta only: send `bidAmount` WITHOUT `bidStrategy` to change the cap amount on an ad set
- * under a COST_CAP / LOWEST_COST_WITH_BID_CAP parent campaign, leaving the strategy itself
- * (inherited from the campaign) untouched. `roasAverageFloor` without `bidStrategy` is
- * rejected (it has no meaning outside LOWEST_COST_WITH_MIN_ROAS).
+ * whose strategy (its own, or the campaign's under CBO) is COST_CAP / LOWEST_COST_WITH_BID_CAP,
+ * leaving the strategy untouched. Send `roasAverageFloor` WITHOUT `bidStrategy` the same way
+ * to change the floor of a LOWEST_COST_WITH_MIN_ROAS ad set. Either field against an
+ * incompatible current strategy is a 400.
+ * - Meta CBO (the campaign holds the budget): the campaign also holds the bid strategy, so only
+ * `bidAmount` or `roasAverageFloor` is written on the ad set. A `bidStrategy` equal to the
+ * campaign's is accepted; a different one is a 409 (change it with
+ * PUT /v1/ads/campaigns/{campaignId}).
  *
  * Delivery settings are validated by Meta against the campaign objective;
  * incompatible combinations (e.g. a billingEvent the optimization goal
