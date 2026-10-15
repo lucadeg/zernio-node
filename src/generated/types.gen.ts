@@ -47203,6 +47203,10 @@ export type ListAdAccountsData = {
          */
         adAccountId?: string;
         /**
+         * Google Ads only. `true` returns only the customers this connection accepts as `adAccountId` (or `customerId`) on the other /v1/ads endpoints, i.e. those inside its ad-account selection. Without it every customer the Google login can reach is listed, including ones selected on another connection of the same login, which those endpoints answer with a 400. Ignored on other platforms.
+         */
+        inScopeOnly?: boolean;
+        /**
          * Clamp the returned `accounts[]` length. Useful for typeahead pickers on agency tokens with hundreds of advertisers.
          */
         limit?: number;
