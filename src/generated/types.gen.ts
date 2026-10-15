@@ -21883,6 +21883,10 @@ export type ListInstagramPagesResponse = ({
             id?: string;
             username?: string;
             profile_picture_url?: string;
+            /**
+             * Followers of the Instagram account when Meta returns it
+             */
+            followers_count?: number;
         };
     }>;
 });
