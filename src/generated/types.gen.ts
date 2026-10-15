@@ -29033,23 +29033,23 @@ export type SendInboxMessageResponse = ({
 export type SendInboxMessageError = ({
     error?: string;
     /**
-     * Present on Meta pass-through rejections: platform_error when Meta rejected the send (see platform/platformError below), invalid_request_error for validation failures.
+     * Present on Meta and TikTok pass-through rejections: platform_error when the platform rejected the send (see platform/platformError below), invalid_request_error for validation failures.
      */
     type?: 'platform_error' | 'invalid_request_error';
     /**
-     * Stable machine-readable reason. PLATFORM_LIMITATION covers a capability the platform does not offer (e.g. Bluesky and Reddit DMs reject media); MISSING_PARTICIPANT means the stored conversation has no recipient to send to; DIRECT_SEND_NOT_ELIGIBLE and DIRECT_SEND_BLOCKED mean the WhatsApp Business Account needs Meta to grant or restore Direct Send access; DIRECT_SEND_LIMITED is temporary, Meta lifts it on its own; platform_api_error means Meta itself rejected the send (see platformError).
+     * Stable machine-readable reason. PLATFORM_LIMITATION covers a capability the platform does not offer (e.g. Bluesky and Reddit DMs reject media); MISSING_PARTICIPANT means the stored conversation has no recipient to send to; DIRECT_SEND_NOT_ELIGIBLE and DIRECT_SEND_BLOCKED mean the WhatsApp Business Account needs Meta to grant or restore Direct Send access; DIRECT_SEND_LIMITED is temporary, Meta lifts it on its own; platform_api_error means the platform itself rejected the send (see platformError).
      */
     code?: 'PLATFORM_LIMITATION' | 'MISSING_PARTICIPANT' | 'INVALID_TEMPLATE_HEADER' | 'DIRECT_SEND_NOT_ELIGIBLE' | 'DIRECT_SEND_LIMITED' | 'DIRECT_SEND_BLOCKED' | 'platform_api_error';
     /**
-     * Present alongside code platform_api_error. The platform that rejected the send (e.g. instagram, facebook, whatsapp).
+     * Present alongside code platform_api_error. The platform that rejected the send (e.g. instagram, facebook, whatsapp, tiktok).
      */
     platform?: string;
     /**
-     * Instagram, Facebook, or WhatsApp. Meta's diagnostic fields for the rejected send or template lookup. WhatsApp lookup errors retain only code, message, and error_data.details. Absent when the failure did not come from Meta.
+     * Instagram, Facebook, WhatsApp, or TikTok. The platform's diagnostic fields for the rejected send or template lookup. WhatsApp lookup errors retain only code, message, and error_data.details. On TikTok only code, message, and request_id are set. Absent when the failure did not come from the platform.
      */
     platformError?: {
         /**
-         * Meta error code
+         * Meta or TikTok error code
          */
         code?: number;
         /**
@@ -29064,6 +29064,14 @@ export type SendInboxMessageError = ({
          * Meta error type (e.g. OAuthException)
          */
         type?: string;
+        /**
+         * TikTok error message
+         */
+        message?: string;
+        /**
+         * TikTok request_id, quote this in a TikTok support ticket
+         */
+        request_id?: string;
     };
 } | ErrorResponse | (ErrorResponse | WhatsAppTemplateLookupError) | unknown | WhatsAppTemplateLookupError);
 
