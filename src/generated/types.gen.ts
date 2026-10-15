@@ -9536,6 +9536,9 @@ export type Post = {
      */
     queueId?: string;
     createdAt?: string;
+    /**
+     * Last change to the post or to any of its platforms (a publish, a failure, a resolved URL).
+     */
     updatedAt?: string;
 };
 
