@@ -29820,7 +29820,7 @@ export type ListInboxCommentsError = (ErrorResponse | unknown);
 export type GetInboxPostCommentsData = {
     path: {
         /**
-         * Zernio post ID or platform-specific post ID. Zernio IDs are auto-resolved. LinkedIn third-party posts accept full activity URN or numeric ID. On Facebook, a comment ID is also accepted here and returns that comment's replies, kept for backwards compatibility; prefer the `commentId` query parameter, which also works on Instagram.
+         * Zernio post ID or platform-specific post ID. Zernio IDs are auto-resolved. On LinkedIn, pass the post id exactly as the feed returns it (urn:li:share:<id> or urn:li:ugcPost:<id>). A bare number is read as an activity id (urn:li:activity:<n>, the number in a linkedin.com/feed/update URL); a share or ugcPost number passed bare returns an empty list. On Facebook, a comment ID is also accepted here and returns that comment's replies, kept for backwards compatibility; prefer the `commentId` query parameter, which also works on Instagram.
          */
         postId: string;
     };
@@ -30040,6 +30040,10 @@ export type GetInboxPostCommentsResponse = ({
          * (Reddit only) Subreddit name
          */
         subreddit?: (string) | null;
+        /**
+         * (LinkedIn only) The post URN that was queried, after a bare number is read as urn:li:activity:<n>
+         */
+        postUrn?: string;
         lastUpdated?: string;
         /**
          * (Facebook/Instagram only) Present when this post has no organic comments but is a boosted post: the engagement lives on the ad. Use the ad-comments endpoint instead.
@@ -30092,7 +30096,7 @@ export type ReplyToInboxPostData = {
     };
     path: {
         /**
-         * Zernio post ID or platform-specific post ID. LinkedIn third-party posts accept full activity URN or numeric ID.
+         * Zernio post ID or platform-specific post ID. On LinkedIn, pass the post id exactly as the feed returns it (urn:li:share:<id> or urn:li:ugcPost:<id>); a bare number is read as an activity id (urn:li:activity:<n>).
          */
         postId: string;
     };
@@ -30115,7 +30119,7 @@ export type ReplyToInboxPostError = (unknown | ErrorResponse);
 export type DeleteInboxCommentData = {
     path: {
         /**
-         * Zernio post ID or platform-specific post ID. LinkedIn third-party posts accept full activity URN or numeric ID.
+         * Zernio post ID or platform-specific post ID. On LinkedIn, pass the post id exactly as the feed returns it (urn:li:share:<id> or urn:li:ugcPost:<id>); a bare number is read as an activity id (urn:li:activity:<n>).
          */
         postId: string;
     };
