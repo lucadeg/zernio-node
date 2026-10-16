@@ -7460,7 +7460,7 @@ export type InboxWebhookMessage = {
          * **Nullable during the BSUID rollout (April 2026+).** WhatsApp users
          * who adopt a username can message businesses without exposing a phone
          * number, so this field is omitted for them. Match by `businessScopedUserId`
-         * instead. See `docs/whatsapp-bsuid-migration.md`.
+         * instead. See `libs/whatsapp/docs/whatsapp-bsuid-migration.md`.
          *
          */
         phoneNumber?: (string) | null;
@@ -13948,7 +13948,7 @@ export type WebhookPayloadMessage = {
              * users who adopt a username can message businesses without
              * exposing a phone number, so this field is omitted for them.
              * Match by `businessScopedUserId` instead. See
-             * `docs/whatsapp-bsuid-migration.md`.
+             * `libs/whatsapp/docs/whatsapp-bsuid-migration.md`.
              *
              */
             phoneNumber?: (string) | null;
