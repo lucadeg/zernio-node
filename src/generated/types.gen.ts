@@ -341,6 +341,30 @@ export type Ad = {
          */
         creativeId?: (string) | null;
         /**
+         * Meta only. The creativeFeatures map sent at creation (degrees_of_freedom_spec.creative_features_spec). Absent on ads synced from Meta.
+         */
+        creativeFeatures?: MetaCreativeFeatures;
+        /**
+         * Meta catalog template ads created through Zernio only (absent on ads synced from Meta).
+         */
+        catalog?: {
+            /**
+             * The creative's product_set_id.
+             */
+            productSetId?: string;
+            /**
+             * object_story_spec.template_data.format_option, from catalogFormat.
+             */
+            format?: 'single_image' | 'carousel_images_multi_items' | 'carousel_images_single_item' | 'carousel_slideshows';
+            /**
+             * The format_transformation_spec sent on the creative, as Meta's raw objects. Present for single_image.
+             */
+            formatTransformationSpec?: Array<{
+                format?: string;
+                data_source?: Array<(string)>;
+            }>;
+        };
+        /**
          * Meta creative object_type (e.g. SHARE, VIDEO, PRIVACY_CHECK_FAIL, POST_DELETED). Use this to render state-aware previews: when Meta moderation strips image/video fields, only thumbnailUrl at 64x64 is available.
          */
         objectType?: string;
@@ -500,6 +524,11 @@ export type creativeType = 'carousel' | 'video' | 'document' | 'image';
 export type goal = 'engagement' | 'traffic' | 'awareness' | 'video_views' | 'lead_generation' | 'lead_conversion' | 'conversions' | 'app_promotion' | 'catalog_sales' | 'page_likes' | 'page_visits' | 'job_applicants';
 
 export type type = 'daily' | 'lifetime';
+
+/**
+ * object_story_spec.template_data.format_option, from catalogFormat.
+ */
+export type format = 'single_image' | 'carousel_images_multi_items' | 'carousel_images_single_item' | 'carousel_slideshows';
 
 /**
  * Request-side publish switch for `adStatus` on ad creation endpoints only (`status`, `campaignStatus` and `adSetStatus` carry their own inline ACTIVE/PAUSED enum there; the status-update endpoints are a separate lowercase `active`/`paused` enum). Distinct from `AdStatus` (the platform-reported delivery status returned on reads).
@@ -1317,7 +1346,7 @@ export type AdPromotedObject = {
      */
     productCatalogId?: string;
     /**
-     * Meta product SET ID, for example from GET /v1/ads/catalogs/{catalogId}/product-sets. Creating catalog ads needs only ads_management on the Meta login, not catalog_management. Zernio reads the set before creation and returns a 400 naming promotedObject.productSetId when Meta rejects the ID outright. When Meta answers that the login lacks the permission to read it (common without catalog_management, even for a set a live ad set already uses), Zernio leaves the check to Meta's own create validation, which rejects an unusable set or a catalog ID with the same 400. When the login can also read the set's catalog (catalog_management), a mismatch with productCatalogId returns a 400 naming promotedObject.productCatalogId; otherwise Meta judges the catalog match. With validateOnly and a new campaign, Meta cannot dry-run the set inside the ad set, so the adSet result carries a reason; pass existingCampaignId to dry-run it in full.
+     * Meta product SET ID, for example from GET /v1/ads/catalogs/{catalogId}/product-sets. Creating catalog ads needs only ads_management on the Meta login, not catalog_management. With goal catalog_sales the set goes on the ad set's promoted_object and on the template creative; with goal traffic, or with adSetId, only on the creative. Zernio reads the set before creation and returns a 400 naming promotedObject.productSetId when Meta rejects the ID outright. When Meta answers that the login lacks the permission to read it (common without catalog_management, even for a set a live ad set already uses), Zernio leaves the check to Meta's own create validation, which rejects an unusable set or a catalog ID with the same 400. When the login can also read the set's catalog (catalog_management), a mismatch with productCatalogId returns a 400 naming promotedObject.productCatalogId; otherwise Meta judges the catalog match. With validateOnly and a new campaign, Meta cannot dry-run the set inside the ad set, so the adSet result carries a reason; pass existingCampaignId to dry-run it in full.
      */
     productSetId?: string;
     /**
@@ -16001,7 +16030,7 @@ export type WhatsAppHeaderComponent = {
     };
 };
 
-export type format = 'text' | 'image' | 'video' | 'gif' | 'document' | 'location';
+export type format2 = 'text' | 'image' | 'video' | 'gif' | 'document' | 'location';
 
 export type WhatsAppLimitedTimeOfferComponent = {
     type: 'limited_time_offer';
@@ -48321,7 +48350,8 @@ export type CreateStandaloneAdData = {
          * - `lead_conversion`: OUTCOME_LEADS optimizing website pixel leads. Same pixel and event fields, but with a leads-class event such as LEAD, SUBMIT_APPLICATION, SCHEDULE or CONTACT (or `promotedObject.customConversionId` to optimise against a Custom Conversion instead). Meta gates conversion events by objective, so leads-class events are rejected under `conversions`.
          * - `lead_generation`: OUTCOME_LEADS with instant forms. Requires `leadGenFormId`. `promotedObject.pageId` is optional and auto-filled from the connected Page.
          * - `app_promotion`: requires `promotedObject.applicationId` and `promotedObject.objectStoreUrl`.
-         * - `catalog_sales`: Advantage+ catalog ads, for example vehicle inventory. Requires `promotedObject.productSetId`, `promotedObject.pixelId` and `promotedObject.customEventType`. Builds a catalog TEMPLATE creative from the copy fields, which may carry template tags like {{product.name}} or {{vehicle.make}}. No imageUrl or video is sent; Meta renders the visuals per catalog item. Discover catalogs via GET /v1/ads/catalogs and product sets via GET /v1/ads/catalogs/{catalogId}/product-sets. Single shape only, no creatives[], adSetId, dynamicCreative or placementAssets.
+         * - `catalog_sales`: Advantage+ catalog ads, for example vehicle inventory. Requires `promotedObject.productSetId`, `promotedObject.pixelId` and `promotedObject.customEventType`. Builds a catalog TEMPLATE creative from the copy fields, which may carry template tags like {{product.name}} or {{vehicle.make}}. No imageUrl or video is sent; Meta renders the visuals per catalog item. Discover catalogs via GET /v1/ads/catalogs and product sets via GET /v1/ads/catalogs/{catalogId}/product-sets. Single shape only, no creatives[], dynamicCreative, placementAssets, existingCreativeId or carouselCards; an imageUrl or video sent with it is ignored and not uploaded. Works with `existingCampaignId`, and with `adSetId` to add a catalog ad to an existing ad set (then only `promotedObject.productSetId` is required; pixel and event stay on the ad set). Pick the format with `catalogFormat`.
+         * - `traffic` with `promotedObject.productSetId`: a catalog ad without a pixel (OUTCOME_TRAFFIC, `optimizationGoal` LINK_CLICKS by default or LANDING_PAGE_VIEWS). The product set goes on the template creative only, never on the ad set's promoted_object, and no `pixelId` or `customEventType` is needed. Same creative rules as `catalog_sales`.
          * - `page_likes`: Page Likes conversion location under OUTCOME_ENGAGEMENT (destination_type ON_PAGE, optimization PAGE_LIKES). `promotedObject.pageId` is optional and auto-filled from the connected Page. The creative CTA is fixed to LIKE_PAGE targeting that Page; headline / body / linkUrl / callToAction / imageUrl / video are all optional (Meta derives the link and the Like button from the Page).
          * - `page_visits`: Meta's "Page visits and followers" under OUTCOME_TRAFFIC (destination_type FACEBOOK_PAGE, optimization PROFILE_VISIT). `promotedObject.pageId` is optional and auto-filled from the connected Page, and `linkUrl` defaults to the Page. Meta enables Profile Visit ads per ad account: one it has not enabled is refused with Meta's "This account isn't eligible to use Profile Visit ads yet".
          *
@@ -48386,9 +48416,13 @@ export type CreateStandaloneAdData = {
          */
         promotion?: MetaPromotion;
         /**
-         * Meta only. Applied to each new creative, including standalone and attach shapes. With creatives[], these are defaults; an item replaces the whole feature map, including an empty map. auto_promotion_tag is an Advantage+ enhancement, not the Ads Manager Promotion setting.
+         * Meta only. Applied to each new creative, including standalone, attach and catalog template shapes. With creatives[], these are defaults; an item replaces the whole feature map, including an empty map. auto_promotion_tag is an Advantage+ enhancement, not the Ads Manager Promotion setting. On catalog ads, the catalog enhancements are keys of this same map, for example `{ "product_extensions": "OPT_OUT", "media_type_automation": "OPT_OUT", "standard_enhancements_catalog": "OPT_OUT", "multi_creative_post_carousel": "OPT_OUT" }`.
          */
         creativeFeatures?: MetaCreativeFeatures;
+        /**
+         * Meta catalog template creatives only (goal `catalog_sales`, goal `traffic` with `promotedObject.productSetId`, or `adSetId` with `promotedObject.productSetId`); a 400 otherwise. Sent as `object_story_spec.template_data.format_option`. `force_single_link` is never sent with it (Meta rejects the pair, subcode 1443051). `single_image` also sends `format_transformation_spec` with `carousel` and `da_collection` set to `data_source: ["none"]`, so Meta keeps the single image instead of turning it into a carousel or collection. `carousel_images_single_item` also sends `template_data.multi_share_end_card: false`, which Meta requires for that format (subcode 1443167). Omit it to let Meta pick the format.
+         */
+        catalogFormat?: 'single_image' | 'carousel_images_multi_items' | 'carousel_images_single_item' | 'carousel_slideshows';
         /**
          * Meta only. Multi-advertiser ads: whether Meta may show this ad alongside other advertisers' in one unit. Meta auto-enrols since Aug 2024, so send OPT_OUT to leave. It is a top-level creative field, NOT a `creativeFeatures` key, and Meta rejects it there.
          */
