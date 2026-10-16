@@ -49452,9 +49452,9 @@ export type CreateStandaloneAdResponse = ({
     validateOnly?: boolean;
     results?: Array<{
         node?: 'campaign' | 'adSet' | 'creative' | 'ad' | 'performanceMaxCampaign';
-        status?: 'validated' | 'skipped';
+        status?: 'validated' | 'skipped' | 'unverified';
         /**
-         * Why the node could not be validated (on skipped), or what the dry run could not check and what the request would do as sent (on validated). A Performance Max validation with no location targeting reports here that the campaign would run worldwide.
+         * Why the node could not be validated (on skipped), why Meta could not dry-run it although the other nodes passed (on unverified), or what the dry run could not check and what the request would do as sent (on validated). A Performance Max validation with no location targeting reports here that the campaign would run worldwide.
          */
         reason?: string;
     }>;
@@ -52711,7 +52711,10 @@ export type CreateMessagingAdResponse = ({
     validateOnly: boolean;
     results: Array<{
         node: 'campaign' | 'adSet' | 'creative' | 'ad';
-        status: 'validated' | 'skipped';
+        status: 'validated' | 'skipped' | 'unverified';
+        /**
+         * On unverified: why Meta could not dry-run this node although the other nodes passed.
+         */
         reason?: string;
     }>;
     message: string;
