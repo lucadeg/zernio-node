@@ -9495,9 +9495,11 @@ export const listCommentAutomations = <ThrowOnError extends boolean = false>(opt
  * delivered, read, and link clicks.
  *
  * Personalisation: `{{first_name}}`, `{{name}}` and `{{username}}` in `dmMessage`,
- * `commentReply`, their variations and button titles resolve from the commenter (first
- * word of the display name, the display name, the platform username). A value the
- * platform does not give us resolves to an empty string.
+ * `commentReply`, their variations and button titles resolve from the commenter.
+ * `{{first_name}}` is the first word of the display name and `{{name}}` the display
+ * name; when the platform gives no display name both fall back to the platform
+ * username (unless it is all digits). `{{username}}` is the platform username. A value
+ * still unknown resolves to an empty string and the space before it is dropped.
  *
  * Behaviour: `repeatPolicy` decides whether a person can get the DM again,
  * `dedupeSameTextHours` stops two automations sending the same text to one person,
