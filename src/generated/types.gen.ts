@@ -329,6 +329,10 @@ export type Ad = {
          */
         imageUrl?: string;
         /**
+         * Google Display only. Resource name of the landscape marketing image asset (`creative.imageUrl`), for example customers/1234567890/assets/123. Set at creation and updated when PUT /v1/ads/{adId} replaces `creative.imageUrl`; replacing only `creative.squareImageUrl` leaves it unchanged.
+         */
+        assetResourceName?: string;
+        /**
          * Meta video ID for VIDEO-type ads. Null for non-video ads. Callers that need an embeddable MP4 can call GET /{videoId}?fields=source with the page access token.
          */
         videoId?: (string) | null;
