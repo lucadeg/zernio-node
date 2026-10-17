@@ -50047,9 +50047,13 @@ export type UploadAdVideoData = {
          */
         videoBase64?: string;
         /**
-         * Optional filename shown alongside the upload session. Applied only when uploading via videoBase64.
+         * Optional file name, sent to Meta as the video's name and title so it shows and is searchable in the Ads Manager media library. Applies to both videoUrl and videoBase64. Without it (and without name), a videoUrl upload is named after the last path segment of the URL.
          */
         filename?: string;
+        /**
+         * Optional video name shown in the Ads Manager media library. Takes precedence over filename.
+         */
+        name?: string;
         /**
          * true: answer 202 once Meta accepts the upload instead of waiting for processing. Poll GET /v1/ads/videos/{videoId} or subscribe to ad.video.processed.
          */
