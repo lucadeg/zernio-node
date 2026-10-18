@@ -39308,7 +39308,7 @@ export type CreateWorkflowData = {
     body: {
         profileId: string;
         accountId: string;
-        platform?: 'whatsapp' | 'instagram' | 'facebook' | 'telegram' | 'twitter' | 'bluesky' | 'reddit';
+        platform?: 'whatsapp' | 'instagram' | 'facebook' | 'telegram' | 'twitter' | 'bluesky' | 'reddit' | 'tiktok';
         name: string;
         description?: string;
         nodes?: Array<WorkflowNode>;
@@ -39375,7 +39375,7 @@ export type UpdateWorkflowData = {
         edges?: Array<WorkflowEdge>;
         entryNodeId?: (string) | null;
         /**
-         * Reassign the workflow to a different `SocialAccount`. `platform` and `profileId` are derived server-side from the new account (the client never sends them directly). The account must belong to the caller's team and be on a workflow-supported platform (whatsapp, instagram, facebook, telegram, twitter, bluesky, reddit). Changing this triggers a graph revalidation against the new platform.
+         * Reassign the workflow to a different `SocialAccount`. `platform` and `profileId` are derived server-side from the new account (the client never sends them directly). The account must belong to the caller's team and be on a workflow-supported platform (whatsapp, instagram, facebook, telegram, twitter, bluesky, reddit, tiktok). Changing this triggers a graph revalidation against the new platform.
          *
          */
         accountId?: string;
