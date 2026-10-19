@@ -223,6 +223,11 @@ describe('Endpoint Methods', () => {
       expect(client.analytics.getFacebookDemographics).toBeTypeOf('function');
     });
 
+    it('should have getLinkedInDemographics method', () => {
+      expect(client.analytics.getLinkedInDemographics).toBeDefined();
+      expect(client.analytics.getLinkedInDemographics).toBeTypeOf('function');
+    });
+
     it('should have getInstagramDemographics method', () => {
       expect(client.analytics.getInstagramDemographics).toBeDefined();
       expect(client.analytics.getInstagramDemographics).toBeTypeOf('function');

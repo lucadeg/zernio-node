@@ -17640,6 +17640,55 @@ export type GetFacebookDemographicsError = (ErrorResponse | {
     error?: string;
 });
 
+export type GetLinkedInDemographicsData = {
+    query: {
+        /**
+         * The Zernio SocialAccount ID of the LinkedIn organization account
+         */
+        accountId: string;
+        /**
+         * Comma-separated list of demographic dimensions: function, seniority, industry, company_size.
+         * Defaults to all four if omitted.
+         *
+         */
+        breakdown?: string;
+    };
+};
+
+export type GetLinkedInDemographicsResponse = ({
+    success?: boolean;
+    accountId?: string;
+    platform?: 'linkedin';
+    metric?: 'follower_demographics';
+    /**
+     * Only the requested breakdowns are present. Entries are sorted by value, largest first.
+     */
+    demographics?: {
+        [key: string]: Array<{
+            /**
+             * Readable label, or the LinkedIn URN when LinkedIn returns no name for it
+             */
+            dimension?: string;
+            /**
+             * LinkedIn URN (urn:li:function:8) or staff count range (SIZE_2_TO_10)
+             */
+            id?: string;
+            /**
+             * Followers (organic plus paid)
+             */
+            value?: number;
+        }>;
+    };
+    note?: string;
+});
+
+export type GetLinkedInDemographicsError = (ErrorResponse | {
+    error?: string;
+    code?: string;
+} | {
+    error?: string;
+});
+
 export type GetInstagramDemographicsData = {
     query: {
         /**

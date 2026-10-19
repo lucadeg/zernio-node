@@ -240,6 +240,7 @@ try {
 | `analytics.getInstagramFollowerHistory()` | Get Instagram follower history |
 | `analytics.getInstagramOnlineFollowers()` | Get Instagram online followers |
 | `analytics.getLinkedInAggregateAnalytics()` | Get LinkedIn aggregate stats |
+| `analytics.getLinkedInDemographics()` | Get LinkedIn organization follower demographics |
 | `analytics.getLinkedInOrgAggregateAnalytics()` | Get LinkedIn org analytics |
 | `analytics.getLinkedInPostAnalytics()` | Get LinkedIn post stats |
 | `analytics.getLinkedInPostReactions()` | Get LinkedIn post reactions |
