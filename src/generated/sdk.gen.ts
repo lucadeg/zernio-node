@@ -10540,6 +10540,17 @@ export const getAdSetDetails = <ThrowOnError extends boolean = false>(options: O
  * theirs, and `statusUpdated` / `statusSkipped` report whether that switch
  * was written or a live read showed it already in place.
  *
+ * Placements and targeting (Meta only): `placements` and `targeting` take the same shapes
+ * as POST /v1/ads/create. Meta replaces an ad set's targeting wholesale, so Zernio reads
+ * the live targeting first, changes only what the request names and writes the merged
+ * spec back: custom audiences, geo, age, interest groups and `targeting_automation` you do
+ * not send are kept. `placements` replaces the whole placement set, `placements: null`
+ * returns the ad set to automatic placements, and omitting it leaves placements as they
+ * are. Other platforms return 400 for either field before anything in the request is
+ * written (use PUT /v1/ads/{adId} with `targeting` where that platform supports it). The
+ * live read and the `incomeTier` lookup run before any other field is written, so a 502
+ * or 422 from them leaves the ad set unchanged.
+ *
  */
 export const updateAdSet = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateAdSetData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateAdSetResponse, UpdateAdSetError, ThrowOnError>({

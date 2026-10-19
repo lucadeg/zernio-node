@@ -42758,6 +42758,44 @@ export type UpdateAdSetData = {
             interestsBehaviors?: boolean;
         };
         /**
+         * Meta only (400 elsewhere). Manual placements, same object and enums as `placements` on
+         * POST /v1/ads/create. Sending an object REPLACES the ad set's current placement set
+         * (`publisher_platforms`, every `*_positions` list and `device_platforms`); a position
+         * list you leave out is removed. `null` removes every placement key so Meta returns to
+         * automatic (Advantage+) placements. Omit to leave placements untouched. Meta enforces
+         * co-selection rules (e.g. a position needs its publisher platform) and its error is
+         * returned as is. Meta may also reject `null` or a narrower set when an ad's creative
+         * uses per-placement asset customization (`placementAssets`). An object with no
+         * non-empty list is a 400 (send `null` instead). Cannot be combined with
+         * `targeting.placements` (400).
+         *
+         */
+        placements?: {
+            publisherPlatforms?: Array<('facebook' | 'instagram' | 'threads' | 'messenger' | 'audience_network' | 'whatsapp')>;
+            facebookPositions?: Array<('feed' | 'right_hand_column' | 'marketplace' | 'video_feeds' | 'story' | 'search' | 'instream_video' | 'facebook_reels' | 'facebook_reels_overlay' | 'profile_feed' | 'notification')>;
+            instagramPositions?: Array<('stream' | 'story' | 'explore' | 'explore_home' | 'reels' | 'profile_feed' | 'ig_search' | 'profile_reels')>;
+            messengerPositions?: Array<('messenger_home' | 'sponsored_messages' | 'story')>;
+            audienceNetworkPositions?: Array<('classic' | 'rewarded_video')>;
+            threadsPositions?: Array<('threads_stream')>;
+            whatsappPositions?: Array<('status')>;
+            devicePlatforms?: Array<('mobile' | 'desktop')>;
+        } | null;
+        /**
+         * Meta only (400 elsewhere). Targeting fields to change, same shape as the `targeting`
+         * object on POST /v1/ads/create. Only the keys you send change: Zernio reads the ad set's
+         * live targeting from Meta, merges these keys over it and writes the full spec back, so
+         * everything you do not send (custom audiences, geo, age, interest groups,
+         * `targeting_automation`) is kept. Setting any location replaces every location list.
+         * An empty list or `gender: all` clears that key. `incomeTier` is resolved to Meta's
+         * income segment first (422 when Meta has none). Fields Meta cannot target (LinkedIn
+         * B2B, Google `devices`, Reddit communities and keywords) return 400 with
+         * `param: targeting.<field>`. An empty object is a 400, and so is a
+         * `targeting.placements` object with no non-empty list (`param: targeting.placements`). When the live targeting cannot be
+         * read the request returns 502 and nothing is written.
+         *
+         */
+        targeting?: (TargetingSpec);
+        /**
          * Bid cap in WHOLE currency units (USD: 5 = $5.00; JPY: 100 = ¥100). Required when
          * bidStrategy is LOWEST_COST_WITH_BID_CAP or COST_CAP. Internally converted to Meta's
          * smallest-denomination integer, or (on OpenAI and X) to micros (× 1,000,000). Meta only:
@@ -42891,6 +42929,12 @@ export type UpdateAdSetResponse = ({
     bidAmount?: (number) | null;
     roasAverageFloor?: (number) | null;
     platformSpecificData?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Present when `placements` or `targeting` was sent. The ad set's full Meta targeting as written (Meta snake_case). The same snake_case object is stored as the ad set's and its ads' `targeting`.
+     */
+    targeting?: {
         [key: string]: unknown;
     };
 });
