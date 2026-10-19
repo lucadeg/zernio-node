@@ -345,6 +345,7 @@ import {
   getCommerceDiscount,
   getCommerceMenu,
   getCommerceMetaobject,
+  getCommerceOrder,
   getCommercePage,
   getCommerceProduct,
   getCommerceStore,
@@ -590,6 +591,7 @@ import {
   listCommerceMenus,
   listCommerceMetaobjectDefinitions,
   listCommerceMetaobjects,
+  listCommerceOrders,
   listCommercePages,
   listCommercePriceLists,
   listCommerceProductMetafields,
@@ -2443,6 +2445,8 @@ export class Zernio {
    */
   commerce = {
     getCommerceStore: this._bind(getCommerceStore),
+    listCommerceOrders: this._bind(listCommerceOrders),
+    getCommerceOrder: this._bind(getCommerceOrder),
     listCommerceProducts: this._bind(listCommerceProducts),
     createCommerceProduct: this._bind(createCommerceProduct),
     changeCommerceProductState: this._bind(changeCommerceProductState),

@@ -773,6 +773,7 @@ try {
 | `commerce.listCommerceMenus()` | List navigation menus |
 | `commerce.listCommerceMetaobjectDefinitions()` | List metaobject definitions |
 | `commerce.listCommerceMetaobjects()` | List metaobjects of a type |
+| `commerce.listCommerceOrders()` | List orders |
 | `commerce.listCommercePages()` | List pages |
 | `commerce.listCommercePriceLists()` | List price lists |
 | `commerce.listCommerceProductMetafields()` | List product metafields |
@@ -793,6 +794,7 @@ try {
 | `commerce.getCommerceDiscount()` | Get a discount |
 | `commerce.getCommerceMenu()` | Get a navigation menu |
 | `commerce.getCommerceMetaobject()` | Get a metaobject |
+| `commerce.getCommerceOrder()` | Get an order |
 | `commerce.getCommercePage()` | Get a page |
 | `commerce.getCommerceProduct()` | Get a product |
 | `commerce.getCommerceStore()` | Get a store |
