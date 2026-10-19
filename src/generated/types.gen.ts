@@ -50261,9 +50261,9 @@ export type SearchAdTargetingData = {
          */
         countryCode?: string;
         /**
-         * What to search. `geo` resolves locations (scope further with `geoType`), `interest`/`behavior` resolve audience entities (`behavior` on Meta, TikTok and LinkedIn), `interestKeyword`/`hashtag` resolve TikTok additional interests and hashtags (TikTok only), `income` resolves the normalized income tiers, `language` resolves Google's targetable language_constant table (Google only), `workPosition`/`workEmployer`/`workIndustry` resolve Meta work demographics, `industry`/`jobFunction`/`seniority`/`companySize` resolve LinkedIn B2B facets (LinkedIn only). Defaults to `interest` for backward compatibility with the deprecated /v1/ads/interests alias.
+         * What to search. `geo` resolves locations (scope further with `geoType`), `interest`/`behavior` resolve audience entities (`behavior` on Meta, TikTok and LinkedIn), `interestSuggestion` suggests interests related to the names in `q` (Meta only), `interestKeyword`/`hashtag` resolve TikTok additional interests and hashtags (TikTok only), `income` resolves the normalized income tiers, `language` resolves Google's targetable language_constant table (Google only), `workPosition`/`workEmployer`/`workIndustry` resolve Meta work demographics, `industry`/`jobFunction`/`seniority`/`companySize` resolve LinkedIn B2B facets (LinkedIn only). Defaults to `interest` for backward compatibility with the deprecated /v1/ads/interests alias.
          */
-        dimension?: 'geo' | 'interest' | 'interestKeyword' | 'behavior' | 'hashtag' | 'income' | 'language' | 'workPosition' | 'workEmployer' | 'workIndustry' | 'industry' | 'jobFunction' | 'seniority' | 'companySize' | 'community' | 'conversationKeyword';
+        dimension?: 'geo' | 'interest' | 'interestSuggestion' | 'interestKeyword' | 'behavior' | 'hashtag' | 'income' | 'language' | 'workPosition' | 'workEmployer' | 'workIndustry' | 'industry' | 'jobFunction' | 'seniority' | 'companySize' | 'community' | 'conversationKeyword';
         /**
          * Only used when `dimension=geo`. The kind of location to resolve. `all` searches every type in one relevance-ranked call. Defaults to `city`.
          */
@@ -50273,7 +50273,7 @@ export type SearchAdTargetingData = {
          */
         limit?: number;
         /**
-         * Search query. For geo, the locality name only (no region/country suffix).
+         * Search query. For geo, the locality name only (no region/country suffix). For `interestSuggestion`, the interest names: comma-separated, or a JSON array of strings when a name contains a comma (a `q` starting with `[` is read as JSON).
          */
         q: string;
     };
@@ -50290,7 +50290,7 @@ export type SearchAdTargetingResponse = ({
          */
         name: string;
         /**
-         * What the result is. Equals the requested dimension (interest, interestKeyword, behavior, hashtag, income, language, workPosition, workEmployer, workIndustry, industry, jobFunction, seniority, companySize, community, conversationKeyword), or the location level for geo (country, region, city, zip, metro, ...).
+         * What the result is. Equals the requested dimension (interest, interestSuggestion, interestKeyword, behavior, hashtag, income, language, workPosition, workEmployer, workIndustry, industry, jobFunction, seniority, companySize, community, conversationKeyword), or the location level for geo (country, region, city, zip, metro, ...).
          */
         type: string;
         /**

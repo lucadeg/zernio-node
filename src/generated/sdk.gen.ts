@@ -13166,6 +13166,15 @@ export const searchAdInterests = <ThrowOnError extends boolean = false>(options:
  *
  * - `geo`: locations, further scoped by `geoType`
  * - `interest`
+ * - `interestSuggestion`: Meta only. Interests related to the interest names in `q`, from Meta's
+ * interest suggestions. `q` lists interest names, case sensitive, names and not ids: either
+ * comma-separated (`NBA,Michael Jordan`) or, for names that contain a comma, a JSON array of
+ * strings (`["Earth, Wind & Fire","Yoga"]`, URL-encoded). A `q` starting with `[` is always read as
+ * JSON. A `q` with no name or malformed JSON returns 400 naming `q`. Meta also suggests behaviors
+ * and demographics; Zernio keeps only interests (entries whose `path` starts with `Interests`), so
+ * every id goes in `TargetingSpec.interests`, like `interest` results. Zernio asks Meta for three
+ * times `limit` (at most 100) before filtering, so fewer than `limit` results can come back. Meta
+ * weights the first name heavily: a multi-name `q` mostly returns suggestions for the first one
  * - `behavior`: Meta, TikTok and LinkedIn, matched by name; ids feed `TargetingSpec.behaviors`.
  * Meta: its fixed behaviors catalog (e.g. `Small business owners`, `Frequent Travelers`).
  * TikTok: video and creator interaction categories (e.g. `Software & Apps`), with ids like
