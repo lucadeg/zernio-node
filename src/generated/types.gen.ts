@@ -10800,6 +10800,22 @@ export type SocialAccount = {
      */
     enabled?: boolean;
     /**
+     * End of the account's publishing cooldown. Compare it with the current time: a value
+     * in the past means the cooldown has ended (the field is cleared on the next successful
+     * publish), null means no cooldown since the last successful publish. A cooldown starts
+     * when a post to the account fails with `errorCategory` `user_abuse` (spam, abuse or
+     * rate-limit errors), or when 10 or more posts to it fail within an hour with
+     * `user_content`, `platform_error`, `platform_rate_limit` or `unknown`. It doubles with
+     * each start inside a 24-hour window that opens at the first one (10, 20, 40, 80 minutes
+     * and so on, capped at 24 hours). On a YouTube account with a recorded successful upload
+     * it instead runs until 24 hours after that upload, or 1 hour when that upload is older
+     * than 24 hours. While it is in the future, POST /v1/posts (drafts excepted) and
+     * POST /v1/posts/{postId}/retry return 429 for this account, and this account's pending
+     * targets on posts scheduled before the cooldown ends are failed when it starts.
+     *
+     */
+    rateLimitedUntil?: (string) | null;
+    /**
      * Platform-specific metadata. Fields vary by platform. For WhatsApp accounts, includes:
      * - qualityRating: Phone number quality rating from Meta (GREEN, YELLOW, RED, or UNKNOWN)
      * - nameStatus: Display name review status (APPROVED, PENDING_REVIEW, DECLINED, or NONE). A declined or pending display name does not by itself block sending; sendability is reported separately via health_status (can_send_message).
