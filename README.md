@@ -438,7 +438,7 @@ try {
 | `adAccounts.listPageUsers()` | Page users of a business |
 | `adAccounts.listTikTokAdPixels()` | List TikTok ad pixels |
 | `adAccounts.listValueRuleSets()` | List value rule sets |
-| `adAccounts.createAdAccount()` | Create Meta ad account |
+| `adAccounts.createAdAccount()` | Create ad account |
 | `adAccounts.createAdLabel()` | Create a Google Ads label |
 | `adAccounts.createAdNegativeKeywordList()` | Create a negative keyword list |
 | `adAccounts.createCustomConversion()` | Create custom conversion |

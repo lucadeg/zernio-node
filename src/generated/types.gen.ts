@@ -4666,6 +4666,169 @@ export type ConversionEvent = {
  */
 export type actionSource = 'web' | 'app' | 'offline' | 'crm' | 'phone_call' | 'system_generated';
 
+export type CreatedGoogleAdAccount = {
+    platform: 'google';
+    /**
+     * New Google Ads customer id for subsequent ads calls.
+     */
+    adAccountId: string;
+    /**
+     * Manager the account was created under.
+     */
+    managerCustomerId: string;
+    /**
+     * Whether the customer was added to the connection and discovery was scheduled. When false the account exists: reconnect Google Ads instead of creating it again.
+     */
+    connectionUpdated: boolean;
+    /**
+     * Recovery instructions if the account could not be attached to the connection.
+     */
+    warnings: Array<(string)>;
+    /**
+     * Always true. The account has no billing until it is set up in Google Ads.
+     */
+    paymentMethodRequired: boolean;
+    /**
+     * Billing setup instructions for the user.
+     */
+    nextSteps: string;
+    /**
+     * Always false on a 201.
+     */
+    validateOnly: boolean;
+};
+
+export type CreatedMetaAdAccount = {
+    /**
+     * New Meta ad account ID for subsequent ads calls.
+     */
+    adAccountId: string;
+    /**
+     * Owning business portfolio ID.
+     */
+    businessId: string;
+    /**
+     * Whether the connection scope and discovery schedule were updated.
+     */
+    connectionUpdated: boolean;
+    /**
+     * Always true as a delivery prerequisite. This is not a live funding-source check. Confirm payment or invoicing in Ads Manager.
+     */
+    paymentMethodRequired: boolean;
+    /**
+     * Open the created account in Ads Manager.
+     */
+    adsManagerUrl: string;
+    /**
+     * Payment setup instructions for the user.
+     */
+    nextSteps: string;
+    /**
+     * Recovery instructions if the account could not be attached to the connection.
+     */
+    warnings: Array<(string)>;
+};
+
+export type CreateGoogleAdAccountRequest = {
+    platform: 'google';
+    /**
+     * Zernio googleads SocialAccount ID whose Google user reaches the manager.
+     */
+    accountId: string;
+    /**
+     * Manager (MCC) customer id without dashes. The new account is created under it. List reachable managers with GET /v1/ads/accounts/hierarchy.
+     */
+    managerCustomerId: string;
+    /**
+     * Account name. Whitespace is trimmed.
+     */
+    name: string;
+    /**
+     * Uppercase ISO 4217 currency. Cannot be changed after creation.
+     */
+    currency: string;
+    /**
+     * IANA time zone name, for example Europe/Madrid. Cannot be changed after creation.
+     */
+    timeZone: string;
+    /**
+     * Ask Google to validate the request without creating the account.
+     */
+    validateOnly?: boolean;
+};
+
+export type CreateMetaAdAccountRequest = {
+    /**
+     * Optional. Omit it or send meta for a Meta ad account.
+     */
+    platform?: 'meta';
+    /**
+     * Zernio metaads SocialAccount ID.
+     */
+    accountId: string;
+    /**
+     * Business portfolio that will own the account.
+     */
+    businessId: string;
+    /**
+     * Ad account name. Whitespace is trimmed.
+     */
+    name: string;
+    /**
+     * Uppercase ISO 4217 currency supported by Meta.
+     */
+    currency: string;
+    /**
+     * Numeric Meta timezone ID from the linked timezone list. For example 1 is America/Los_Angeles.
+     */
+    timezoneId: number;
+    /**
+     * End advertiser business or page ID. NONE uses the owning business.
+     */
+    endAdvertiser?: string;
+    /**
+     * Media agency business or page ID. NONE for self-serve customers.
+     */
+    mediaAgency?: string;
+    /**
+     * Partner business or page ID. NONE for self-serve customers.
+     */
+    partner?: string;
+    /**
+     * Request Meta invoicing. Eligibility is determined by Meta.
+     */
+    invoice?: boolean;
+    /**
+     * Existing Meta invoice group ID.
+     */
+    invoiceGroupId?: string;
+    /**
+     * Addresses for Meta invoices.
+     */
+    invoicingEmails?: Array<(string)>;
+    /**
+     * Meta insertion-order invoicing option.
+     */
+    io?: boolean;
+    /**
+     * Purchase order number.
+     */
+    poNumber?: string;
+    /**
+     * Existing Meta funding reference. Does not add a payment method.
+     */
+    fundingId?: string;
+    /**
+     * Meta Business Manager creation flag.
+     */
+    adAccountCreatedFromBmFlag?: boolean;
+};
+
+/**
+ * Optional. Omit it or send meta for a Meta ad account.
+ */
+export type platform6 = 'meta';
+
 /**
  * In addition to the `required` list, the request must use
  * EXACTLY ONE of the two shapes:
@@ -7378,7 +7541,7 @@ export type HubSpotSettings = {
     logMessages: boolean;
 };
 
-export type platform6 = 'hubspot';
+export type platform7 = 'hubspot';
 
 export type ImessageAudienceContact = {
     conversationId?: string;
@@ -7458,7 +7621,7 @@ export type ImessageSender = {
     isActive?: boolean;
 };
 
-export type platform7 = 'imessage';
+export type platform8 = 'imessage';
 
 /**
  * A provisioned iMessage sender order and its lifecycle. Activation is asynchronous: poll GET /v1/imessage/senders/{senderId} or subscribe to account.connected.
@@ -7611,7 +7774,7 @@ export type InboxWebhookConversationDetail = {
     contactId?: string;
 };
 
-export type platform8 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'sms' | 'rcs' | 'slack' | 'tiktok' | 'imessage';
+export type platform9 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'sms' | 'rcs' | 'slack' | 'tiktok' | 'imessage';
 
 /**
  * The message object included in inbox webhook payloads.
@@ -7730,7 +7893,7 @@ export type InboxWebhookMessage = {
     isRead: boolean;
 };
 
-export type platform9 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'sms';
+export type platform10 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'sms';
 
 export type direction2 = 'incoming' | 'outgoing';
 
@@ -7858,7 +8021,7 @@ export type InstagramAccountInsightsResponse = {
 /**
  * Platform that served this response.
  */
-export type platform10 = 'facebook' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok';
+export type platform11 = 'facebook' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok';
 
 export type metricType = 'time_series' | 'total_value';
 
@@ -10847,7 +11010,7 @@ export type ReviewWebhookReview = {
 /**
  * Platform the review originated on. Currently Google Business Profile only.
  */
-export type platform11 = 'googlebusiness';
+export type platform12 = 'googlebusiness';
 
 /**
  * A Meta Reach & Frequency prediction. Money values in whole units of the ad account currency.
@@ -11081,7 +11244,7 @@ export type SocialAccount = {
     };
 };
 
-export type platform12 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot';
+export type platform13 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot';
 
 /**
  * TikTok accounts only. The account type TikTok reported when the account was connected. `personal` accounts cannot use TikTok direct messages through the API (TikTok limits Business Messaging to Business Accounts): skip the inbox for them and tell the user to switch to a Business Account in the TikTok app, then reconnect. `business` is the prerequisite, not a guarantee; messaging also needs the messaging scopes granted and TikTok's regional availability. `unknown` on accounts connected before this was captured or whose grant left out the account-type scope.
@@ -11161,7 +11324,7 @@ export type StorePixelInstall = {
 /**
  * The store platform.
  */
-export type platform13 = 'shopify' | 'wordpress';
+export type platform14 = 'shopify' | 'wordpress';
 
 /**
  * WordPress only.
@@ -11842,7 +12005,7 @@ export type TrackingTag = {
     autoTagging?: boolean;
 };
 
-export type platform14 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
+export type platform15 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
 
 /**
  * Platform-native flavor of the tag (Meta: `pixel`).
@@ -13758,7 +13921,7 @@ export type WebhookPayloadComment = {
 
 export type event14 = 'comment.received';
 
-export type platform15 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
+export type platform16 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
 
 export type WebhookPayloadCommerceOrder = {
     /**
@@ -14120,7 +14283,7 @@ export type WebhookPayloadLead = {
 
 export type event22 = 'lead.received';
 
-export type platform16 = 'facebook';
+export type platform17 = 'facebook';
 
 /**
  * Webhook payload for message received events
@@ -15137,7 +15300,7 @@ export type event27 = 'message.sent';
 /**
  * Every platform whose outgoing messages Zernio observes. sms is absent on purpose: its carrier receipts update delivery status and never raise message.sent.
  */
-export type platform17 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
+export type platform18 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
 
 /**
  * WhatsApp send origin. whatsapp_business_app when sent from the WhatsApp Business phone app on a Coexistence number; cloud_api when sent through Zernio (dashboard, API, or broadcasts); meta_business_agent when Meta Business Agent answered on the number. Absent on non-WhatsApp platforms. Says where WhatsApp saw the send come from, not which Zernio surface produced it: read sentVia for that.
@@ -15712,7 +15875,7 @@ export type WebhookPayloadWhatsAppAccountAlertReceived = {
 
 export type event38 = 'whatsapp.account.alert_received';
 
-export type platform18 = 'whatsapp';
+export type platform19 = 'whatsapp';
 
 /**
  * Webhook payload for the `whatsapp.account.name_status_updated` event.
@@ -47813,100 +47976,17 @@ export type GetAdAccountLiveEntitiesResponse = ({
 export type GetAdAccountLiveEntitiesError = (ErrorResponse | unknown);
 
 export type CreateAdAccountData = {
-    body: {
-        /**
-         * Zernio metaads SocialAccount ID.
-         */
-        accountId: string;
-        /**
-         * Business portfolio that will own the account.
-         */
-        businessId: string;
-        /**
-         * Ad account name. Whitespace is trimmed.
-         */
-        name: string;
-        /**
-         * Uppercase ISO 4217 currency supported by Meta.
-         */
-        currency: string;
-        /**
-         * Numeric Meta timezone ID from the linked timezone list. For example 1 is America/Los_Angeles.
-         */
-        timezoneId: number;
-        /**
-         * End advertiser business or page ID. NONE uses the owning business.
-         */
-        endAdvertiser?: string;
-        /**
-         * Media agency business or page ID. NONE for self-serve customers.
-         */
-        mediaAgency?: string;
-        /**
-         * Partner business or page ID. NONE for self-serve customers.
-         */
-        partner?: string;
-        /**
-         * Request Meta invoicing. Eligibility is determined by Meta.
-         */
-        invoice?: boolean;
-        /**
-         * Existing Meta invoice group ID.
-         */
-        invoiceGroupId?: string;
-        /**
-         * Addresses for Meta invoices.
-         */
-        invoicingEmails?: Array<(string)>;
-        /**
-         * Meta insertion-order invoicing option.
-         */
-        io?: boolean;
-        /**
-         * Purchase order number.
-         */
-        poNumber?: string;
-        /**
-         * Existing Meta funding reference. Does not add a payment method.
-         */
-        fundingId?: string;
-        /**
-         * Meta Business Manager creation flag.
-         */
-        adAccountCreatedFromBmFlag?: boolean;
-    };
+    body: (CreateMetaAdAccountRequest | CreateGoogleAdAccountRequest);
 };
 
 export type CreateAdAccountResponse = ({
+    platform: 'google';
+    managerCustomerId: string;
     /**
-     * New Meta ad account ID for subsequent ads calls.
+     * Always true on a 200.
      */
-    adAccountId: string;
-    /**
-     * Owning business portfolio ID.
-     */
-    businessId: string;
-    /**
-     * Whether the connection scope and discovery schedule were updated.
-     */
-    connectionUpdated: boolean;
-    /**
-     * Always true as a delivery prerequisite. This is not a live funding-source check. Confirm payment or invoicing in Ads Manager.
-     */
-    paymentMethodRequired: boolean;
-    /**
-     * Open the created account in Ads Manager.
-     */
-    adsManagerUrl: string;
-    /**
-     * Payment setup instructions for the user.
-     */
-    nextSteps: string;
-    /**
-     * Recovery instructions if the account could not be attached to the connection.
-     */
-    warnings: Array<(string)>;
-});
+    validateOnly: boolean;
+} | (CreatedMetaAdAccount | CreatedGoogleAdAccount));
 
 export type CreateAdAccountError = (ErrorResponse);
 

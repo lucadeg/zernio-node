@@ -12620,8 +12620,10 @@ export const getAdAccountLiveEntities = <ThrowOnError extends boolean = false>(o
 };
 
 /**
- * Create Meta ad account
- * Creates a new Meta ad account in the user's own business portfolio (a payment method must then be added in Ads Manager).
+ * Create ad account
+ * Creates a new Meta ad account in the user's own business portfolio, or a Google Ads client account under a manager (MCC) account the connection reaches. Billing must then be set up on the platform.
+ *
+ * **Meta** (omit `platform` or send `meta`).
  *
  * Creates a durable Meta ad account in the end user's own business portfolio using
  * their connected Meta Ads token. Requires an active metaads accountId, Ads access,
@@ -12646,11 +12648,30 @@ export const getAdAccountLiveEntities = <ThrowOnError extends boolean = false>(o
  * immediately. Use the returned adAccountId with the existing ads endpoints.
  *
  * This operation is not idempotent and Zernio never automatically retries it.
- * Unknown body fields are rejected. No validateOnly or dry-run option is supported.
+ * Unknown body fields are rejected. The Meta flow has no validateOnly or dry-run option.
  * After a timeout or a 502 with details.creationStatus=unknown, check the business
  * in Ads Manager before attempting another creation. A 201 with connectionUpdated=false
  * means the account exists but needs reconnecting with adAccountIds containing the returned ID and the previous
  * scoped IDs via GET /v1/connect/facebook/ads. Do not repeat the create call.
+ *
+ * **Google** (send `platform: google`).
+ *
+ * Google only creates accounts through a manager account, so the new client account
+ * is created under `managerCustomerId`, which must be a manager the Google user behind
+ * the googleads `accountId` reaches (directly or as a sub-manager). List them with
+ * GET /v1/ads/accounts/hierarchy. Whose manager it is (the integrator's or the end
+ * user's) is the caller's choice: pass the connection that reaches it.
+ *
+ * `currency` (ISO 4217) and `timeZone` (IANA name, for example Europe/Madrid) cannot be
+ * changed after creation. The account starts without billing: set it up in Google Ads
+ * before ads can serve. Google caps how many accounts a manager can create and how
+ * many active client accounts it can hold.
+ *
+ * The new customer is added to the connection (and to a scoped connection's allowlist),
+ * discovery is nudged immediately, and the returned adAccountId works with every other
+ * ads endpoint. `validateOnly: true` asks Google to validate the request without creating
+ * anything and returns 200. A real create is not idempotent: after a 502 with
+ * details.creationStatus=unknown, check the manager in Google Ads before trying again.
  *
  */
 export const createAdAccount = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<CreateAdAccountData, ThrowOnError>) => {
