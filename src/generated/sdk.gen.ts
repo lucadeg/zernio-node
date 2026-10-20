@@ -4044,7 +4044,7 @@ export const listLogs = <ThrowOnError extends boolean = false>(options?: Options
  * List conversations
  * Fetch conversations (DMs) from all connected messaging accounts in a single API call. Supports filtering by profile and platform. Results are aggregated and deduplicated.
  *
- * Supported platforms: Facebook, Instagram, X, Bluesky, Reddit, Telegram.
+ * Supported platforms: Facebook, Instagram, X, Bluesky, Reddit, Telegram, WhatsApp, iMessage and SMS.
  *
  * **X limitation.** X has replaced traditional DMs with encrypted "X Chat" for many accounts. Messages sent or received through encrypted X Chat are not accessible via X's API (the /2/dm_events endpoint only returns legacy unencrypted DMs). This means some X conversations may show only outgoing messages or appear empty. This is an X platform limitation that affects all third-party applications. See X's docs on encrypted messaging for more details.
  *

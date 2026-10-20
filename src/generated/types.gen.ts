@@ -27885,7 +27885,7 @@ export type ListInboxConversationsData = {
         /**
          * Filter by platform
          */
-        platform?: 'facebook' | 'instagram' | 'twitter' | 'bluesky' | 'reddit' | 'telegram' | 'whatsapp' | 'imessage';
+        platform?: 'facebook' | 'instagram' | 'twitter' | 'bluesky' | 'reddit' | 'telegram' | 'whatsapp' | 'imessage' | 'sms';
         /**
          * Filter by profile ID
          */
