@@ -554,7 +554,8 @@ export const getGoogleBusinessPerformance = <ThrowOnError extends boolean = fals
 /**
  * Get Google Business Profile search keywords
  * Returns search keywords that triggered impressions for a Google Business Profile location.
- * Data is aggregated monthly. Keywords below a minimum impression threshold set by Google are excluded.
+ * Data is aggregated monthly. Keywords Google reports only as below a threshold have `impressions` 0 and `impressionsThreshold` set to that threshold.
+ * Returns up to 100 keywords per page. When `nextPageToken` is not null, pass it as `pageToken` with the same `startMonth` and `endMonth` to get the next page.
  * Max 18 months of historical data. Requires the Analytics add-on.
  *
  */

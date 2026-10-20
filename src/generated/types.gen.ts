@@ -18571,6 +18571,10 @@ export type GetGoogleBusinessSearchKeywordsData = {
          */
         endMonth?: string;
         /**
+         * The nextPageToken from the previous page. Valid only with the same startMonth and endMonth as the request that returned it.
+         */
+        pageToken?: string;
+        /**
          * Start month (YYYY-MM). Defaults to 3 months ago.
          */
         startMonth?: string;
@@ -18587,8 +18591,19 @@ export type GetGoogleBusinessSearchKeywordsResponse = ({
     };
     keywords?: Array<{
         keyword?: string;
+        /**
+         * Impressions for the range. 0 when Google reports only a threshold.
+         */
         impressions?: number;
+        /**
+         * Set when Google reports only that impressions were below this value. null when impressions is exact.
+         */
+        impressionsThreshold?: (number) | null;
     }>;
+    /**
+     * Pass as pageToken to fetch the next page. null on the last page.
+     */
+    nextPageToken?: (string) | null;
     note?: string;
 });
 
