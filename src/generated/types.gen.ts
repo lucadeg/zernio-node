@@ -4644,9 +4644,39 @@ export type ConversionEvent = {
      */
     sourceUrl?: string;
     /**
-     * Where the conversion happened. Used by Meta. Google also requires an event source internally; omitting this field sends OTHER to Google. Send an explicit value for accurate origin reporting.
+     * Where the conversion happened. Used by Meta. Google also requires an event source internally; omitting this field sends OTHER to Google. Send an explicit value for accurate origin reporting. `business_messaging` (Meta) marks an event from a WhatsApp, Messenger or Instagram Direct conversation and needs `messaging`.
      */
-    actionSource?: 'web' | 'app' | 'offline' | 'crm' | 'phone_call' | 'system_generated';
+    actionSource?: 'web' | 'app' | 'offline' | 'crm' | 'phone_call' | 'system_generated' | 'business_messaging';
+    /**
+     * Meta only, read when `actionSource` is `business_messaging` (Conversions API
+     * for Business Messaging). `channel` is sent as the event's `messaging_channel`
+     * (`instagram_direct` goes out as `instagram`). Each id lands in Meta's
+     * `user_data` unhashed, and an id that does not belong to `channel` is ignored.
+     *
+     */
+    messaging?: {
+        channel: 'whatsapp' | 'messenger' | 'instagram_direct';
+        /**
+         * WhatsApp only. WhatsApp Business Account id, sent as `whatsapp_business_account_id`.
+         */
+        wabaId?: string;
+        /**
+         * WhatsApp only. Click-to-WhatsApp click id from the first inbound message referral, sent as `ctwa_clid`.
+         */
+        ctwaClid?: string;
+        /**
+         * Messenger and Instagram Direct. Facebook Page id, sent as `page_id`.
+         */
+        pageId?: string;
+        /**
+         * Messenger only. The page-scoped user id (PSID) your Messenger webhook gives for the person, sent as `page_scoped_user_id` next to `page_id`.
+         */
+        pageScopedUserId?: string;
+        /**
+         * Instagram Direct only. The Instagram-scoped user id (IGSID) your Instagram messaging webhook gives for the person, sent as `ig_sid`.
+         */
+        instagramScopedUserId?: string;
+    };
     /**
      * Escape hatch for platform-specific fields we haven't normalized.
      * On Meta, keys are shallow-merged into `custom_data` only: fields
@@ -4662,9 +4692,11 @@ export type ConversionEvent = {
 };
 
 /**
- * Where the conversion happened. Used by Meta. Google also requires an event source internally; omitting this field sends OTHER to Google. Send an explicit value for accurate origin reporting.
+ * Where the conversion happened. Used by Meta. Google also requires an event source internally; omitting this field sends OTHER to Google. Send an explicit value for accurate origin reporting. `business_messaging` (Meta) marks an event from a WhatsApp, Messenger or Instagram Direct conversation and needs `messaging`.
  */
-export type actionSource = 'web' | 'app' | 'offline' | 'crm' | 'phone_call' | 'system_generated';
+export type actionSource = 'web' | 'app' | 'offline' | 'crm' | 'phone_call' | 'system_generated' | 'business_messaging';
+
+export type channel3 = 'whatsapp' | 'messenger' | 'instagram_direct';
 
 export type CreatedGoogleAdAccount = {
     platform: 'google';
@@ -7175,7 +7207,7 @@ export type level = 'LEVEL1' | 'LEVEL2' | 'LEVEL3' | 'LEVEL4' | 'LEVEL5';
 
 export type condition = 'NEW' | 'REFURBISHED' | 'USED';
 
-export type channel3 = 'ONLINE' | 'LOCAL';
+export type channel4 = 'ONLINE' | 'LOCAL';
 
 export type index = 'INDEX0' | 'INDEX1' | 'INDEX2' | 'INDEX3' | 'INDEX4';
 
@@ -12781,7 +12813,7 @@ export type Verification = {
 
 export type status31 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
 
-export type channel4 = 'sms' | 'whatsapp';
+export type channel5 = 'sms' | 'whatsapp';
 
 /**
  * WhatsApp only, returned by GET /v1/verify/verifications/{verificationId} (null on create and check responses): what Meta reported for the latest send, null until it reports. A code that never reached the recipient (for example a number not on WhatsApp) reads failed, with the Meta error in deliveryErrorCode. failed does not settle the verification: Meta can report failed and later deliver the same message. Reported for at least an hour after the send, well past any code's expiry.
