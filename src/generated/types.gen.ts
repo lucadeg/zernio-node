@@ -17750,9 +17750,9 @@ export type GetInstagramAccountInsightsData = {
         /**
          * Comma-separated list of metrics. Defaults to "reach,views,accounts_engaged,total_interactions".
          * Valid metrics: reach, views, accounts_engaged, total_interactions, comments, likes, saves, shares,
-         * replies, reposts, follows_and_unfollows, profile_links_taps.
+         * replies, reposts, follows_and_unfollows, profile_links_taps, profile_views, website_clicks.
          * Note: only "reach" supports metricType=time_series. All other metrics (including
-         * follows_and_unfollows) are total_value only. This is an Instagram Graph API limitation,
+         * follows_and_unfollows, profile_views and website_clicks) are total_value only. This is an Instagram Graph API limitation,
          * not a Zernio limitation - the IG API does not return time-series data for these metrics.
          * For a daily running follower count, use /v1/analytics/instagram/follower-history instead.
          *

@@ -3064,8 +3064,10 @@ export const getInstagramBusinessDiscovery = <ThrowOnError extends boolean = fal
  * - `live`: fetched from Meta in real time (story is still active)
  * - `cached`: fetched from a persisted `story_insights` webhook payload
  * (story has expired but we received its final-state metrics from Meta)
- * - `unavailable`: story has expired and we never received its webhook
- * payload (for example, the account connected after the story expired)
+ * - `unavailable`: story has expired and Meta sent no `story_insights` webhook for it.
+ * Meta sends it most reliably for accounts connected with Facebook Login or with their
+ * linked Facebook Page connected, so read insights while the story is live if you need
+ * final numbers.
  *
  * Meta can report an expired story as an empty successful result rather
  * than an error, so an expired story resolves to `cached` or `unavailable`
