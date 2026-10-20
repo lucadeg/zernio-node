@@ -523,6 +523,7 @@ import {
   initiateWhatsAppCall,
   installTrackingTagOnStore,
   inviteAdAccountToManager,
+  inviteAdAccountUser,
   likeInboxComment,
   likePost,
   linkWhatsAppCatalog,
@@ -531,6 +532,7 @@ import {
   listAccountSitelinks,
   listAccountStructuredSnippets,
   listAccounts,
+  listAdAccountUserInvitations,
   listAdAccountUsers,
   listAdAccounts,
   listAdAudiences,
@@ -776,6 +778,7 @@ import {
   retweetPost,
   reuseSmsRegistrationForNumber,
   reviewPhoneNumberKycPacket,
+  revokeAdAccountUserInvitation,
   revokeBusinessPartner,
   revokeConnectedApp,
   rotateSipTrunkCredentials,
@@ -2232,6 +2235,9 @@ export class Zernio {
     getAdAccountHierarchy: this._bind(getAdAccountHierarchy),
     inviteAdAccountToManager: this._bind(inviteAdAccountToManager),
     updateAdAccountManagerLink: this._bind(updateAdAccountManagerLink),
+    listAdAccountUserInvitations: this._bind(listAdAccountUserInvitations),
+    inviteAdAccountUser: this._bind(inviteAdAccountUser),
+    revokeAdAccountUserInvitation: this._bind(revokeAdAccountUserInvitation),
     listAdAccountUsers: this._bind(listAdAccountUsers),
     assignAdAccountUser: this._bind(assignAdAccountUser),
     removeAdAccountUser: this._bind(removeAdAccountUser),
@@ -2789,6 +2795,12 @@ export class Zernio {
     inviteAdAccountToManager: this._bind(inviteAdAccountToManager),
     /** @deprecated Use `zernio.adaccounts.updateAdAccountManagerLink` instead. */
     updateAdAccountManagerLink: this._bind(updateAdAccountManagerLink),
+    /** @deprecated Use `zernio.adaccounts.listAdAccountUserInvitations` instead. */
+    listAdAccountUserInvitations: this._bind(listAdAccountUserInvitations),
+    /** @deprecated Use `zernio.adaccounts.inviteAdAccountUser` instead. */
+    inviteAdAccountUser: this._bind(inviteAdAccountUser),
+    /** @deprecated Use `zernio.adaccounts.revokeAdAccountUserInvitation` instead. */
+    revokeAdAccountUserInvitation: this._bind(revokeAdAccountUserInvitation),
     /** @deprecated Use `zernio.adaccounts.listAdAccountUsers` instead. */
     listAdAccountUsers: this._bind(listAdAccountUsers),
     /** @deprecated Use `zernio.adaccounts.assignAdAccountUser` instead. */

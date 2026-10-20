@@ -6681,6 +6681,11 @@ export type GoogleAdLabelAssignments = {
 };
 
 /**
+ * ADMIN manages the account and its users, STANDARD edits campaigns, READ_ONLY views them, EMAIL_ONLY only receives the account's emails.
+ */
+export type GoogleAdsAccessRole = 'ADMIN' | 'STANDARD' | 'READ_ONLY' | 'EMAIL_ONLY';
+
+/**
  * A Google Ads account inside a manager tree.
  */
 export type GoogleAdsHierarchyClient = {
@@ -6742,6 +6747,45 @@ export type GoogleAdsManagerLink = {
  * Status the link has after this call.
  */
 export type status18 = 'PENDING' | 'ACTIVE' | 'REFUSED' | 'CANCELED' | 'INACTIVE';
+
+export type GoogleAdsUserAccessInvitation = {
+    invitationId?: string;
+    emailAddress?: string;
+    accessRole?: 'ADMIN' | 'STANDARD' | 'READ_ONLY' | 'EMAIL_ONLY' | 'UNKNOWN';
+    status?: 'PENDING' | 'DECLINED' | 'EXPIRED' | 'UNKNOWN';
+    /**
+     * Google's creation time, yyyy-MM-dd HH:mm:ss.ssssss in the account's time zone.
+     */
+    createdAt?: (string) | null;
+};
+
+export type accessRole = 'ADMIN' | 'STANDARD' | 'READ_ONLY' | 'EMAIL_ONLY' | 'UNKNOWN';
+
+export type status19 = 'PENDING' | 'DECLINED' | 'EXPIRED' | 'UNKNOWN';
+
+export type GoogleAdsUserAccessInvitationResult = {
+    customerId?: string;
+    emailAddress?: string;
+    accessRole?: GoogleAdsAccessRole;
+    /**
+     * PENDING once the email is sent; PENDING_APPROVAL while Google waits for a second admin's multi-party approval.
+     */
+    status?: 'PENDING' | 'PENDING_APPROVAL';
+    /**
+     * Null on validateOnly and while the invitation awaits multi-party approval.
+     */
+    invitationId?: (string) | null;
+    /**
+     * Google's multi-party approval review id when status is PENDING_APPROVAL.
+     */
+    multiPartyAuthReviewId?: (string) | null;
+    validateOnly?: boolean;
+};
+
+/**
+ * PENDING once the email is sent; PENDING_APPROVAL while Google waits for a second admin's multi-party approval.
+ */
+export type status20 = 'PENDING' | 'PENDING_APPROVAL';
 
 /**
  * Link one asset to the asset group. Send exactly one of asset (an existing asset), text, imageUrl or youtubeVideoId (new content, created in the same request).
@@ -7486,7 +7530,7 @@ export type GoogleRecommendationResult = {
     error?: string;
 };
 
-export type status19 = 'applied' | 'dismissed' | 'failed';
+export type status21 = 'applied' | 'dismissed' | 'failed';
 
 export type GoogleRsaDescription = {
     text: string;
@@ -7621,7 +7665,7 @@ export type ImessageSandboxContact = {
     createdAt?: string;
 };
 
-export type status20 = 'pending' | 'active';
+export type status22 = 'pending' | 'active';
 
 /**
  * An iMessage sender registered as an account on a profile.
@@ -7696,7 +7740,7 @@ export type region = 'US' | 'GB';
 /**
  * `awaiting_payment`: the first-month charge is still being confirmed by the card; the number is ordered automatically once it is paid (usually under 5 minutes), or the order fails with `failureReason` when the card declines or nothing confirms within 30 minutes.
  */
-export type status21 = 'ordering' | 'awaiting_payment' | 'activating' | 'active' | 'suspended' | 'canceled' | 'failed';
+export type status23 = 'ordering' | 'awaiting_payment' | 'activating' | 'active' | 'suspended' | 'canceled' | 'failed';
 
 /**
  * Attachment snapshot inside an edit-history entry.
@@ -7768,7 +7812,7 @@ export type InboxWebhookConversation = {
     contactId?: string;
 };
 
-export type status22 = 'active' | 'archived';
+export type status24 = 'active' | 'archived';
 
 /**
  * The conversation object included in conversation lifecycle webhook payloads (conversation.started, conversation.control_changed).
@@ -9670,7 +9714,7 @@ export type OwnedPhoneNumber = {
     }>;
 };
 
-export type status23 = 'pending_payment' | 'pending_regulatory' | 'regulatory_declined' | 'provisioning' | 'verifying' | 'active' | 'suspended' | 'releasing' | 'released';
+export type status25 = 'pending_payment' | 'pending_regulatory' | 'regulatory_declined' | 'provisioning' | 'verifying' | 'active' | 'suspended' | 'releasing' | 'released';
 
 export type metaVerificationStatus = 'pending' | 'code_requested' | 'verified' | 'expired';
 
@@ -9808,7 +9852,7 @@ export type PlatformAnalytics = {
     isOwner?: (boolean) | null;
 };
 
-export type status24 = 'published' | 'failed';
+export type status26 = 'published' | 'failed';
 
 /**
  * Sync state of analytics for this platform
@@ -10243,7 +10287,7 @@ export type Product = {
     publishedAt?: (string) | null;
 };
 
-export type status25 = 'active' | 'draft' | 'archived';
+export type status27 = 'active' | 'draft' | 'archived';
 
 export type ProductImage = {
     url?: string;
@@ -10462,7 +10506,7 @@ export type RcsAgent = {
     createdAt?: string;
 };
 
-export type status26 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
+export type status28 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
 
 export type useCase = 'MULTI_USE' | 'PROMOTIONAL' | 'TRANSACTIONAL' | 'OTP';
 
@@ -10514,7 +10558,7 @@ export type RcsBrand = RcsBrandInput & {
 /**
  * draft = not filed yet (still editable).
  */
-export type status27 = 'draft' | 'vetting' | 'verified' | 'rejected';
+export type status29 = 'draft' | 'vetting' | 'verified' | 'rejected';
 
 export type RcsBrandInput = {
     displayName: string;
@@ -10601,7 +10645,7 @@ export type RcsCarrierApproval = {
 
 export type scope2 = 'carrier' | 'hub' | 'bot';
 
-export type status28 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
+export type status30 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
 
 /**
  * Message content. `suggestions` (max 11) render as chips under the message.
@@ -11434,7 +11478,7 @@ export type SupportRun = {
 /**
  * queued and running are in progress. needs_human means the assistant handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
  */
-export type status29 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
+export type status31 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
 
 /**
  * Why the run stopped. Null while it is in progress.
@@ -12304,7 +12348,7 @@ export type UploadTokenResponse = {
     status?: 'pending' | 'completed' | 'expired';
 };
 
-export type status30 = 'pending' | 'completed' | 'expired';
+export type status32 = 'pending' | 'completed' | 'expired';
 
 export type UploadTokenStatusResponse = {
     token?: string;
@@ -12811,7 +12855,7 @@ export type Verification = {
     resend?: boolean;
 };
 
-export type status31 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
+export type status33 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
 
 export type channel5 = 'sms' | 'whatsapp';
 
@@ -12969,7 +13013,7 @@ export type WebhookLog = {
 /**
  * Delivery outcome
  */
-export type status32 = 'success' | 'failed';
+export type status34 = 'success' | 'failed';
 
 /**
  * Webhook payload for `account.ads.initial_sync_completed` events.
@@ -13086,7 +13130,7 @@ export type event = 'account.ads.initial_sync_completed';
 /**
  * Overall outcome of the initial sync.
  */
-export type status33 = 'success' | 'failure';
+export type status35 = 'success' | 'failure';
 
 /**
  * Stable category for UX branching. New values may be added; existing ones are
@@ -13477,7 +13521,7 @@ export type event7 = 'ad.video.processed';
 /**
  * `ready`: usable as `video.id` on the create endpoints. `error`: Meta could not process it; upload again.
  */
-export type status34 = 'ready' | 'error';
+export type status36 = 'ready' | 'error';
 
 /**
  * Webhook payload for `analytics.synced`. Fired once per connected account each
@@ -15584,7 +15628,7 @@ export type event30 = 'post.platform.published' | 'post.platform.failed' | 'post
 /**
  * Terminal status this event fires on. Matches the event suffix.
  */
-export type status35 = 'published' | 'failed' | 'deleted';
+export type status37 = 'published' | 'failed' | 'deleted';
 
 /**
  * Webhook payload for reaction received events (WhatsApp, Telegram, Slack, Instagram, Facebook Messenger, TikTok)
@@ -15981,7 +16025,7 @@ export type event39 = 'whatsapp.account.name_status_updated';
 /**
  * Normalized from Meta's `decision` (REJECTED -> DECLINED, DEFERRED -> PENDING_REVIEW; the review is still open on DEFERRED, not a rejection).
  */
-export type status36 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
+export type status38 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
 
 /**
  * Webhook payload for `whatsapp.account.quality_updated`. Fired when a connected
@@ -16115,7 +16159,7 @@ export type event41 = 'whatsapp.account.status_updated';
 /**
  * `active` only on a reinstatement (DISABLED_UPDATE with ban state REINSTATE).
  */
-export type status37 = 'restricted' | 'active';
+export type status39 = 'restricted' | 'active';
 
 /**
  * Webhook payload for the `whatsapp.contact.identity_changed` event. Fired when
@@ -16331,7 +16375,7 @@ export type event44 = 'whatsapp.template.status_updated';
  * request before the template is actually removed.
  *
  */
-export type status38 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
+export type status40 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
 
 export type WebhookPayloadWorkflowRun = {
     /**
@@ -16395,7 +16439,7 @@ export type event45 = 'workflow.run.started' | 'workflow.run.completed' | 'workf
 /**
  * running on workflow.run.started; completed or exited (ended on purpose before the last node, e.g. a handoff) on workflow.run.completed; failed on workflow.run.failed.
  */
-export type status39 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
+export type status41 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
 
 /**
  * The profiles this event belongs to, each with the externalId you set on it (null when none is set). Present on every event tied to a profile and absent on events that belong to none. Events spanning several profiles (a post published to accounts of different profiles) list each once. Use it to route the event to your tenant without storing Zernio profile ids.
@@ -16792,7 +16836,7 @@ export type WorkflowExecutionEvent = {
 
 export type action2 = 'execution_started' | 'execution_completed' | 'execution_exited' | 'execution_paused' | 'execution_resumed' | 'node_started' | 'node_completed' | 'node_failed' | 'node_skipped';
 
-export type status40 = 'success' | 'failed' | 'pending';
+export type status42 = 'success' | 'failed' | 'pending';
 
 /**
  * A node in a workflow graph. `config` shape depends on `type`.
@@ -47730,6 +47774,82 @@ export type UpdateAdAccountManagerLinkData = {
 export type UpdateAdAccountManagerLinkResponse = (GoogleAdsManagerLink);
 
 export type UpdateAdAccountManagerLinkError = (ErrorResponse | unknown);
+
+export type ListAdAccountUserInvitationsData = {
+    query: {
+        /**
+         * Google ads SocialAccount id.
+         */
+        accountId: string;
+        /**
+         * Google Ads customer id, digits only. Defaults to the connection's selected customer.
+         */
+        adAccountId?: string;
+    };
+};
+
+export type ListAdAccountUserInvitationsResponse = ({
+    customerId?: string;
+    invitations?: Array<GoogleAdsUserAccessInvitation>;
+    /**
+     * When this data was fetched from Google. Null on a live read.
+     */
+    cachedAt?: (string) | null;
+    /**
+     * True when Google's quota was exhausted and this is the last successful fetch.
+     */
+    stale?: boolean;
+});
+
+export type ListAdAccountUserInvitationsError = (ErrorResponse | unknown);
+
+export type InviteAdAccountUserData = {
+    body: {
+        /**
+         * Google ads SocialAccount id.
+         */
+        accountId: string;
+        /**
+         * Google Ads customer id to invite the user to, digits only.
+         */
+        adAccountId: string;
+        emailAddress: string;
+        accessRole: GoogleAdsAccessRole;
+        validateOnly?: boolean;
+    };
+};
+
+export type InviteAdAccountUserResponse = (GoogleAdsUserAccessInvitationResult);
+
+export type InviteAdAccountUserError = (ErrorResponse | unknown);
+
+export type RevokeAdAccountUserInvitationData = {
+    query: {
+        /**
+         * Google ads SocialAccount id.
+         */
+        accountId: string;
+        /**
+         * Google Ads customer id, digits only.
+         */
+        adAccountId: string;
+        /**
+         * Numeric invitation id from GET /v1/ads/accounts/user-invitations.
+         */
+        invitationId: string;
+    };
+};
+
+export type RevokeAdAccountUserInvitationResponse = ({
+    customerId?: string;
+    invitationId?: string;
+    /**
+     * Always true.
+     */
+    revoked?: boolean;
+});
+
+export type RevokeAdAccountUserInvitationError = (ErrorResponse | unknown);
 
 export type ListAdAccountUsersData = {
     query: {

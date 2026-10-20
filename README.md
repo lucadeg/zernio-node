@@ -423,6 +423,7 @@ try {
 | `adAccounts.listAccountSitelinks()` | List account sitelinks |
 | `adAccounts.listAccountStructuredSnippets()` | List account snippets |
 | `adAccounts.listAdAccounts()` | List ad accounts |
+| `adAccounts.listAdAccountUserInvitations()` | List user access invitations |
 | `adAccounts.listAdAccountUsers()` | Ad account users |
 | `adAccounts.listAdLabels()` | List ad labels |
 | `adAccounts.listAdNegativeKeywordLists()` | List negative keyword lists |
@@ -474,6 +475,7 @@ try {
 | `adAccounts.detachAdLabel()` | Detach a Google Ads label |
 | `adAccounts.hideAdComment()` | Hide or unhide an ad comment |
 | `adAccounts.inviteAdAccountToManager()` | Invite a client account to a manager |
+| `adAccounts.inviteAdAccountUser()` | Invite a user to an ad account by email |
 | `adAccounts.removeAccountCallout()` | Remove account callout |
 | `adAccounts.removeAccountSitelink()` | Remove account sitelink |
 | `adAccounts.removeAccountStructuredSnippet()` | Remove account snippet |
@@ -482,6 +484,7 @@ try {
 | `adAccounts.removePageUser()` | Remove a user from a Page |
 | `adAccounts.replaceAdNegativeKeywordListKeywords()` | Replace negative list keywords |
 | `adAccounts.replyToAdComment()` | Reply to an ad comment |
+| `adAccounts.revokeAdAccountUserInvitation()` | Revoke a user access invitation |
 
 ### Ad Audiences
 | Method | Description |
