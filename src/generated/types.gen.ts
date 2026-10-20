@@ -47720,7 +47720,7 @@ export type ListAdAccountsData = {
          */
         adAccountId?: string;
         /**
-         * Google Ads only. `true` returns only the customers this connection accepts as `adAccountId` (or `customerId`) on the other /v1/ads endpoints, i.e. those inside its ad-account selection. Without it every customer the Google login can reach is listed, including ones selected on another connection of the same login, which those endpoints answer with a 400. Ignored on other platforms.
+         * Google Ads only. `true` returns only the customers this connection accepts as `adAccountId` (or `customerId`) on the other /v1/ads endpoints, i.e. those inside its ad-account selection. Without it every customer the Google login can reach is listed, including ones selected on another connection of the same login, which those endpoints answer with a 400. Ignored on other platforms. On every platform, each item's `selected` flags selection membership without narrowing the list.
          */
         inScopeOnly?: boolean;
         /**
@@ -47863,6 +47863,10 @@ export type ListAdAccountsResponse = ({
          * Meta and X only. Always present on every Meta and X account. Human-readable reason when selectable is false; null when selectable.
          */
         unusableReason?: (string) | null;
+        /**
+         * Always present. True when the ad account is in this connection's ad-account selection, or when the connection has no selection (then every ad account is usable). For a posting account (e.g. facebook, twitter) the selection of its ads connection applies. Unrelated to `selectable`, which is the platform's own status. Writes to an ad account with `selected: false` will answer 403 `ad_account_not_selected`.
+         */
+        selected?: boolean;
     }>;
     /**
      * Google only. When this list was fetched from Google. Null when it was never served from cache. Absent on other platforms.

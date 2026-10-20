@@ -12602,6 +12602,13 @@ export const createAdAccount = <ThrowOnError extends boolean = false>(options: O
  * For Reddit Ads (`redditads`): every Reddit ad account the connected Reddit user can reach,
  * with `businessId`, `approvalStatus` (Reddit's `admin_approval`), `timezone` and `type`.
  *
+ * Every listed ad account carries `selected`: whether it is in the connection's ad-account
+ * selection (the ad accounts picked at connect time or in the dashboard picker, the ones
+ * Zernio syncs). On a connection without a selection every ad account is `selected: true`.
+ * Writes through /v1/ads endpoints to an ad account with `selected: false` are being
+ * restricted and will answer `403 ad_account_not_selected`; add it to the selection first
+ * (dashboard picker, or `GET /v1/connect/{platform}/ads` with `adAccountIds`).
+ *
  */
 export const listAdAccounts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdAccountsData, ThrowOnError>) => {
     return (options?.client ?? client).get<ListAdAccountsResponse, ListAdAccountsError, ThrowOnError>({
