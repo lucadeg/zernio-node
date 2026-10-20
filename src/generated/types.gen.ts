@@ -6890,7 +6890,7 @@ export type GoogleDemandGenInput = {
         };
     }>;
     /**
-     * Channel controls on the ad group. Only the listed channels serve; omit to serve on all of them.
+     * Channel controls on the new ad group. Only the listed channels serve; Google Maps, which this list cannot select, is turned off. Omit to send no channel controls, so Google applies its default for a new ad group: all Demand Gen channels, Google Maps included.
      */
     channels?: Array<('youtube_in_stream' | 'youtube_in_feed' | 'youtube_shorts' | 'discover' | 'gmail' | 'display')>;
     audience?: GoogleDemandGenAudience;
@@ -6942,7 +6942,7 @@ export type GoogleDemandGenUpdate = {
      */
     youtubeVideoIds?: Array<(string)>;
     /**
-     * Replaces the ad group's channel controls; only the listed channels serve.
+     * Replaces the ad group's channel controls. Only the listed channels serve; Google Maps, which this list cannot select, is turned off. Omit to leave the ad group's channel controls unchanged.
      */
     channels?: Array<('youtube_in_stream' | 'youtube_in_feed' | 'youtube_shorts' | 'discover' | 'gmail' | 'display')>;
     audience?: GoogleDemandGenAudience;
