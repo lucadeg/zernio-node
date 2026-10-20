@@ -8180,6 +8180,21 @@ export type metric = 'follower_demographics' | 'engaged_audience_demographics';
  */
 export type timeframe = 'this_week' | 'this_month';
 
+export type InstagramMediaCollaborator = {
+    /**
+     * App-scoped ID of the collaborator's Instagram account.
+     */
+    id: string;
+    /**
+     * Instagram handle of the collaborator.
+     */
+    username: (string) | null;
+    /**
+     * accepted or pending. Any other value Meta adds later is passed through in lowercase.
+     */
+    inviteStatus: (string) | null;
+};
+
 /**
  * Feed aspect ratio 0.5625-1.91, carousels up to 20 items, stories require media (no captions). User tag coordinates 0.0-1.0 from top-left. Images over 8 MB and videos over platform limits are auto-compressed.
  */
@@ -26103,6 +26118,25 @@ export type GetInstagramBusinessDiscoveryData = {
 export type GetInstagramBusinessDiscoveryResponse = (InstagramBusinessDiscovery);
 
 export type GetInstagramBusinessDiscoveryError = (ErrorResponse);
+
+export type ListInstagramMediaCollaboratorsData = {
+    path: {
+        /**
+         * The ID of a connected Instagram account (Facebook Login).
+         */
+        accountId: string;
+        /**
+         * Instagram media ID of a post published by this account (digits only, e.g. the platformPostId of a published post).
+         */
+        mediaId: string;
+    };
+};
+
+export type ListInstagramMediaCollaboratorsResponse = ({
+    data: Array<InstagramMediaCollaborator>;
+});
+
+export type ListInstagramMediaCollaboratorsError = (ErrorResponse);
 
 export type GetInstagramStoryInsightsData = {
     path: {
