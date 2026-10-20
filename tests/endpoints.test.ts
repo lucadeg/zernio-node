@@ -369,6 +369,11 @@ describe('Endpoint Methods', () => {
       expect(client.connect.getWordPressAuthUrl).toBeTypeOf('function');
     });
 
+    it('should have getWixConnectUrl method', () => {
+      expect(client.connect.getWixConnectUrl).toBeDefined();
+      expect(client.connect.getWixConnectUrl).toBeTypeOf('function');
+    });
+
     it('should have connectWordPressWithApplicationPassword method', () => {
       expect(client.connect.connectWordPressWithApplicationPassword).toBeDefined();
       expect(client.connect.connectWordPressWithApplicationPassword).toBeTypeOf('function');

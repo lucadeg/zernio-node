@@ -347,6 +347,7 @@ try {
 | `connect.getSubredditRules()` | Get subreddit rules |
 | `connect.getTelegramConnectStatus()` | Generate Telegram code |
 | `connect.getWhatsAppSdkConfig()` | Get Embedded Signup SDK config |
+| `connect.getWixConnectUrl()` | Get Wix site install URL |
 | `connect.getWordPressAuthUrl()` | Get WordPress.com OAuth connect URL |
 | `connect.getYoutubeCaptions()` | Get a YouTube video transcript |
 | `connect.getYoutubePlaylists()` | List YouTube playlists |

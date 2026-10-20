@@ -2295,35 +2295,35 @@ export type billingSystem = 'metronome' | 'stripe' | 'shopify';
  */
 export type Blog = {
     /**
-     * Platform-native blog id. Shopify uses a numeric blog id. WordPress.com uses the numeric site id; self-hosted WordPress uses `1`, scoped to the connected account.
+     * Platform-native blog id. Shopify uses a numeric blog id. WordPress.com uses the numeric site id; self-hosted WordPress and Wix use `1`, scoped to the connected account.
      */
     id?: string;
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     title?: string;
     /**
-     * URL slug on Shopify; site hostname on WordPress.
+     * URL slug on Shopify; site hostname on WordPress and Wix.
      */
     handle?: string;
 };
 
-export type platform3 = 'shopify' | 'wordpress';
+export type platform3 = 'shopify' | 'wordpress' | 'wix';
 
 /**
  * An article inside a blog on the connected platform.
  */
 export type BlogArticle = {
     /**
-     * Platform-native numeric article/post id.
+     * Platform-native article/post id: numeric on Shopify and WordPress, a GUID on Wix.
      */
     id?: string;
     /**
      * Platform-native id of the blog the article belongs to.
      */
     blogId?: string;
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     title?: string;
     /**
-     * Article body as HTML.
+     * Article body as HTML. Wix stores rich content, converted from and to HTML; Wix lists return null (get the article for its body).
      */
     bodyHtml?: (string) | null;
     /**
@@ -2331,11 +2331,11 @@ export type BlogArticle = {
      */
     handle?: string;
     /**
-     * Tag names. On WordPress, missing tag names are created and matching is case-insensitive.
+     * Tag names. On WordPress and Wix, missing tag names are created and matching is case-insensitive.
      */
     tags?: Array<(string)>;
     /**
-     * Shopify author display name, or numeric WordPress user id serialized as a string.
+     * Shopify author display name, numeric WordPress user id serialized as a string, or Wix site member id. Wix posts without one are attributed to the site's default author.
      */
     author?: (string) | null;
     /**
@@ -2358,11 +2358,11 @@ export type BlogArticle = {
      */
     publishedAt?: (string) | null;
     /**
-     * WordPress only. Native post status returned by WordPress; omitted for Shopify.
+     * WordPress and Wix. Post status (`future` = scheduled, `pending` = in review on Wix); omitted for Shopify.
      */
     status?: 'publish' | 'future' | 'draft' | 'pending' | 'private';
     /**
-     * WordPress only. Scheduled publication time in UTC when status is `future`; null for other WordPress statuses and omitted for Shopify.
+     * WordPress and Wix. Scheduled publication time in UTC when status is `future`; null for other statuses and omitted for Shopify.
      */
     publishDate?: (string) | null;
     /**
@@ -2376,7 +2376,7 @@ export type BlogArticle = {
 };
 
 /**
- * WordPress only. Native post status returned by WordPress; omitted for Shopify.
+ * WordPress and Wix. Post status (`future` = scheduled, `pending` = in review on Wix); omitted for Shopify.
  */
 export type status3 = 'publish' | 'future' | 'draft' | 'pending' | 'private';
 
@@ -10913,7 +10913,7 @@ export type contentType3 = 'story' | 'saved_story' | 'spotlight';
 
 export type SocialAccount = {
     _id: string;
-    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads';
+    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads';
     profileId: (string | Profile);
     username?: string;
     displayName?: string;
@@ -11023,7 +11023,7 @@ export type SocialAccount = {
     };
 };
 
-export type platform11 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads';
+export type platform11 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads';
 
 /**
  * TikTok accounts only. The account type TikTok reported when the account was connected. `personal` accounts cannot use TikTok direct messages through the API (TikTok limits Business Messaging to Business Accounts): skip the inbox for them and tell the user to switch to a Business Account in the TikTok app, then reconnect. `business` is the prerequisite, not a guarantee; messaging also needs the messaging scopes granted and TikTok's regional availability. `unknown` on accounts connected before this was captured or whose grant left out the account-type scope.
@@ -11099,6 +11099,11 @@ export type StorePixelInstall = {
      */
     sidebarId?: (string) | null;
 };
+
+/**
+ * The store platform.
+ */
+export type platform12 = 'shopify' | 'wordpress';
 
 /**
  * WordPress only.
@@ -11779,7 +11784,7 @@ export type TrackingTag = {
     autoTagging?: boolean;
 };
 
-export type platform12 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
+export type platform13 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
 
 /**
  * Platform-native flavor of the tag (Meta: `pixel`).
@@ -13691,7 +13696,7 @@ export type WebhookPayloadComment = {
 
 export type event14 = 'comment.received';
 
-export type platform13 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
+export type platform14 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
 
 export type WebhookPayloadCommerceOrder = {
     /**
@@ -14053,7 +14058,7 @@ export type WebhookPayloadLead = {
 
 export type event22 = 'lead.received';
 
-export type platform14 = 'facebook';
+export type platform15 = 'facebook';
 
 /**
  * Webhook payload for message received events
@@ -15070,7 +15075,7 @@ export type event27 = 'message.sent';
 /**
  * Every platform whose outgoing messages Zernio observes. sms is absent on purpose: its carrier receipts update delivery status and never raise message.sent.
  */
-export type platform15 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
+export type platform16 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
 
 /**
  * WhatsApp send origin. whatsapp_business_app when sent from the WhatsApp Business phone app on a Coexistence number; cloud_api when sent through Zernio (dashboard, API, or broadcasts); meta_business_agent when Meta Business Agent answered on the number. Absent on non-WhatsApp platforms. Says where WhatsApp saw the send come from, not which Zernio surface produced it: read sentVia for that.
@@ -15645,7 +15650,7 @@ export type WebhookPayloadWhatsAppAccountAlertReceived = {
 
 export type event38 = 'whatsapp.account.alert_received';
 
-export type platform16 = 'whatsapp';
+export type platform17 = 'whatsapp';
 
 /**
  * Webhook payload for the `whatsapp.account.name_status_updated` event.
@@ -20229,7 +20234,7 @@ export type GetAllAccountsHealthData = {
         /**
          * Filter by platform
          */
-        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads';
+        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads';
         /**
          * Filter by profile ID
          */
@@ -21835,6 +21840,87 @@ export type GetWordPressAuthUrlResponse = ({
 });
 
 export type GetWordPressAuthUrlError = (unknown | ErrorResponse | {
+    /**
+     * Human-readable error message suitable for end-user display.
+     */
+    error: string;
+    /**
+     * Machine-readable error code. Stable across versions.
+     */
+    code: 'PAYMENT_REQUIRED';
+    /**
+     * Discriminator for which gate fired.
+     */
+    reason: 'free_tier_exceeded' | 'twitter_passthrough' | 'enterprise_required' | 'card_verification_required';
+    /**
+     * Link to the relevant documentation page.
+     */
+    documentation_url?: string;
+    /**
+     * Deep-link to send the end-user to. For
+     * `free_tier_exceeded` and `twitter_passthrough` this opens
+     * the add-payment-method drawer on the Zernio billing page.
+     * For `enterprise_required` this is the Zernio enterprise
+     * contact page.
+     *
+     */
+    dashboard_url?: string;
+    /**
+     * Structured context for SDK clients that want to render their own UX. Keys vary by `reason`.
+     */
+    details?: {
+        /**
+         * How many accounts the free tier allows. Only set when reason=free_tier_exceeded.
+         */
+        free_tier_account_limit?: number;
+        /**
+         * How many accounts the team currently has connected. Set when reason=free_tier_exceeded or reason=enterprise_required.
+         */
+        current_account_count?: number;
+        /**
+         * Whether the team currently has a card on file in Stripe. Set when reason=free_tier_exceeded or reason=twitter_passthrough.
+         */
+        has_payment_method?: boolean;
+        /**
+         * One-time card verification charge in USD cents, credited to usage. Only set when reason=card_verification_required.
+         */
+        verification_amount_cents?: number;
+        /**
+         * The negotiated connected-account cap from the
+         * team's enterprise contract. Self-service teams
+         * have no cap and never receive this reason. Only
+         * set when reason=enterprise_required.
+         *
+         */
+        effective_account_limit?: number;
+    };
+});
+
+export type GetWixConnectUrlData = {
+    query: {
+        /**
+         * Your Zernio profile ID (get from /v1/profiles).
+         */
+        profileId: string;
+        /**
+         * Custom redirect after connection. Must be an absolute http(s) URL or custom app scheme such as `myapp://callback`; relative and unsafe URLs return 400.
+         */
+        redirect_url?: string;
+    };
+};
+
+export type GetWixConnectUrlResponse = ({
+    /**
+     * Wix installer URL to open in the user agent.
+     */
+    authUrl: string;
+    /**
+     * Authenticated, expiring state handled by the callback.
+     */
+    state: string;
+});
+
+export type GetWixConnectUrlError = (unknown | ErrorResponse | {
     /**
      * Human-readable error message suitable for end-user display.
      */
@@ -54714,7 +54800,7 @@ export type GetTrackingTagStatsError = (unknown | ErrorResponse);
 export type ListBlogsData = {
     path: {
         /**
-         * Connected Shopify or WordPress account id.
+         * Connected Shopify, WordPress or Wix account id.
          */
         accountId: string;
     };
@@ -54731,7 +54817,7 @@ export type ListBlogsData = {
 };
 
 export type ListBlogsResponse = ({
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     blogs?: Array<Blog>;
     /**
      * Cursor for the next page; null when there are no more pages.
@@ -54767,18 +54853,18 @@ export type CreateBlogError = (ErrorResponse | unknown);
 export type GetBlogData = {
     path: {
         /**
-         * Connected Shopify or WordPress account id.
+         * Connected Shopify, WordPress or Wix account id.
          */
         accountId: string;
         /**
-         * Platform-native numeric blog/site id returned by the list operation.
+         * Platform-native blog/site id returned by the list operation.
          */
         blogId: string;
     };
 };
 
 export type GetBlogResponse = ({
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     blog?: Blog;
 });
 
@@ -54798,7 +54884,7 @@ export type UpdateBlogData = {
          */
         accountId: string;
         /**
-         * Platform-native numeric blog id. Non-numeric values return 400.
+         * Platform-native blog id. Shopify blog ids are numeric; other values return 400.
          */
         blogId: string;
     };
@@ -54818,7 +54904,7 @@ export type DeleteBlogData = {
          */
         accountId: string;
         /**
-         * Platform-native numeric blog id. Non-numeric values return 400.
+         * Platform-native blog id. Shopify blog ids are numeric; other values return 400.
          */
         blogId: string;
     };
@@ -54831,11 +54917,11 @@ export type DeleteBlogError = (ErrorResponse | unknown);
 export type ListBlogArticlesData = {
     path: {
         /**
-         * Connected Shopify or WordPress account id.
+         * Connected Shopify, WordPress or Wix account id.
          */
         accountId: string;
         /**
-         * Platform-native numeric blog/site id returned by the list operation.
+         * Platform-native blog/site id returned by the list operation.
          */
         blogId: string;
     };
@@ -54852,7 +54938,7 @@ export type ListBlogArticlesData = {
 };
 
 export type ListBlogArticlesResponse = ({
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     articles?: Array<BlogArticle>;
     /**
      * Cursor for the next page; null when there are no more pages.
@@ -54874,11 +54960,11 @@ export type CreateBlogArticleData = {
          */
         handle?: string;
         /**
-         * Tag names. WordPress resolves existing names case-insensitively and creates missing tags.
+         * Tag names. WordPress and Wix resolve existing names case-insensitively and create missing tags (Wix allows up to 30).
          */
         tags?: Array<(string)>;
         /**
-         * Shopify author display name, or numeric WordPress user id serialized as a string. Assigning another WordPress user may require elevated capability.
+         * Shopify author display name, numeric WordPress user id serialized as a string, or Wix site member id. Assigning another WordPress user may require elevated capability. Wix posts without one go to the site's default author.
          */
         author?: string;
         /**
@@ -54886,21 +54972,21 @@ export type CreateBlogArticleData = {
          */
         excerpt?: string;
         /**
-         * Featured image from a public URL. WordPress downloads it into the media library; JPEG, PNG, GIF and WebP are accepted up to 10 MB.
+         * Featured image from a public URL. WordPress downloads it into the media library and Wix imports it into the Media Manager; JPEG, PNG, GIF and WebP are accepted up to 10 MB.
          */
         image?: {
             url: string;
             altText?: string;
         };
         /**
-         * Shopify only. Search-engine overrides mapped to global title_tag and description_tag metafields. WordPress rejects this field.
+         * Shopify and Wix. Search-engine overrides: Shopify global title_tag and description_tag metafields, Wix post SEO title and meta description. WordPress rejects this field.
          */
         seo?: {
             title?: string;
             description?: string;
         };
         /**
-         * Set false for a draft or true to publish. On WordPress false takes priority over a future publishDate; omission with no date defaults to draft.
+         * Set false for a draft or true to publish. On WordPress and Wix false takes priority over a future publishDate; omission with no date defaults to draft.
          */
         isPublished?: boolean;
         /**
@@ -54910,18 +54996,18 @@ export type CreateBlogArticleData = {
     };
     path: {
         /**
-         * Connected Shopify or WordPress account id.
+         * Connected Shopify, WordPress or Wix account id.
          */
         accountId: string;
         /**
-         * Platform-native numeric blog/site id returned by the list operation.
+         * Platform-native blog/site id returned by the list operation.
          */
         blogId: string;
     };
 };
 
 export type CreateBlogArticleResponse = ({
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     article?: BlogArticle;
 });
 
@@ -54930,22 +55016,22 @@ export type CreateBlogArticleError = (ErrorResponse | unknown);
 export type GetBlogArticleData = {
     path: {
         /**
-         * Connected Shopify or WordPress account id.
+         * Connected Shopify, WordPress or Wix account id.
          */
         accountId: string;
         /**
-         * Platform-native numeric article id. Non-numeric values return 400.
+         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix. Other formats return 400.
          */
         articleId: string;
         /**
-         * Platform-native numeric blog/site id returned by the list operation.
+         * Platform-native blog/site id returned by the list operation.
          */
         blogId: string;
     };
 };
 
 export type GetBlogArticleResponse = ({
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     article?: BlogArticle;
 });
 
@@ -54963,11 +55049,11 @@ export type UpdateBlogArticleData = {
          */
         handle?: string;
         /**
-         * Replaces the full tag-name list. WordPress resolves existing names case-insensitively and creates missing tags.
+         * Replaces the full tag-name list. WordPress and Wix resolve existing names case-insensitively and create missing tags (Wix allows up to 30).
          */
         tags?: Array<(string)>;
         /**
-         * Shopify author display name, or numeric WordPress user id serialized as a string. Assigning another WordPress user may require elevated capability.
+         * Shopify author display name, numeric WordPress user id serialized as a string, or Wix site member id. Assigning another WordPress user may require elevated capability. Wix posts without one go to the site's default author.
          */
         author?: string;
         /**
@@ -54975,21 +55061,21 @@ export type UpdateBlogArticleData = {
          */
         excerpt?: string;
         /**
-         * Featured image from a public URL. WordPress downloads it into the media library; JPEG, PNG, GIF and WebP are accepted up to 10 MB. Omit to preserve it; null removal is not supported.
+         * Featured image from a public URL. WordPress downloads it into the media library and Wix imports it into the Media Manager; JPEG, PNG, GIF and WebP are accepted up to 10 MB. Omit to preserve it; null removal is not supported.
          */
         image?: {
             url: string;
             altText?: string;
         };
         /**
-         * Shopify only. Search-engine overrides mapped to global title_tag and description_tag metafields. WordPress rejects this field.
+         * Shopify and Wix. Search-engine overrides: Shopify global title_tag and description_tag metafields, Wix post SEO title and meta description. WordPress rejects this field.
          */
         seo?: {
             title?: string;
             description?: string;
         };
         /**
-         * Set false to move to draft or true to publish. On WordPress false takes priority over a future publishDate; omission preserves status unless publishDate is sent.
+         * Set false to move to draft or true to publish. On WordPress and Wix false takes priority over a future publishDate; omission preserves status unless publishDate is sent (edits to a published Wix post go live).
          */
         isPublished?: boolean;
         /**
@@ -54999,22 +55085,22 @@ export type UpdateBlogArticleData = {
     };
     path: {
         /**
-         * Connected Shopify or WordPress account id.
+         * Connected Shopify, WordPress or Wix account id.
          */
         accountId: string;
         /**
-         * Platform-native numeric article id. Non-numeric values return 400.
+         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix. Other formats return 400.
          */
         articleId: string;
         /**
-         * Platform-native numeric blog/site id returned by the list operation.
+         * Platform-native blog/site id returned by the list operation.
          */
         blogId: string;
     };
 };
 
 export type UpdateBlogArticleResponse = ({
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     article?: BlogArticle;
 });
 
@@ -55023,15 +55109,15 @@ export type UpdateBlogArticleError = (ErrorResponse | unknown);
 export type DeleteBlogArticleData = {
     path: {
         /**
-         * Connected Shopify or WordPress account id.
+         * Connected Shopify, WordPress or Wix account id.
          */
         accountId: string;
         /**
-         * Platform-native numeric article id. Non-numeric values return 400.
+         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix. Other formats return 400.
          */
         articleId: string;
         /**
-         * Platform-native numeric blog/site id returned by the list operation.
+         * Platform-native blog/site id returned by the list operation.
          */
         blogId: string;
     };
