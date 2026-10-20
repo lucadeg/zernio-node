@@ -333,6 +333,29 @@ export type Ad = {
          */
         assetResourceName?: string;
         /**
+         * Google Display only. Native Google asset resource name of each image on the responsive display ad, keyed by Google's image role. Set at creation for ads created through Zernio. PUT /v1/ads/{adId} overwrites only the role it replaces: `creative.imageUrl` updates `marketingImages`, `creative.squareImageUrl` updates `squareMarketingImages`. Absent on ads synced from Google.
+         */
+        assets?: {
+            /**
+             * Landscape (1.91:1) marketing images. The first item matches `assetResourceName`.
+             */
+            marketingImages?: Array<{
+                /**
+                 * Google asset resource name, for example customers/1234567890/assets/123.
+                 */
+                resourceName?: string;
+            }>;
+            /**
+             * Square (1:1) marketing images.
+             */
+            squareMarketingImages?: Array<{
+                /**
+                 * Google asset resource name, for example customers/1234567890/assets/124.
+                 */
+                resourceName?: string;
+            }>;
+        };
+        /**
          * Meta video ID for VIDEO-type ads. Null for non-video ads. Callers that need an embeddable MP4 can call GET /{videoId}?fields=source with the page access token.
          */
         videoId?: (string) | null;

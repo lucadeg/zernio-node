@@ -10822,7 +10822,7 @@ export const getAd = <ThrowOnError extends boolean = false>(options: OptionsLega
  * `creative.squareImageUrl`. Each image URL is uploaded as a new Google asset and the ad
  * is pointed at it; Google assets are immutable, so the previous asset stays in the
  * account's asset library. A new landscape image also updates `creative.assetResourceName`
- * to the new asset.
+ * to the new asset, and each replaced image updates its own role in `creative.assets`.
  * - **Performance Max**: top-level `assetGroup`, which swaps asset roles on the ad's asset
  * group. The other creative fields return 422 for this channel, and `assetGroup` returns
  * 422 on any other channel.
