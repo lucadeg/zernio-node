@@ -50081,6 +50081,13 @@ export type ListLeadsResponse = ({
         hasMore?: boolean;
         cursor?: (string) | null;
     };
+    meta?: {
+        /**
+         * Meta only, present when `accountId` is passed: when Zernio last re-read the Page's forms from Meta to catch leads the webhook missed. Null when no leads matched or before the first pass.
+         */
+        lastCheckedAt?: (string) | null;
+        lastUpdated?: string;
+    };
 });
 
 export type ListLeadsError = (ErrorResponse | unknown);
@@ -50382,6 +50389,20 @@ export type ListFormLeadsResponse = ({
     pagination?: {
         hasMore?: boolean;
         cursor?: (string) | null;
+    };
+    meta?: {
+        platform?: string;
+        accountId?: string;
+        formId?: string;
+        /**
+         * persisted: leads stored from the webhook and the reconcile pass. live: read from Meta because none are stored for this form yet.
+         */
+        source?: 'persisted' | 'live';
+        /**
+         * When Zernio last read this form's leads from Meta. For persisted leads, the last reconcile pass for the Page (null before the first one). For live reads, when the cached Graph read was made.
+         */
+        lastCheckedAt?: (string) | null;
+        lastUpdated?: string;
     };
 });
 
