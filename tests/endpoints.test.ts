@@ -140,6 +140,16 @@ describe('Endpoint Methods', () => {
       expect(client.accounts.getLinkedInMentions).toBeTypeOf('function');
     });
 
+    it('should have getHubSpotSettings method', () => {
+      expect(client.accounts.getHubSpotSettings).toBeDefined();
+      expect(client.accounts.getHubSpotSettings).toBeTypeOf('function');
+    });
+
+    it('should have updateHubSpotSettings method', () => {
+      expect(client.accounts.updateHubSpotSettings).toBeDefined();
+      expect(client.accounts.updateHubSpotSettings).toBeTypeOf('function');
+    });
+
     it('should have getSlackSettings method', () => {
       expect(client.accounts.getSlackSettings).toBeDefined();
       expect(client.accounts.getSlackSettings).toBeTypeOf('function');
@@ -362,6 +372,11 @@ describe('Endpoint Methods', () => {
     it('should have connectShopifyWithToken method', () => {
       expect(client.connect.connectShopifyWithToken).toBeDefined();
       expect(client.connect.connectShopifyWithToken).toBeTypeOf('function');
+    });
+
+    it('should have getHubSpotConnectUrl method', () => {
+      expect(client.connect.getHubSpotConnectUrl).toBeDefined();
+      expect(client.connect.getHubSpotConnectUrl).toBeTypeOf('function');
     });
 
     it('should have getWordPressAuthUrl method', () => {

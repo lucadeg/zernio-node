@@ -195,12 +195,14 @@ try {
 | `accounts.getFollowerStats()` | Get follower stats |
 | `accounts.getGoogleBusinessReview()` | Get a review |
 | `accounts.getGoogleBusinessReviews()` | Get reviews |
+| `accounts.getHubSpotSettings()` | Get HubSpot account settings |
 | `accounts.getInstagramFollowStatus()` | Check whether an Instagram user follows the account |
 | `accounts.getLinkedInMentions()` | Resolve LinkedIn mention |
 | `accounts.getSlackSettings()` | Get Slack account settings |
 | `accounts.getTikTokCreatorInfo()` | Get TikTok creator info |
 | `accounts.updateAccount()` | Update account |
 | `accounts.updateBlueskySettings()` | Update Bluesky account settings |
+| `accounts.updateHubSpotSettings()` | Update HubSpot account settings |
 | `accounts.updateSlackSettings()` | Update Slack account settings |
 | `accounts.deleteAccount()` | Disconnect account |
 | `accounts.deleteGoogleBusinessReviewReply()` | Delete a review reply |
@@ -337,6 +339,7 @@ try {
 | `connect.getConnectUrl()` | Get OAuth connect URL |
 | `connect.getFacebookPages()` | List Facebook pages |
 | `connect.getGmbLocations()` | List Google Business Profile locations |
+| `connect.getHubSpotConnectUrl()` | Get HubSpot OAuth connect URL |
 | `connect.getLinkedInOrganizations()` | List LinkedIn orgs |
 | `connect.getPageWebhookSubscription()` | Read a Facebook Page's webhook subscription |
 | `connect.getPendingOAuthData()` | Get pending OAuth data |

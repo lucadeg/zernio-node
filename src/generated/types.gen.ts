@@ -7350,6 +7350,36 @@ export type GoogleTargetImpressionShare = {
 
 export type location = 'ANYWHERE_ON_PAGE' | 'TOP_OF_PAGE' | 'ABSOLUTE_TOP_OF_PAGE';
 
+export type HubSpotSettings = {
+    /**
+     * Zernio account ID of the HubSpot connection.
+     */
+    _id: string;
+    platform: 'hubspot';
+    /**
+     * HubSpot portal (hub) ID.
+     */
+    hubId: string;
+    /**
+     * HubSpot portal domain, when HubSpot reports one.
+     */
+    hubDomain: (string) | null;
+    /**
+     * OAuth scopes the portal granted.
+     */
+    scopes: Array<(string)>;
+    /**
+     * Whether Zernio creates or updates HubSpot contacts for inbox contacts.
+     */
+    syncContacts: boolean;
+    /**
+     * Whether Zernio logs inbox messages on HubSpot contact timelines.
+     */
+    logMessages: boolean;
+};
+
+export type platform6 = 'hubspot';
+
 export type ImessageAudienceContact = {
     conversationId?: string;
     accountId?: string;
@@ -7428,7 +7458,7 @@ export type ImessageSender = {
     isActive?: boolean;
 };
 
-export type platform6 = 'imessage';
+export type platform7 = 'imessage';
 
 /**
  * A provisioned iMessage sender order and its lifecycle. Activation is asynchronous: poll GET /v1/imessage/senders/{senderId} or subscribe to account.connected.
@@ -7581,7 +7611,7 @@ export type InboxWebhookConversationDetail = {
     contactId?: string;
 };
 
-export type platform7 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'sms' | 'rcs' | 'slack' | 'tiktok' | 'imessage';
+export type platform8 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'sms' | 'rcs' | 'slack' | 'tiktok' | 'imessage';
 
 /**
  * The message object included in inbox webhook payloads.
@@ -7700,7 +7730,7 @@ export type InboxWebhookMessage = {
     isRead: boolean;
 };
 
-export type platform8 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'sms';
+export type platform9 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'sms';
 
 export type direction2 = 'incoming' | 'outgoing';
 
@@ -7828,7 +7858,7 @@ export type InstagramAccountInsightsResponse = {
 /**
  * Platform that served this response.
  */
-export type platform9 = 'facebook' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok';
+export type platform10 = 'facebook' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok';
 
 export type metricType = 'time_series' | 'total_value';
 
@@ -10817,7 +10847,7 @@ export type ReviewWebhookReview = {
 /**
  * Platform the review originated on. Currently Google Business Profile only.
  */
-export type platform10 = 'googlebusiness';
+export type platform11 = 'googlebusiness';
 
 /**
  * A Meta Reach & Frequency prediction. Money values in whole units of the ad account currency.
@@ -10941,7 +10971,7 @@ export type contentType3 = 'story' | 'saved_story' | 'spotlight';
 
 export type SocialAccount = {
     _id: string;
-    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads';
+    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot';
     profileId: (string | Profile);
     username?: string;
     displayName?: string;
@@ -11051,7 +11081,7 @@ export type SocialAccount = {
     };
 };
 
-export type platform11 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads';
+export type platform12 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot';
 
 /**
  * TikTok accounts only. The account type TikTok reported when the account was connected. `personal` accounts cannot use TikTok direct messages through the API (TikTok limits Business Messaging to Business Accounts): skip the inbox for them and tell the user to switch to a Business Account in the TikTok app, then reconnect. `business` is the prerequisite, not a guarantee; messaging also needs the messaging scopes granted and TikTok's regional availability. `unknown` on accounts connected before this was captured or whose grant left out the account-type scope.
@@ -11131,7 +11161,7 @@ export type StorePixelInstall = {
 /**
  * The store platform.
  */
-export type platform12 = 'shopify' | 'wordpress';
+export type platform13 = 'shopify' | 'wordpress';
 
 /**
  * WordPress only.
@@ -11812,7 +11842,7 @@ export type TrackingTag = {
     autoTagging?: boolean;
 };
 
-export type platform13 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
+export type platform14 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
 
 /**
  * Platform-native flavor of the tag (Meta: `pixel`).
@@ -13728,7 +13758,7 @@ export type WebhookPayloadComment = {
 
 export type event14 = 'comment.received';
 
-export type platform14 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
+export type platform15 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
 
 export type WebhookPayloadCommerceOrder = {
     /**
@@ -14090,7 +14120,7 @@ export type WebhookPayloadLead = {
 
 export type event22 = 'lead.received';
 
-export type platform15 = 'facebook';
+export type platform16 = 'facebook';
 
 /**
  * Webhook payload for message received events
@@ -15107,7 +15137,7 @@ export type event27 = 'message.sent';
 /**
  * Every platform whose outgoing messages Zernio observes. sms is absent on purpose: its carrier receipts update delivery status and never raise message.sent.
  */
-export type platform16 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
+export type platform17 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
 
 /**
  * WhatsApp send origin. whatsapp_business_app when sent from the WhatsApp Business phone app on a Coexistence number; cloud_api when sent through Zernio (dashboard, API, or broadcasts); meta_business_agent when Meta Business Agent answered on the number. Absent on non-WhatsApp platforms. Says where WhatsApp saw the send come from, not which Zernio surface produced it: read sentVia for that.
@@ -15682,7 +15712,7 @@ export type WebhookPayloadWhatsAppAccountAlertReceived = {
 
 export type event38 = 'whatsapp.account.alert_received';
 
-export type platform17 = 'whatsapp';
+export type platform18 = 'whatsapp';
 
 /**
  * Webhook payload for the `whatsapp.account.name_status_updated` event.
@@ -20081,9 +20111,9 @@ export type DeleteProfileError = (unknown | ErrorResponse | {
 export type ListAccountsData = {
     query?: {
         /**
-         * Only accounts of this kind. ads = ad accounts (Meta, Google, LinkedIn, Pinterest, TikTok, X, OpenAI, Reddit), communication = WhatsApp, Telegram, Discord, Slack and iMessage, blogs = Shopify and WordPress, social = every other platform.
+         * Only accounts of this kind. ads = ad accounts (Meta, Google, LinkedIn, Pinterest, TikTok, X, OpenAI, Reddit), communication = WhatsApp, Telegram, Discord, Slack and iMessage, blogs = Shopify and WordPress, crm = HubSpot, social = every other platform.
          */
-        category?: 'social' | 'ads' | 'communication' | 'blogs';
+        category?: 'social' | 'ads' | 'communication' | 'blogs' | 'crm';
         /**
          * When true, leaves out accounts the dashboard does not show as connections: posting
          * accounts with `enabled: false` (ads accounts are always kept, whatever their `enabled`
@@ -20289,7 +20319,7 @@ export type GetAllAccountsHealthData = {
         /**
          * Filter by platform
          */
-        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads';
+        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads' | 'hubspot';
         /**
          * Filter by profile ID
          */
@@ -21869,6 +21899,87 @@ export type ConnectShopifyWithTokenError = (unknown | ErrorResponse | {
         effective_account_limit?: number;
     };
 });
+
+export type GetHubSpotConnectUrlData = {
+    query: {
+        /**
+         * Your Zernio profile ID (get from /v1/profiles).
+         */
+        profileId: string;
+        /**
+         * Custom redirect after connection. Must be an absolute http(s) URL or custom app scheme such as `myapp://callback`; relative and unsafe URLs return 400.
+         */
+        redirect_url?: string;
+    };
+};
+
+export type GetHubSpotConnectUrlResponse = ({
+    /**
+     * HubSpot URL to open in the user agent.
+     */
+    authUrl: string;
+    /**
+     * Authenticated, expiring OAuth state handled by the callback.
+     */
+    state: string;
+});
+
+export type GetHubSpotConnectUrlError = (ErrorResponse | {
+    /**
+     * Human-readable error message suitable for end-user display.
+     */
+    error: string;
+    /**
+     * Machine-readable error code. Stable across versions.
+     */
+    code: 'PAYMENT_REQUIRED';
+    /**
+     * Discriminator for which gate fired.
+     */
+    reason: 'free_tier_exceeded' | 'twitter_passthrough' | 'enterprise_required' | 'card_verification_required';
+    /**
+     * Link to the relevant documentation page.
+     */
+    documentation_url?: string;
+    /**
+     * Deep-link to send the end-user to. For
+     * `free_tier_exceeded` and `twitter_passthrough` this opens
+     * the add-payment-method drawer on the Zernio billing page.
+     * For `enterprise_required` this is the Zernio enterprise
+     * contact page.
+     *
+     */
+    dashboard_url?: string;
+    /**
+     * Structured context for SDK clients that want to render their own UX. Keys vary by `reason`.
+     */
+    details?: {
+        /**
+         * How many accounts the free tier allows. Only set when reason=free_tier_exceeded.
+         */
+        free_tier_account_limit?: number;
+        /**
+         * How many accounts the team currently has connected. Set when reason=free_tier_exceeded or reason=enterprise_required.
+         */
+        current_account_count?: number;
+        /**
+         * Whether the team currently has a card on file in Stripe. Set when reason=free_tier_exceeded or reason=twitter_passthrough.
+         */
+        has_payment_method?: boolean;
+        /**
+         * One-time card verification charge in USD cents, credited to usage. Only set when reason=card_verification_required.
+         */
+        verification_amount_cents?: number;
+        /**
+         * The negotiated connected-account cap from the
+         * team's enterprise contract. Self-service teams
+         * have no cap and never receive this reason. Only
+         * set when reason=enterprise_required.
+         *
+         */
+        effective_account_limit?: number;
+    };
+} | unknown);
 
 export type GetWordPressAuthUrlData = {
     query: {
@@ -26451,6 +26562,41 @@ export type SetRedditPostFlairResponse = ({
 });
 
 export type SetRedditPostFlairError = (unknown | ErrorResponse);
+
+export type GetHubSpotSettingsData = {
+    path: {
+        accountId: string;
+    };
+};
+
+export type GetHubSpotSettingsResponse = ({
+    account?: HubSpotSettings;
+});
+
+export type GetHubSpotSettingsError = (ErrorResponse | unknown);
+
+export type UpdateHubSpotSettingsData = {
+    body: {
+        /**
+         * Create or update a HubSpot contact for each inbox contact.
+         */
+        syncContacts?: boolean;
+        /**
+         * Log inbound and outbound inbox messages on the contact's HubSpot timeline.
+         */
+        logMessages?: boolean;
+    };
+    path: {
+        accountId: string;
+    };
+};
+
+export type UpdateHubSpotSettingsResponse = ({
+    message?: string;
+    account?: HubSpotSettings;
+});
+
+export type UpdateHubSpotSettingsError = (ErrorResponse | unknown);
 
 export type GetSlackSettingsData = {
     path: {
