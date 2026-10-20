@@ -1958,7 +1958,7 @@ export const connectShopifyWithToken = <ThrowOnError extends boolean = false>(op
  * (the portal domain); on failure it carries `error`, `platform=hubspot`
  * and `error_message`. Reconnecting the same portal and profile updates
  * the stored connection in place and keeps its settings.
- * Requested scopes: `crm.objects.contacts.read`, `crm.objects.contacts.write`.
+ * Requested scopes: `oauth`, `crm.objects.contacts.read`, `crm.objects.contacts.write`.
  *
  */
 export const getHubSpotConnectUrl = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetHubSpotConnectUrlData, ThrowOnError>) => {

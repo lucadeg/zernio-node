@@ -7564,7 +7564,7 @@ export type HubSpotSettings = {
      */
     scopes: Array<(string)>;
     /**
-     * Whether Zernio creates or updates HubSpot contacts for inbox contacts.
+     * Whether Zernio creates HubSpot contacts for inbox contacts that match none.
      */
     syncContacts: boolean;
     /**
@@ -26807,7 +26807,7 @@ export type GetHubSpotSettingsError = (ErrorResponse | unknown);
 export type UpdateHubSpotSettingsData = {
     body: {
         /**
-         * Create or update a HubSpot contact for each inbox contact.
+         * Create a HubSpot contact for an inbox contact that matches none by email or phone. A match is linked as it is and never updated.
          */
         syncContacts?: boolean;
         /**
