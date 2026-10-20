@@ -9934,7 +9934,12 @@ export type PostRetryResponse = {
 
 export type PostsListResponse = {
     posts?: Array<Post>;
-    pagination?: Pagination;
+    pagination?: (Pagination & {
+    /**
+     * Cursor for the next page in the same sortBy order. Send it back as `cursor`. Null on the last page, and always null for `sortBy=status` or `sortBy=platform`. Absent for `source=external`.
+     */
+    nextCursor?: (string) | null;
+});
 };
 
 export type PostUpdateResponse = {
@@ -19318,6 +19323,10 @@ export type ListPostsData = {
          */
         createdBy?: string;
         /**
+         * Opaque cursor from a previous response's `pagination.nextCursor`. Returns the page that follows it in the same `sortBy` order, and takes precedence over `page` and `offset`. Each cursor page costs the same however deep it is, unlike `page`/`offset`, which get slower the further you go; prefer it to walk a long history. Send the same filters and `sortBy` as the request that issued it: a cursor from another `sortBy` returns 400. Not available with `sortBy=status` or `sortBy=platform`, or with `source=external`.
+         */
+        cursor?: string;
+        /**
          * Alias of fromDate, kept for existing callers
          * @deprecated
          */
@@ -19327,6 +19336,10 @@ export type ListPostsData = {
          * @deprecated
          */
         dateTo?: string;
+        /**
+         * Comma-separated list of post fields to return. Each post then carries `_id` plus only these fields, which makes large pages much cheaper: leave out `platforms`, `content`, `mediaItems` or `metadata` when you do not need them. Accepted: `userId`, `title`, `content`, `mediaItems`, `platforms`, `scheduledFor`, `timezone`, `status`, `tags`, `hashtags`, `mentions`, `visibility`, `metadata`, `recycling`, `recycledFromPostId`, `queuedFromProfile`, `queueId`, `createdAt`, `updatedAt`. An unknown field returns 400 naming it. `fields=_id` returns ids only. Omit it (or send it empty) for the full post. Not available with `source=external`.
+         */
+        fields?: string;
         /**
          * Zero-padded YYYY-MM-DD, or a full ISO 8601 datetime. An empty value means no date filter; any other malformed value returns 400. The same name the other date-window filters use (ads, analytics).
          */
