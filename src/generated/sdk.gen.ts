@@ -59,6 +59,8 @@ export const validateMedia = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Check subreddit existence
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Check if a subreddit exists and return basic info (title, subscriber count, NSFW status, post types allowed).
  *
  * When accountId is provided, uses authenticated Reddit OAuth API with automatic token refresh (recommended). Falls back to Reddit's public JSON API, which may be unreliable from server IPs. Returns exists: false for private, banned, or nonexistent subreddits.
@@ -755,7 +757,10 @@ export const getMediaPresignedUrl = <ThrowOnError extends boolean = false>(optio
 
 /**
  * Search posts
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Search Reddit posts using a connected account. Optionally scope to a specific subreddit.
+ *
  */
 export const searchReddit = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<SearchRedditData, ThrowOnError>) => {
     return (options?.client ?? client).get<SearchRedditResponse, SearchRedditError, ThrowOnError>({
@@ -766,7 +771,10 @@ export const searchReddit = <ThrowOnError extends boolean = false>(options: Opti
 
 /**
  * Get subreddit feed
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Fetch posts from a subreddit feed. Supports sorting, time filtering, and cursor-based pagination.
+ *
  */
 export const getRedditFeed = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetRedditFeedData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetRedditFeedResponse, GetRedditFeedError, ThrowOnError>({
@@ -777,6 +785,8 @@ export const getRedditFeed = <ThrowOnError extends boolean = false>(options: Opt
 
 /**
  * Get the comments of a Reddit post
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Reads the comments of any Reddit post the connected account can see, for example one found
  * through `/v1/reddit/feed` or `/v1/reddit/search`, straight from Reddit on every call. The tree
  * comes flattened in thread order (a reply follows its parent); rebuild it from `parentId`, which
@@ -3215,7 +3225,10 @@ export const getFacebookPostReactions = <ThrowOnError extends boolean = false>(o
 
 /**
  * List Reddit subreddits
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Returns the subreddits the connected Reddit account can post to. Use this to get a subreddit name when creating a Reddit post.
+ *
  */
 export const getRedditSubreddits = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetRedditSubredditsData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetRedditSubredditsResponse, GetRedditSubredditsError, ThrowOnError>({
@@ -3226,7 +3239,10 @@ export const getRedditSubreddits = <ThrowOnError extends boolean = false>(option
 
 /**
  * Set default subreddit
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Sets the default subreddit used when publishing posts for this Reddit account.
+ *
  */
 export const updateRedditSubreddits = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdateRedditSubredditsData, ThrowOnError>) => {
     return (options?.client ?? client).put<UpdateRedditSubredditsResponse, UpdateRedditSubredditsError, ThrowOnError>({
@@ -3237,6 +3253,8 @@ export const updateRedditSubreddits = <ThrowOnError extends boolean = false>(opt
 
 /**
  * Get subreddit rules
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Returns a subreddit's posting rules plus Reddit's site-wide rules, so you can check
  * them before submitting and avoid a removal.
  *
@@ -3253,6 +3271,8 @@ export const getSubredditRules = <ThrowOnError extends boolean = false>(options:
 
 /**
  * Vote on a Reddit post or comment
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Cast, change, or clear the connected account's vote on a Reddit post or comment.
  *
  * **Reddit requires that votes be cast by humans.** Reddit's API terms permit a client
@@ -3271,7 +3291,10 @@ export const voteRedditThing = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * List subreddit flairs
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Returns available post flairs for a subreddit. Some subreddits require a flair when posting.
+ *
  */
 export const getRedditFlairs = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetRedditFlairsData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetRedditFlairsResponse, GetRedditFlairsError, ThrowOnError>({
@@ -3282,6 +3305,8 @@ export const getRedditFlairs = <ThrowOnError extends boolean = false>(options: O
 
 /**
  * Set Reddit post flair
+ * Temporarily unavailable: Reddit has blocked third-party apps from its API, so this endpoint returns 503 `PLATFORM_DISABLED` until Reddit restores access. Reddit Ads is not affected.
+ *
  * Applies a flair to a post the connected account already published. Use the GET on this
  * path to list the available `flairTemplateId` values for the subreddit.
  *

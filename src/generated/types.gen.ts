@@ -17219,7 +17219,7 @@ export type ValidateSubredditResponse = (({
     error?: string;
 }));
 
-export type ValidateSubredditError = (ErrorResponse);
+export type ValidateSubredditError = (ErrorResponse | unknown);
 
 export type GetAnalyticsData = {
     query?: {
@@ -19035,7 +19035,7 @@ export type SearchRedditResponse = ({
     before?: (string) | null;
 });
 
-export type SearchRedditError = (ErrorResponse);
+export type SearchRedditError = (ErrorResponse | unknown);
 
 export type GetRedditFeedData = {
     query: {
@@ -19054,7 +19054,7 @@ export type GetRedditFeedResponse = ({
     before?: (string) | null;
 });
 
-export type GetRedditFeedError = (ErrorResponse);
+export type GetRedditFeedError = (ErrorResponse | unknown);
 
 export type GetRedditPostCommentsData = {
     path: {
@@ -19092,7 +19092,7 @@ export type GetRedditPostCommentsResponse = ({
     more?: Array<(string)>;
 });
 
-export type GetRedditPostCommentsError = (ErrorResponse);
+export type GetRedditPostCommentsError = (ErrorResponse | unknown);
 
 export type GetBillingResponse = (BillingSnapshot);
 
