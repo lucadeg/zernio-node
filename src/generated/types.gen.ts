@@ -12036,6 +12036,10 @@ export type TwitterPlatformData = {
          */
         other?: boolean;
     };
+    /**
+     * X usernames (with or without @) to tag on the photos of the post, up to 10. Photos only, not video or GIF. Applied to the media of every tweet in a thread. An unknown username fails the post.
+     */
+    mediaTaggedUsers?: Array<(string)>;
 };
 
 /**
