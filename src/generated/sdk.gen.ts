@@ -13228,8 +13228,8 @@ export const searchAdInterests = <ThrowOnError extends boolean = false>(options:
  * - `language`: Google-only
  * - `workPosition`, `workEmployer`, `workIndustry`: the Meta-only work demographics, whose
  * ids feed `TargetingSpec.workPositions`/`workEmployers`/`workIndustries`
- * - `industry`, `jobFunction`, `seniority`, `companySize`: the LinkedIn-only B2B facets, whose
- * URNs feed `TargetingSpec.industries`/`jobFunctions`/`seniorities`/`companySizes`
+ * - `industry`, `jobFunction`, `seniority`, `companySize`, `skill`: the LinkedIn-only B2B facets, whose
+ * URNs feed `TargetingSpec.industries`/`jobFunctions`/`seniorities`/`companySizes`/`skills`
  * - `community`: Reddit only. Subreddits matching `q`; the id is the subreddit name for
  * `TargetingSpec.communities` / `excludedCommunities`, `platformId` Reddit's own id and
  * `audienceSize` its subscriber count when Reddit reports it
@@ -13275,10 +13275,10 @@ export const searchAdInterests = <ThrowOnError extends boolean = false>(options:
  * `POST /v1/ads/targeting/reach-estimate` (LinkedIn puts countries and
  * regions in the same `locations` facet, so both target the same way).
  *
- * LinkedIn B2B searches (`industry`, `jobFunction`, `seniority`, `companySize`) return the
+ * LinkedIn B2B searches (`industry`, `jobFunction`, `seniority`, `companySize`, `skill`) return the
  * full URN to pass straight back, so no URN id fragment has to be assembled by hand:
  * `urn:li:industry:4`, `urn:li:function:8`, `urn:li:seniority:6`,
- * `urn:li:staffCountRange:(51,200)`. Only `industry` is a server-side name search
+ * `urn:li:staffCountRange:(51,200)`, `urn:li:skill:1346`. Only `industry` and `skill` are server-side name searches
  * (LinkedIn's typeahead finder). LinkedIn exposes no typeahead for job functions,
  * seniorities and company sizes, so Zernio fetches each whole table (26, 10 and 9 entries),
  * caches it, and does the matching, ranking and `limit` cutoff itself. Those three never

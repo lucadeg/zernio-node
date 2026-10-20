@@ -11438,6 +11438,10 @@ export type TargetingSpec = {
      */
     jobFunctions?: Array<(string)>;
     /**
+     * LinkedIn B2B only. Member skills (e.g. Python, Recruiting): skill URN id fragments, or the full urn:li:skill:* URN from /v1/ads/targeting/search?dimension=skill. Values are ORed; the facet is ANDed with the other facets. On an ad set update an empty list removes the skills.
+     */
+    skills?: Array<(string)>;
+    /**
      * Platform audience IDs to include, as returned by GET /v1/ads/audiences (Meta custom audience ids, TikTok audience ids, Pinterest customer list ids, LinkedIn segment ids (the platformAudienceId from GET /v1/ads/audiences; Zernio resolves it to the targetable LinkedIn ad segment, an unknown id returns 400), Google user list ids, X custom audience ids). On Reddit, the ids of custom audiences built in Reddit Ads Manager (GET /v1/ads/audiences does not list Reddit audiences). Not supported on OpenAI (400).
      */
     audienceInclude?: Array<(string)>;
@@ -50576,9 +50580,9 @@ export type SearchAdTargetingData = {
          */
         countryCode?: string;
         /**
-         * What to search. `geo` resolves locations (scope further with `geoType`), `interest`/`behavior` resolve audience entities (`behavior` on Meta, TikTok and LinkedIn), `interestSuggestion` suggests interests related to the names in `q` (Meta only), `interestKeyword`/`hashtag` resolve TikTok additional interests and hashtags (TikTok only), `income` resolves the normalized income tiers, `language` resolves Google's targetable language_constant table (Google only), `workPosition`/`workEmployer`/`workIndustry` resolve Meta work demographics, `industry`/`jobFunction`/`seniority`/`companySize` resolve LinkedIn B2B facets (LinkedIn only). Defaults to `interest` for backward compatibility with the deprecated /v1/ads/interests alias.
+         * What to search. `geo` resolves locations (scope further with `geoType`), `interest`/`behavior` resolve audience entities (`behavior` on Meta, TikTok and LinkedIn), `interestSuggestion` suggests interests related to the names in `q` (Meta only), `interestKeyword`/`hashtag` resolve TikTok additional interests and hashtags (TikTok only), `income` resolves the normalized income tiers, `language` resolves Google's targetable language_constant table (Google only), `workPosition`/`workEmployer`/`workIndustry` resolve Meta work demographics, `industry`/`jobFunction`/`seniority`/`companySize`/`skill` resolve LinkedIn B2B facets (LinkedIn only). Defaults to `interest` for backward compatibility with the deprecated /v1/ads/interests alias.
          */
-        dimension?: 'geo' | 'interest' | 'interestSuggestion' | 'interestKeyword' | 'behavior' | 'hashtag' | 'income' | 'language' | 'workPosition' | 'workEmployer' | 'workIndustry' | 'industry' | 'jobFunction' | 'seniority' | 'companySize' | 'community' | 'conversationKeyword';
+        dimension?: 'geo' | 'interest' | 'interestSuggestion' | 'interestKeyword' | 'behavior' | 'hashtag' | 'income' | 'language' | 'workPosition' | 'workEmployer' | 'workIndustry' | 'industry' | 'jobFunction' | 'seniority' | 'companySize' | 'skill' | 'community' | 'conversationKeyword';
         /**
          * Only used when `dimension=geo`. The kind of location to resolve. `all` searches every type in one relevance-ranked call. Defaults to `city`.
          */
@@ -50605,7 +50609,7 @@ export type SearchAdTargetingResponse = ({
          */
         name: string;
         /**
-         * What the result is. Equals the requested dimension (interest, interestSuggestion, interestKeyword, behavior, hashtag, income, language, workPosition, workEmployer, workIndustry, industry, jobFunction, seniority, companySize, community, conversationKeyword), or the location level for geo (country, region, city, zip, metro, ...).
+         * What the result is. Equals the requested dimension (interest, interestSuggestion, interestKeyword, behavior, hashtag, income, language, workPosition, workEmployer, workIndustry, industry, jobFunction, seniority, companySize, skill, community, conversationKeyword), or the location level for geo (country, region, city, zip, metro, ...).
          */
         type: string;
         /**
