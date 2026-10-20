@@ -9795,7 +9795,7 @@ export type PlatformTarget = {
         [key: string]: unknown;
     };
     /**
-     * Platform-specific status: pending, processing, uploading, published, failed, cancelled (removed from the platform via DELETE /v1/posts/{postId}/unpublish)
+     * Platform-specific status: pending, processing, uploading, published, failed, cancelled (removed from the platform via POST /v1/posts/{postId}/unpublish)
      */
     status?: string;
     /**
@@ -9922,7 +9922,7 @@ export type Post = {
     scheduledFor?: string;
     timezone?: string;
     /**
-     * `cancelled` is set by DELETE /v1/posts/{postId}/unpublish once every platform entry has been removed from its platform (a post with published entries left becomes `partial`); cancelled posts can be edited and rescheduled like drafts.
+     * `cancelled` is set by POST /v1/posts/{postId}/unpublish once every platform entry has been removed from its platform (a post with published entries left becomes `partial`); cancelled posts can be edited and rescheduled like drafts.
      */
     status?: 'draft' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
     /**
@@ -33943,7 +33943,7 @@ export type UpdateBrandedCallingIdentityData = {
         };
         references?: BrandedCallingReferences;
         /**
-         * One entry per point id of the open reviewRequest. A text point takes text; a link point takes url; file and link_or_file points take url set to the URL of a file you uploaded first (POST /v1/media/upload). A point id that is not on the open request is a 422.
+         * One entry per point id of the open reviewRequest. A text point takes text; a link point takes url; file and link_or_file points take url set to the URL of a file you uploaded first (POST /v1/media/presign). A point id that is not on the open request is a 422.
          */
         reviewAnswers?: {
             [key: string]: {
