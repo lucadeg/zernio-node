@@ -10841,7 +10841,7 @@ export const getAd = <ThrowOnError extends boolean = false>(options: OptionsLega
  * and creative (uploads new media, creates a replacement inline creative on the same
  * campaign, pauses the old one).
  * - **Pinterest / X / OpenAI Ads**: status + budget only. Sending
- * `targeting` or `creative` returns 501 with code `unsupported_platform_operation`.
+ * `targeting` or `creative` returns 501 with code `feature_not_available`.
  * OpenAI Ads budget is the campaign's spend cap, daily or lifetime (see `budget.type` below).
  * - **Reddit Ads**: status, budget, `name` (renames the ad) and targeting. `budget` goes to
  * the ad's ad group, or to its campaign when the ad group spends a campaign budget, and
