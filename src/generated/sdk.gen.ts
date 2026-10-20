@@ -5058,6 +5058,8 @@ export const unlikePost = <ThrowOnError extends boolean = false>(options: Option
  * A 502 means Meta answered a server error after receiving the reply; it carries
  * `details.privateReplyOutcome: "unknown"`, the reply is usually delivered and the comment's
  * private reply spent, so check the conversation before retrying.
+ * The reply is recorded in the inbox conversation with the commenter (`sentVia` `api` for
+ * key auth, `human` for a session) and fires `message.sent` once.
  *
  */
 export const sendPrivateReplyToComment = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<SendPrivateReplyToCommentData, ThrowOnError>) => {

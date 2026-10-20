@@ -33954,7 +33954,7 @@ export type ListSmsRegistrationsResponse = ({
     }>;
 });
 
-export type ListSmsRegistrationsError = (ErrorResponse);
+export type ListSmsRegistrationsError = (ErrorResponse | unknown);
 
 export type PreflightSmsRegistrationData = {
     body: {
