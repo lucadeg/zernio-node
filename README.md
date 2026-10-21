@@ -1250,8 +1250,8 @@ try {
 | `trackingTags.deleteTrackingTagEvent()` | Delete a conversion event |
 | `trackingTags.addTrackingTagSharedAccount()` | Share with an ad account |
 | `trackingTags.assignTrackingTagUser()` | Assign a user to a tag |
-| `trackingTags.installTrackingTagOnStore()` | Install on a Shopify store or WordPress site |
-| `trackingTags.removeTrackingTagFromStore()` | Remove from a Shopify store or WordPress site |
+| `trackingTags.installTrackingTagOnStore()` | Install on a Shopify store, WordPress site or Wix site |
+| `trackingTags.removeTrackingTagFromStore()` | Remove from a Shopify store, WordPress site or Wix site |
 | `trackingTags.removeTrackingTagSharedAccount()` | Stop sharing with an account |
 | `trackingTags.removeTrackingTagUser()` | Remove a user from a tag |
 

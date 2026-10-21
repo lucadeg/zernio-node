@@ -15925,8 +15925,8 @@ export const removeTrackingTagSharedAccount = <ThrowOnError extends boolean = fa
 };
 
 /**
- * Install on a Shopify store or WordPress site
- * Installs a pixel on a connected Shopify store or WordPress site, so store visits and purchases are reported without editing the theme.
+ * Install on a Shopify store, WordPress site or Wix site
+ * Installs a pixel on a connected Shopify store, WordPress site or Wix site, so store visits and purchases are reported without editing the theme.
  *
  * Puts the Meta pixel on a connected Shopify store's storefront and checkout through
  * Zernio's Shopify web pixel (a Shopify app pixel, no theme edits). The store then sends
@@ -16006,6 +16006,18 @@ export const removeTrackingTagSharedAccount = <ThrowOnError extends boolean = fa
  * with a `pagevisit` event; the manual fallback is the official Pinterest for WooCommerce
  * plugin (WooCommerce stores).
  *
+ * **Wix** (`storeAccountId` is a connected Wix site): Zernio's Wix app embeds one script on
+ * the site that loads each installed tag's base code (the same code WordPress gets), so on
+ * Wix each tag records page views. Wix changes pages without reloading, so later page views
+ * are recorded again on Wix's own page-view event for Meta, TikTok, Google, Pinterest,
+ * OpenAI and Whop; LinkedIn and X count the first page of each visit. Like Shopify, the site holds one tag per platform:
+ * installing a different tag of the same platform replaces it (`replacedTagId`) and other
+ * platforms' tags are kept. The script is an Advertising script, so it runs only for
+ * visitors who accept advertising cookies when the site shows a cookie banner. Sites
+ * connected before pixel support answer 409 `reconnect_required` until the owner approves
+ * the Zernio app's new permission (`details.authUrl`, or Apps > Manage Apps in the Wix
+ * dashboard).
+ *
  */
 export const installTrackingTagOnStore = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<InstallTrackingTagOnStoreData, ThrowOnError>) => {
     return (options?.client ?? client).post<InstallTrackingTagOnStoreResponse, InstallTrackingTagOnStoreError, ThrowOnError>({
@@ -16016,7 +16028,7 @@ export const installTrackingTagOnStore = <ThrowOnError extends boolean = false>(
 
 /**
  * Get store install status
- * Shows whether a tracking tag is live on your Shopify store or WordPress site, and whether a WordPress install would be blocked.
+ * Shows whether a tracking tag is live on your Shopify store, WordPress site or Wix site, and whether a WordPress install would be blocked.
  *
  * Whether this tag is the one the Shopify store fires for its platform. `installedTagId`
  * names the tag of that platform the store currently fires, which can be a different tag,
@@ -16038,13 +16050,14 @@ export const getTrackingTagStoreInstall = <ThrowOnError extends boolean = false>
 };
 
 /**
- * Remove from a Shopify store or WordPress site
- * Removes a tracking tag from your Shopify store or WordPress site, leaving other platforms' tags and hand-added pixel code in place.
+ * Remove from a Shopify store, WordPress site or Wix site
+ * Removes a tracking tag from your Shopify store, WordPress site or Wix site, leaving other platforms' tags and hand-added pixel code in place.
  *
  * Idempotent: nothing installed returns 200 with
  * `installed: false`. If the store fires a different tag of the same platform, nothing is
  * removed and the call answers 409 `invalid_resource_state`. Shopify: other platforms'
- * tags stay; the web pixel itself is deleted once no tag remains.
+ * tags stay; the web pixel itself is deleted once no tag remains. Wix works the same way,
+ * and the site's Zernio script is disabled once no tag remains.
  *
  * WordPress: deletes every widget Zernio created for this pixel and reports how many in
  * `removed` (0 when nothing was installed). Pixel code added by hand is left alone.

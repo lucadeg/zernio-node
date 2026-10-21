@@ -11453,14 +11453,14 @@ export type platform13 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'link
 export type tiktokAccountType = 'business' | 'personal' | 'unknown';
 
 /**
- * A tracking tag's install on a connected store: a Shopify web pixel, or a Custom HTML widget on a WordPress site. Fields marked Shopify or WordPress are present only for that platform.
+ * A tracking tag's install on a connected store: a Shopify web pixel, a Custom HTML widget on a WordPress site, or the Zernio embedded script on a Wix site. Fields marked Shopify, WordPress or Wix are present only for that platform.
  */
 export type StorePixelInstall = {
     storeAccountId?: string;
     /**
      * The store platform.
      */
-    platform?: 'shopify' | 'wordpress';
+    platform?: 'shopify' | 'wordpress' | 'wix';
     /**
      * Platform of the tag this install is about (e.g. `metaads`).
      */
@@ -11470,7 +11470,7 @@ export type StorePixelInstall = {
      */
     siteTagId?: string;
     /**
-     * Shopify: this tag is the one the store fires for its platform. WordPress: the Zernio widget for this tag is in an active widget area with its script intact.
+     * Shopify and Wix: this tag is the one the store fires for its platform. WordPress: the Zernio widget for this tag is in an active widget area with its script intact.
      */
     installed?: boolean;
     /**
@@ -11478,11 +11478,11 @@ export type StorePixelInstall = {
      */
     shopDomain?: string;
     /**
-     * Shopify only: the tag of the same platform the store fires now (may be a different tag), or null.
+     * Shopify and Wix only: the tag of the same platform the store fires now (may be a different tag), or null.
      */
     installedTagId?: (string) | null;
     /**
-     * GET only on WordPress, always on Shopify: every Zernio tag on the store, all platforms.
+     * GET only on WordPress, always on Shopify and Wix: every Zernio tag on the store, all platforms.
      */
     tags?: Array<{
         platform?: string;
@@ -11505,9 +11505,9 @@ export type StorePixelInstall = {
      */
     webPixelId?: (string) | null;
     /**
-     * WordPress only.
+     * WordPress and Wix only. Null on a Wix site that was never published.
      */
-    siteUrl?: string;
+    siteUrl?: (string) | null;
     /**
      * WordPress only.
      */
@@ -11525,7 +11525,7 @@ export type StorePixelInstall = {
 /**
  * The store platform.
  */
-export type platform14 = 'shopify' | 'wordpress';
+export type platform14 = 'shopify' | 'wordpress' | 'wix';
 
 /**
  * WordPress only.
@@ -55431,7 +55431,7 @@ export type RemoveTrackingTagSharedAccountError = (unknown | ErrorResponse);
 export type InstallTrackingTagOnStoreData = {
     body: {
         /**
-         * The connected Shopify (`shopify`) or WordPress (`wordpress`) account id.
+         * The connected Shopify (`shopify`), WordPress (`wordpress`) or Wix (`wix`) account id.
          */
         storeAccountId: string;
         /**
@@ -55460,7 +55460,7 @@ export type InstallTrackingTagOnStoreResponse = ({
     platform?: 'metaads' | 'tiktokads' | 'googleads' | 'xads' | 'openaiads' | 'linkedinads' | 'pinterestads' | 'whopads';
     install?: (StorePixelInstall & {
     /**
-     * Shopify only: the pixel this install replaced on the store, if any.
+     * Shopify and Wix only: the pixel this install replaced on the store, if any.
      */
     replacedTagId?: (string) | null;
     /**
@@ -55503,7 +55503,7 @@ export type GetTrackingTagStoreInstallData = {
          */
         adAccountId?: string;
         /**
-         * The connected Shopify or WordPress account id.
+         * The connected Shopify, WordPress or Wix account id.
          */
         storeAccountId: string;
     };
@@ -55551,7 +55551,7 @@ export type RemoveTrackingTagFromStoreData = {
          */
         adAccountId?: string;
         /**
-         * The connected Shopify or WordPress account id.
+         * The connected Shopify, WordPress or Wix account id.
          */
         storeAccountId: string;
     };
