@@ -4681,11 +4681,11 @@ export type ConversionEvent = {
          */
         ctwaClid?: string;
         /**
-         * Messenger: Facebook Page id, sent as `page_id`. Instagram Direct: when `instagramBusinessAccountId` is absent, Zernio reads the Instagram professional account linked to this Page and sends its id as `instagram_business_account_id`; if none is linked or the lookup fails, `page_id` is sent instead.
+         * Messenger: Facebook Page id, sent as `page_id`. Instagram Direct: when `instagramBusinessAccountId` is absent, Zernio reads the Instagram professional account linked to this Page and sends its id as `ig_account_id`; if none is linked or the lookup fails, `page_id` is sent instead.
          */
         pageId?: string;
         /**
-         * Instagram Direct only. Instagram professional account id (`instagram_business_account` on the Page), sent as `instagram_business_account_id` next to `ig_sid`.
+         * Instagram Direct only. Instagram professional account id (`instagram_business_account` on the Page), sent as `ig_account_id` next to `ig_sid`.
          */
         instagramBusinessAccountId?: string;
         /**
