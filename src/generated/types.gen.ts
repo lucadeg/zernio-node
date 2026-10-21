@@ -16779,6 +16779,7 @@ export type WorkflowEdge = {
      * - **condition**: a rule's `id`, or `'default'` (no rule matched)
      * - **wait_for_reply**: `'reply'` (contact replied) | `'timeout'` (no reply in window)
      * - **webhook**: `'success'` (2xx) | `'error'` (non-2xx / fetch failed)
+     * - **hubspot_upsert_contact**: `'success'` | `'error'` (not connected / HubSpot refused)
      * - **ai**: `'success'` (text/JSON response) | `'tool:<toolName>'` (model invoked
      * that tool) | `'error'` (upstream failure / non-JSON in JSON mode)
      * - **start_call**: `'success'` | `'permission_required'` | `'failed'`
@@ -16847,14 +16848,14 @@ export type WorkflowNode = {
      */
     id: string;
     /**
-     * Node kind. The 16 supported types break into four groups:
+     * Node kind. The 17 supported types break into four groups:
      * messaging (send_message),
      * control flow (trigger, condition, delay, wait_for_reply, a_b_split, end),
      * data ops (set_variable, set_field, add_tag, remove_tag, enroll_sequence),
-     * integrations (webhook, ai, handoff, start_call).
+     * integrations (webhook, hubspot_upsert_contact, ai, handoff, start_call).
      *
      */
-    type: 'trigger' | 'send_message' | 'wait_for_reply' | 'condition' | 'set_variable' | 'delay' | 'webhook' | 'ai' | 'handoff' | 'start_call' | 'a_b_split' | 'set_field' | 'enroll_sequence' | 'add_tag' | 'remove_tag' | 'end';
+    type: 'trigger' | 'send_message' | 'wait_for_reply' | 'condition' | 'set_variable' | 'delay' | 'webhook' | 'hubspot_upsert_contact' | 'ai' | 'handoff' | 'start_call' | 'a_b_split' | 'set_field' | 'enroll_sequence' | 'add_tag' | 'remove_tag' | 'end';
     /**
      * Type-specific settings. All string fields support `{{variable}}` interpolation against the run's variable bag (resolved at execution time).
      *
@@ -16874,6 +16875,8 @@ export type WorkflowNode = {
      * **delay**: `{ delayMinutes:int (max 43200) }`. Suspends the run, resumes via timer.
      *
      * **webhook**: `{ url, method: GET|POST|PUT|PATCH|DELETE, headers, bodyTemplate, saveAs }`. SSRF-guarded (private/loopback/metadata IPs rejected). Response saved as `{ status, ok, body }` to `vars[saveAs]`. Edge: `'success'` on 2xx, `'error'` otherwise.
+     *
+     * **hubspot_upsert_contact**: `{ email, phone, firstName, lastName, properties, saveAs }`. Creates or updates the run contact in the profile's connected HubSpot portal: the contact already linked by inbox sync, else one matching by email, then phone, is updated; otherwise one is created. An existing contact gets only the fields the node sets (a value that resolves to an empty string is skipped); a new one also takes the Zernio contact's name, email and phone for anything left out. `properties` maps HubSpot internal property names to values (at most 50). Saves `{ id, created }` (or `{ error }`) to `vars[saveAs]` (default `hubspotContact`). Edges: `'success'` | `'error'` (HubSpot not connected, or HubSpot refused the write).
      *
      * **ai**: `{ provider: anthropic|openai|google|mistral|groq|openrouter, model, preset: smart|tools|cheap, systemPrompt, userPromptTemplate, saveAs, temperature, maxTokens, outputType: text|json, tools:[{ name, description, parameters }] }`. Set `provider` + `model` for BYOK (uses your stored API key); omit `provider` for the legacy Telnyx path. Edges: `'success'`, `'tool:<name>'` (model picked a tool), `'error'`.
      *
@@ -16909,14 +16912,14 @@ export type WorkflowNode = {
 };
 
 /**
- * Node kind. The 16 supported types break into four groups:
+ * Node kind. The 17 supported types break into four groups:
  * messaging (send_message),
  * control flow (trigger, condition, delay, wait_for_reply, a_b_split, end),
  * data ops (set_variable, set_field, add_tag, remove_tag, enroll_sequence),
- * integrations (webhook, ai, handoff, start_call).
+ * integrations (webhook, hubspot_upsert_contact, ai, handoff, start_call).
  *
  */
-export type type21 = 'trigger' | 'send_message' | 'wait_for_reply' | 'condition' | 'set_variable' | 'delay' | 'webhook' | 'ai' | 'handoff' | 'start_call' | 'a_b_split' | 'set_field' | 'enroll_sequence' | 'add_tag' | 'remove_tag' | 'end';
+export type type21 = 'trigger' | 'send_message' | 'wait_for_reply' | 'condition' | 'set_variable' | 'delay' | 'webhook' | 'hubspot_upsert_contact' | 'ai' | 'handoff' | 'start_call' | 'a_b_split' | 'set_field' | 'enroll_sequence' | 'add_tag' | 'remove_tag' | 'end';
 
 /**
  * A single X API operation with its per-call price and the Zernio platform methods that trigger it.
