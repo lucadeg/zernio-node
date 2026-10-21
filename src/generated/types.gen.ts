@@ -44118,7 +44118,7 @@ export type GetAdTreeError = (ErrorResponse | unknown);
 export type GetAdsTimelineData = {
     query: {
         /**
-         * Account ID. Sibling-expanded to its linked posting↔ads pair.
+         * Account ID. Sibling-expanded to its linked posting↔ads pair. An id that does not exist or sits on a profile the API key cannot reach answers 404 (code: account_not_found).
          */
         accountId: string;
         /**
