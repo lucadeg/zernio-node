@@ -409,6 +409,16 @@ describe('Endpoint Methods', () => {
       expect(client.connect.selectInstagramAccount).toBeTypeOf('function');
     });
 
+    it('should have getConnectWelcomeScreen method', () => {
+      expect(client.connect.getConnectWelcomeScreen).toBeDefined();
+      expect(client.connect.getConnectWelcomeScreen).toBeTypeOf('function');
+    });
+
+    it('should have updateConnectWelcomeScreen method', () => {
+      expect(client.connect.updateConnectWelcomeScreen).toBeDefined();
+      expect(client.connect.updateConnectWelcomeScreen).toBeTypeOf('function');
+    });
+
     it('should have getPendingOAuthData method', () => {
       expect(client.connect.getPendingOAuthData).toBeDefined();
       expect(client.connect.getPendingOAuthData).toBeTypeOf('function');

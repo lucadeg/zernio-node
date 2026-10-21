@@ -337,6 +337,7 @@ try {
 | `connect.createPinterestBoard()` | Create Pinterest board |
 | `connect.createYoutubePlaylist()` | Create YouTube playlist |
 | `connect.getConnectUrl()` | Get OAuth connect URL |
+| `connect.getConnectWelcomeScreen()` | Get the saved welcome screen |
 | `connect.getFacebookPages()` | List Facebook pages |
 | `connect.getGmbLocations()` | List Google Business Profile locations |
 | `connect.getHubSpotConnectUrl()` | Get HubSpot OAuth connect URL |
@@ -354,6 +355,7 @@ try {
 | `connect.getWordPressAuthUrl()` | Get WordPress.com OAuth connect URL |
 | `connect.getYoutubeCaptions()` | Get a YouTube video transcript |
 | `connect.getYoutubePlaylists()` | List YouTube playlists |
+| `connect.updateConnectWelcomeScreen()` | Save the welcome screen |
 | `connect.updateFacebookPage()` | Update Facebook page |
 | `connect.updateGmbLocation()` | Update Google Business Profile location |
 | `connect.updateLinkedInOrganization()` | Switch LinkedIn account type |

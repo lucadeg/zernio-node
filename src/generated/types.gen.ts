@@ -4343,6 +4343,18 @@ export type ConnectedApp = {
     tokenCount?: number;
 };
 
+export type ConnectWelcomeScreen = {
+    showByDefault?: boolean;
+    brandName?: (string) | null;
+    logoUrl?: (string) | null;
+    /**
+     * Same keys as the `welcomeTheme` parameter of `GET /v1/connect/{platform}`.
+     */
+    theme?: {
+        [key: string]: unknown;
+    } | null;
+};
+
 /**
  * A Google Ads conversion action, e.g. a WEBPAGE conversion created via
  * `createConversionAction`. Returned by `listConversionActions` and
@@ -21460,7 +21472,7 @@ export type GetConnectUrlData = {
          */
         loginMethod?: 'instagram_login' | 'facebook_login';
         /**
-         * Welcome screen only (`welcome=true`): https URL of your logo, shown in a square tile, so use a square image. Without it the tile shows the first letter of `brandName`, or the Zernio mark when there is no `brandName` either. Rejected with 400 `INVALID_FIELD_VALUE` without `welcome=true`.
+         * Welcome screen only (`welcome=true`): https URL of your logo, shown in a square tile, so use a square image. Without it the tile shows the first letter of `brandName`, or the Zernio mark when there is no `brandName` either. Rejected with 400 `INVALID_FIELD_VALUE` when the welcome screen is not shown.
          */
         logoUrl?: string;
         /**
@@ -21661,11 +21673,11 @@ export type GetConnectUrlData = {
          */
         signup?: 'hosted';
         /**
-         * Any platform. When `true`, `authUrl` points to a Zernio-hosted welcome screen that shows your brand next to the platform ("<brandName> wants to connect to your <platform>") with a Continue button; Continue sends the user to the platform's own authorization screen and the rest of the flow is unchanged. `brandName`, `logoUrl`, `primaryColor` and `welcomeTheme` are optional and default to Zernio's own name, mark and look. The link is valid for 30 minutes, after which the page asks the user to start again. The brand also carries to the account and channel pickers Zernio shows after authorization, and when you pass no `redirect_url` the flow ends on a branded Zernio-hosted page saying whether the account connected, instead of the Zernio dashboard. Cannot be combined with `headless=true` or `signup=hosted` (400 `INVALID_FIELD_VALUE`). The platform's authorization screen still names the Zernio app.
+         * Any platform. When `true`, `authUrl` points to a Zernio-hosted welcome screen that shows your brand next to the platform ("<brandName> wants to connect to your <platform>") whose button fills for about a second and then sends the user on to the platform's own authorization screen, with no click; the rest of the flow is unchanged. `brandName`, `logoUrl`, `primaryColor` and `welcomeTheme` are optional and default to Zernio's own name, mark and look. The link is valid for 30 minutes, after which the page asks the user to start again. The brand also carries to the account and channel pickers Zernio shows after authorization, and when you pass no `redirect_url` the flow ends on a branded Zernio-hosted page saying whether the account connected, instead of the Zernio dashboard. Cannot be combined with `headless=true` or `signup=hosted` (400 `INVALID_FIELD_VALUE`). The platform's authorization screen still names the Zernio app. Recommended. When left out, the screen is shown if the workspace saved it as on by default (`PUT /v1/connect/welcome-screen`), except with `headless=true` or `signup=hosted`; pass `false` to skip it. Branding you leave out of the call comes from those saved settings, and a `welcomeTheme` you send is merged key by key over the saved theme.
          */
         welcome?: boolean;
         /**
-         * Welcome screen only (`welcome=true`): a URL-encoded JSON object that restyles and rewords the screen. All keys are optional. Copy: `heading` (up to 120 characters), `trustLine` and `consentLine` (up to 200 each), `buttonLabel` (up to 30); each may contain the placeholders `{brand}` and `{platform}`. Style: `primaryColor`, `pageColor`, `cardColor` and `textColor` as `#RRGGBB`, `cornerRadius` as an integer from 0 to 24 (pixels), `font` as `sans`, `serif` or `mono`. A `primaryColor` here wins over the `primaryColor` parameter. Unknown keys, invalid JSON or an invalid value are a 400 `INVALID_FIELD_VALUE`. Rejected without `welcome=true`. Example: `{"heading":"Link your {platform} to {brand}","cardColor":"#FFF7ED","cornerRadius":12}`.
+         * Welcome screen only (`welcome=true`): a URL-encoded JSON object that restyles and rewords the screen. All keys are optional. Copy: `heading` (up to 120 characters), `trustLine` and `consentLine` (up to 200 each), `buttonLabel` (up to 30, the label on that button); each may contain the placeholders `{brand}` and `{platform}`. Style: `primaryColor`, `pageColor`, `cardColor` and `textColor` as `#RRGGBB`, `cornerRadius` as an integer from 0 to 24 (pixels), `font` as `sans`, `serif` or `mono`. A `primaryColor` here wins over the `primaryColor` parameter. Unknown keys, invalid JSON or an invalid value are a 400 `INVALID_FIELD_VALUE`. Rejected when the welcome screen is not shown. Example: `{"heading":"Link your {platform} to {brand}","cardColor":"#FFF7ED","cornerRadius":12}`.
          */
         welcomeTheme?: string;
     };
@@ -24304,6 +24316,34 @@ export type DeleteGoogleBusinessReviewReplyResponse = ({
 export type DeleteGoogleBusinessReviewReplyError = (ErrorResponse | {
     error?: string;
 });
+
+export type GetConnectWelcomeScreenResponse = (ConnectWelcomeScreen);
+
+export type GetConnectWelcomeScreenError = (ErrorResponse);
+
+export type UpdateConnectWelcomeScreenData = {
+    body: {
+        /**
+         * Show the welcome screen on connect calls that do not pass `welcome`.
+         */
+        showByDefault: boolean;
+        brandName?: string;
+        /**
+         * https URL of a square logo.
+         */
+        logoUrl?: string;
+        /**
+         * Same keys as the `welcomeTheme` parameter of `GET /v1/connect/{platform}`, as a JSON object.
+         */
+        theme?: {
+            [key: string]: unknown;
+        };
+    };
+};
+
+export type UpdateConnectWelcomeScreenResponse = (ConnectWelcomeScreen);
+
+export type UpdateConnectWelcomeScreenError = (ErrorResponse | unknown);
 
 export type GetPendingOAuthDataData = {
     query: {
