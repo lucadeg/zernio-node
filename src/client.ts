@@ -634,6 +634,7 @@ import {
   listInboxConversations,
   listInboxMentions,
   listInboxReviews,
+  listInstagramLiveMedia,
   listInstagramMediaCollaborators,
   listInstagramPages,
   listInstagramStories,
@@ -1529,6 +1530,7 @@ export class Zernio {
     getInstagramAudio: this._bind(getInstagramAudio),
     getInstagramBusinessDiscovery: this._bind(getInstagramBusinessDiscovery),
     listInstagramMediaCollaborators: this._bind(listInstagramMediaCollaborators),
+    listInstagramLiveMedia: this._bind(listInstagramLiveMedia),
     getInstagramStoryInsights: this._bind(getInstagramStoryInsights),
   };
 

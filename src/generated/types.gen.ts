@@ -8292,6 +8292,29 @@ export type metric = 'follower_demographics' | 'engaged_audience_demographics';
  */
 export type timeframe = 'this_week' | 'this_month';
 
+export type InstagramLiveMedia = {
+    /**
+     * Instagram media ID of the live broadcast.
+     */
+    id: string;
+    /**
+     * BROADCAST for a live video.
+     */
+    mediaType: (string) | null;
+    /**
+     * LIVE for a live video.
+     */
+    mediaProductType: (string) | null;
+    /**
+     * Instagram handle of the broadcasting account.
+     */
+    username: (string) | null;
+    /**
+     * Creation time of the broadcast media as Meta returns it (ISO 8601).
+     */
+    timestamp: (string) | null;
+};
+
 export type InstagramMediaCollaborator = {
     /**
      * App-scoped ID of the collaborator's Instagram account.
@@ -26280,6 +26303,21 @@ export type ListInstagramMediaCollaboratorsResponse = ({
 });
 
 export type ListInstagramMediaCollaboratorsError = (ErrorResponse);
+
+export type ListInstagramLiveMediaData = {
+    path: {
+        /**
+         * The ID of a connected Instagram account (Facebook Login).
+         */
+        accountId: string;
+    };
+};
+
+export type ListInstagramLiveMediaResponse = ({
+    data: Array<InstagramLiveMedia>;
+});
+
+export type ListInstagramLiveMediaError = (ErrorResponse);
 
 export type GetInstagramStoryInsightsData = {
     path: {
@@ -49442,7 +49480,7 @@ export type CreateStandaloneAdData = {
          */
         aiDisclosure?: 'OPT_IN' | 'OPT_OUT';
         /**
-         * Google Performance Max validates the complete atomic campaign and asset group with no resource creation or local persistence. Google validation still downloads image URLs and consumes quota. On Meta, validates the complete inline campaign, ad set, creative and ad with execution_options validate_only. Nothing is uploaded or created, and validation bypasses Idempotency-Key storage. Supports a single image, all-image placementAssets with per-rule copy, existing video.id or existingCreativeId; other media pools, new video uploads, creatives[], adSetId and RESERVED buying return 400. Placement validation uses existing Instagram identities only. Existing campaign or creative nodes are marked skipped. Success returns 200 with per-node results; Meta rejection returns an error. ChatGPT (OpenAI) has no platform dry-run: Zernio runs every check it knows (creative lengths, budget, bid strategy, targeting) plus live lookups of the conversion event and target countries, and uploads or creates nothing. OpenAI's own write-time checks (image fetch, currency-specific minimums, ad review) still run only on a real create. Any other platform, or a Google campaignType other than pmax or demand_gen, returns 501 `feature_not_available`.
+         * Google Performance Max validates the complete atomic campaign and asset group with no resource creation or local persistence. Google validation still downloads image URLs and consumes quota. On Meta, validates the complete inline campaign, ad set, creative and ad with execution_options validate_only. Nothing is uploaded or created, and validation bypasses Idempotency-Key storage. Supports a single image or existing video.id (each also with bodies[] / headlines[] Multiple Text Options), all-image placementAssets with per-rule copy and text pools, or existingCreativeId; dynamicCreative, translations, carouselCards, placement videos, new video uploads, creatives[], adSetId and RESERVED buying return 400. Placement validation uses existing Instagram identities only. Existing campaign or creative nodes are marked skipped. Success returns 200 with per-node results; Meta rejection returns an error. ChatGPT (OpenAI) has no platform dry-run: Zernio runs every check it knows (creative lengths, budget, bid strategy, targeting) plus live lookups of the conversion event and target countries, and uploads or creates nothing. OpenAI's own write-time checks (image fetch, currency-specific minimums, ad review) still run only on a real create. Any other platform, or a Google campaignType other than pmax or demand_gen, returns 501 `feature_not_available`.
          */
         validateOnly?: boolean;
         /**

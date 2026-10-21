@@ -1021,6 +1021,7 @@ try {
 ### Instagram
 | Method | Description |
 |--------|-------------|
+| `instagram.listInstagramLiveMedia()` | List the live broadcasts of an Instagram account |
 | `instagram.listInstagramMediaCollaborators()` | List the collaborators of an Instagram post |
 | `instagram.listInstagramStories()` | List active Instagram stories |
 | `instagram.getInstagramAudio()` | Get Instagram audio metadata |
