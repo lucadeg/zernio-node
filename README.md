@@ -1024,6 +1024,7 @@ try {
 | `instagram.listInstagramLiveMedia()` | List the live broadcasts of an Instagram account |
 | `instagram.listInstagramMediaCollaborators()` | List the collaborators of an Instagram post |
 | `instagram.listInstagramStories()` | List active Instagram stories |
+| `instagram.listInstagramTaggedMedia()` | List the posts an Instagram account is tagged in |
 | `instagram.getInstagramAudio()` | Get Instagram audio metadata |
 | `instagram.getInstagramBusinessDiscovery()` | Look up a public Instagram Business account |
 | `instagram.getInstagramPublishingLimit()` | Get Instagram publishing limit |
