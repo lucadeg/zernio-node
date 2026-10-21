@@ -425,6 +425,7 @@ try {
 | `adAccounts.listAccountSitelinks()` | List account sitelinks |
 | `adAccounts.listAccountStructuredSnippets()` | List account snippets |
 | `adAccounts.listAdAccounts()` | List ad accounts |
+| `adAccounts.listAdAccountUserInvitationApprovals()` | List invitations awaiting multi-party approval |
 | `adAccounts.listAdAccountUserInvitations()` | List user access invitations |
 | `adAccounts.listAdAccountUsers()` | Ad account users |
 | `adAccounts.listAdLabels()` | List ad labels |
@@ -487,6 +488,7 @@ try {
 | `adAccounts.replaceAdNegativeKeywordListKeywords()` | Replace negative list keywords |
 | `adAccounts.replyToAdComment()` | Reply to an ad comment |
 | `adAccounts.revokeAdAccountUserInvitation()` | Revoke a user access invitation |
+| `adAccounts.withdrawAdAccountUserInvitationApproval()` | Withdraw an invitation awaiting multi-party approval |
 
 ### Ad Audiences
 | Method | Description |

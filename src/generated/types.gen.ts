@@ -918,7 +918,11 @@ export type AdFunnelCounts = {
      */
     paymentInfoAdds?: number;
     /**
-     * Purchases (Meta `Purchase` pixel event). Pair with `purchaseValue` for revenue.
+     * Purchases. Meta reports one purchase under several action types at once, so this takes the FIRST one present, in this order, never a sum: `offsite_conversion.fb_pixel_purchase`, `omni_purchase`, `app_custom_event.fb_mobile_purchase`, `onsite_conversion.purchase`, `purchase`.
+     * It always counts purchases, whatever the ad set optimizes for. `conversions` instead follows the ad set's optimization event (PURCHASE when the ad set names none), so the two can differ on any other goal.
+     * TikTok: app purchases (`purchase`), else website complete payments (`complete_payment`), else Place an Order (`place_order`).
+     * Pair with `purchaseValue` for revenue.
+     *
      */
     purchases?: number;
     /**
@@ -6798,6 +6802,26 @@ export type GoogleAdsUserAccessInvitationResult = {
  * PENDING once the email is sent; PENDING_APPROVAL while Google waits for a second admin's multi-party approval.
  */
 export type status20 = 'PENDING' | 'PENDING_APPROVAL';
+
+export type GoogleAdsUserInvitationApproval = {
+    /**
+     * Pass to DELETE /v1/ads/accounts/user-invitations/pending-approvals to withdraw the request.
+     */
+    multiPartyAuthReviewId?: string;
+    /**
+     * Invited email address.
+     */
+    emailAddress?: (string) | null;
+    accessRole?: 'ADMIN' | 'STANDARD' | 'READ_ONLY' | 'EMAIL_ONLY' | 'UNKNOWN';
+    /**
+     * Google user who sent the invitation. Only this user can withdraw it.
+     */
+    requestUserEmail?: (string) | null;
+    /**
+     * Google's creation time, yyyy-MM-dd HH:mm:ss.ssssss in the account's time zone.
+     */
+    createdAt?: (string) | null;
+};
 
 /**
  * Link one asset to the asset group. Send exactly one of asset (an existing asset), text, imageUrl or youtubeVideoId (new content, created in the same request).
@@ -47835,7 +47859,7 @@ export type ListAdAccountUserInvitationsResponse = ({
     customerId?: string;
     invitations?: Array<GoogleAdsUserAccessInvitation>;
     /**
-     * When this data was fetched from Google. Null on a live read.
+     * When this data was fetched from Google. Null when the cache is unavailable.
      */
     cachedAt?: (string) | null;
     /**
@@ -47893,6 +47917,59 @@ export type RevokeAdAccountUserInvitationResponse = ({
 });
 
 export type RevokeAdAccountUserInvitationError = (ErrorResponse | unknown);
+
+export type ListAdAccountUserInvitationApprovalsData = {
+    query: {
+        /**
+         * Google ads SocialAccount id.
+         */
+        accountId: string;
+        /**
+         * Google Ads customer id, digits only. Defaults to the connection's selected customer.
+         */
+        adAccountId?: string;
+    };
+};
+
+export type ListAdAccountUserInvitationApprovalsResponse = ({
+    customerId?: string;
+    approvals?: Array<GoogleAdsUserInvitationApproval>;
+    /**
+     * When this data was fetched from Google. Null when the cache is unavailable.
+     */
+    cachedAt?: (string) | null;
+    /**
+     * True when Google's quota was exhausted and this is the last successful fetch.
+     */
+    stale?: boolean;
+});
+
+export type ListAdAccountUserInvitationApprovalsError = (ErrorResponse | unknown);
+
+export type WithdrawAdAccountUserInvitationApprovalData = {
+    query: {
+        /**
+         * Google ads SocialAccount id.
+         */
+        accountId: string;
+        /**
+         * Google Ads customer id, digits only.
+         */
+        adAccountId: string;
+        /**
+         * Numeric review id from POST /v1/ads/accounts/user-invitations or GET /v1/ads/accounts/user-invitations/pending-approvals.
+         */
+        multiPartyAuthReviewId: string;
+    };
+};
+
+export type WithdrawAdAccountUserInvitationApprovalResponse = ({
+    customerId?: string;
+    multiPartyAuthReviewId?: string;
+    status?: 'REVOKED';
+});
+
+export type WithdrawAdAccountUserInvitationApprovalError = (ErrorResponse | unknown);
 
 export type ListAdAccountUsersData = {
     query: {

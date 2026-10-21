@@ -533,6 +533,7 @@ import {
   listAccountSitelinks,
   listAccountStructuredSnippets,
   listAccounts,
+  listAdAccountUserInvitationApprovals,
   listAdAccountUserInvitations,
   listAdAccountUsers,
   listAdAccounts,
@@ -980,6 +981,7 @@ import {
   verifyWhatsAppNumber,
   viewPhoneNumberKycDocument,
   voteRedditThing,
+  withdrawAdAccountUserInvitationApproval,
 } from './generated/sdk.gen';
 
 import { ZernioApiError, parseApiError } from './errors';
@@ -2242,6 +2244,8 @@ export class Zernio {
     listAdAccountUserInvitations: this._bind(listAdAccountUserInvitations),
     inviteAdAccountUser: this._bind(inviteAdAccountUser),
     revokeAdAccountUserInvitation: this._bind(revokeAdAccountUserInvitation),
+    listAdAccountUserInvitationApprovals: this._bind(listAdAccountUserInvitationApprovals),
+    withdrawAdAccountUserInvitationApproval: this._bind(withdrawAdAccountUserInvitationApproval),
     listAdAccountUsers: this._bind(listAdAccountUsers),
     assignAdAccountUser: this._bind(assignAdAccountUser),
     removeAdAccountUser: this._bind(removeAdAccountUser),
@@ -2805,6 +2809,10 @@ export class Zernio {
     inviteAdAccountUser: this._bind(inviteAdAccountUser),
     /** @deprecated Use `zernio.adaccounts.revokeAdAccountUserInvitation` instead. */
     revokeAdAccountUserInvitation: this._bind(revokeAdAccountUserInvitation),
+    /** @deprecated Use `zernio.adaccounts.listAdAccountUserInvitationApprovals` instead. */
+    listAdAccountUserInvitationApprovals: this._bind(listAdAccountUserInvitationApprovals),
+    /** @deprecated Use `zernio.adaccounts.withdrawAdAccountUserInvitationApproval` instead. */
+    withdrawAdAccountUserInvitationApproval: this._bind(withdrawAdAccountUserInvitationApproval),
     /** @deprecated Use `zernio.adaccounts.listAdAccountUsers` instead. */
     listAdAccountUsers: this._bind(listAdAccountUsers),
     /** @deprecated Use `zernio.adaccounts.assignAdAccountUser` instead. */
