@@ -12128,6 +12128,38 @@ export type commercialContentType = 'none' | 'brand_organic' | 'brand_content';
 export type mediaType2 = 'video' | 'photo';
 
 /**
+ * One TikTok `reject_info` entry.
+ */
+export type TikTokReviewRejection = {
+    reasons?: Array<(string)>;
+    /**
+     * TikTok's advice for fixing the rejection.
+     */
+    suggestion?: (string) | null;
+    forbiddenPlacements?: Array<(string)>;
+    forbiddenAges?: Array<(string)>;
+    forbiddenLocations?: Array<(string)>;
+    /**
+     * The content TikTok rejected.
+     */
+    content?: {
+        /**
+         * TikTok `content_type`, verbatim (ModeString, ModeImage, ModeVideo, ModeMusic, LandingPage, ...).
+         */
+        type?: (string) | null;
+        text?: (string) | null;
+        imageId?: (string) | null;
+        videoId?: (string) | null;
+        musicId?: (string) | null;
+    } | null;
+};
+
+/**
+ * TikTok `review_status` normalized: ALL_AVAILABLE -> approved, PART_AVAILABLE -> partially_approved (delivers in part of the targeted locations), UNAVAILABLE -> rejected, anything else or missing -> unknown (see `rawReviewStatus`).
+ */
+export type TikTokSmartPlusReviewStatus = 'approved' | 'partially_approved' | 'rejected' | 'unknown';
+
+/**
  * A platform measurement tag: the thing you create, install on a
  * website, send events to, and target ads against. On Meta this is a
  * Pixel (`kind: pixel`). The shape is platform-neutral so other platforms
@@ -45065,6 +45097,89 @@ export type GetAdReviewResponse = ({
 });
 
 export type GetAdReviewError = (ErrorResponse | unknown);
+
+export type GetTikTokSmartPlusAdReviewData = {
+    path: {
+        /**
+         * Zernio ad id (24-char hex) or the TikTok ad id: the Smart+ ad id or the ad id of one of its creatives.
+         */
+        adId: string;
+    };
+};
+
+export type GetTikTokSmartPlusAdReviewResponse = ({
+    adId?: string;
+    platform?: 'tiktok';
+    platformAdId?: string;
+    /**
+     * The TikTok Smart+ ad whose review this is.
+     */
+    smartPlusAdId?: string;
+    /**
+     * The ad-level verdict (`smart_plus_ad_review_infos`). Null when TikTok returned none.
+     */
+    review?: {
+        reviewStatus?: TikTokSmartPlusReviewStatus;
+        /**
+         * TikTok `review_status`, verbatim.
+         */
+        rawReviewStatus?: (string) | null;
+        /**
+         * Every distinct reason across `rejections`.
+         */
+        rejectReasons?: Array<(string)>;
+        /**
+         * Location codes that passed the review.
+         */
+        passedLocations?: Array<(string)>;
+        /**
+         * TikTok `appeal_status`, verbatim: NOT_APPEALED, APPEALING, APPEAL_SUCCESSFUL, APPEAL_FAILED, APPEAL_DONE.
+         */
+        appealStatus?: (string) | null;
+        appealRejectReasons?: Array<(string)>;
+        rejections?: Array<TikTokReviewRejection>;
+    } | null;
+    /**
+     * One entry per creative TikTok reviewed (`material_review_infos`).
+     */
+    materials?: Array<{
+        /**
+         * TikTok `ad_material_id` of the creative inside this ad.
+         */
+        adMaterialId?: string;
+        /**
+         * Null for a creative TikTok added on its own or a carousel image.
+         */
+        materialType?: ('spark_post' | 'video' | 'carousel' | 'catalog_carousel') | null;
+        /**
+         * The TikTok post id when the creative is a Spark post.
+         */
+        tiktokItemId?: (string) | null;
+        videoId?: (string) | null;
+        name?: (string) | null;
+        /**
+         * TikTok `material_operation_status`: ENABLE or DISABLE.
+         */
+        operationStatus?: (string) | null;
+        reviewStatus?: TikTokSmartPlusReviewStatus;
+        /**
+         * TikTok `review_status`, verbatim.
+         */
+        rawReviewStatus?: (string) | null;
+        /**
+         * Every distinct reason across `rejections`. Empty when approved.
+         */
+        rejectReasons?: Array<(string)>;
+        passedLocations?: Array<(string)>;
+        rejections?: Array<TikTokReviewRejection>;
+    }>;
+    /**
+     * When the verdict was read from TikTok.
+     */
+    readAt?: string;
+});
+
+export type GetTikTokSmartPlusAdReviewError = (ErrorResponse | unknown);
 
 export type GetAdMediaData = {
     path: {

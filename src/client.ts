@@ -457,6 +457,7 @@ import {
   getTelegramConnectStatus,
   getTikTokAccountInsights,
   getTikTokCreatorInfo,
+  getTikTokSmartPlusAdReview,
   getTikTokSmartPlusMaterialReport,
   getTrackingTag,
   getTrackingTagDiagnostics,
@@ -2107,6 +2108,7 @@ export class Zernio {
     updateAdGroupAssets: this._bind(updateAdGroupAssets),
     removeAdGroupAssets: this._bind(removeAdGroupAssets),
     getAdReview: this._bind(getAdReview),
+    getTikTokSmartPlusAdReview: this._bind(getTikTokSmartPlusAdReview),
     listCampaignNegativeKeywordLists: this._bind(listCampaignNegativeKeywordLists),
     replaceCampaignNegativeKeywordLists: this._bind(replaceCampaignNegativeKeywordLists),
     boostPost: this._bind(boostPost),
@@ -2681,6 +2683,8 @@ export class Zernio {
     removeAdGroupAssets: this._bind(removeAdGroupAssets),
     /** @deprecated Use `zernio.adcampaigns.getAdReview` instead. */
     getAdReview: this._bind(getAdReview),
+    /** @deprecated Use `zernio.adcampaigns.getTikTokSmartPlusAdReview` instead. */
+    getTikTokSmartPlusAdReview: this._bind(getTikTokSmartPlusAdReview),
     /** @deprecated Use `zernio.adcampaigns.listCampaignNegativeKeywordLists` instead. */
     listCampaignNegativeKeywordLists: this._bind(listCampaignNegativeKeywordLists),
     /** @deprecated Use `zernio.adcampaigns.replaceCampaignNegativeKeywordLists` instead. */

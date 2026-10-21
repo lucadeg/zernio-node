@@ -534,6 +534,7 @@ try {
 | `adCampaigns.getCampaignConversionGoals()` | Get campaign conversion goals |
 | `adCampaigns.getCampaignTargeting()` | Read a Google campaign's device, location, excluded location, and language targeting |
 | `adCampaigns.getGoogleAssetGroup()` | Get a Performance Max asset group |
+| `adCampaigns.getTikTokSmartPlusAdReview()` | Review status of each creative in a TikTok Smart+ ad |
 | `adCampaigns.updateAd()` | Update ad |
 | `adCampaigns.updateAdCampaign()` | Update a campaign |
 | `adCampaigns.updateAdCampaignStatus()` | Pause or resume a campaign |
