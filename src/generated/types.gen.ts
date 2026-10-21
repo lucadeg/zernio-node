@@ -29500,6 +29500,14 @@ export type SendInboxMessageData = {
          */
         channel?: 'imessage' | 'sms' | 'rcs' | 'whatsapp';
         /**
+         * Instagram only (JSON body only). Shares one of the account's own published posts in the DM, by its Instagram media id (the `id` returned by the media endpoints, not a permalink). Meta only accepts media the account owns. Sent on its own: cannot be combined with `message`, attachments, `quickReplies`, `buttons`, `template` or `sticker` (400). `messageTag: HUMAN_AGENT` is allowed. Rejected with 400 on other platforms. Works on accounts connected with Instagram Login and with Facebook Login.
+         */
+        sharedMediaId?: string;
+        /**
+         * Instagram only (JSON body only). Sends a sticker instead of text; `like_heart` is the heart sticker. Sent on its own: cannot be combined with `message`, attachments, `quickReplies`, `buttons`, `template` or `sharedMediaId` (400). `messageTag: HUMAN_AGENT` is allowed. Rejected with 400 on other platforms.
+         */
+        sticker?: 'like_heart';
+        /**
          * Quick reply buttons. Mutually exclusive with buttons. Max 13 items.
          */
         quickReplies?: Array<{
