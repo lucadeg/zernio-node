@@ -564,7 +564,7 @@ export type AdActivationStatus = 'ACTIVE' | 'PAUSED';
 
 export type AdAnalyticsResponse = {
     /**
-     * Present and true while historical data is being backfilled.
+     * Meta only. Present and true while historical data is being backfilled.
      */
     backfillPending?: boolean;
     ad?: {
@@ -1424,7 +1424,7 @@ export type AdsListResponse = {
     ads?: Array<Ad>;
     pagination?: Pagination;
     /**
-     * Present and true while historical data is being backfilled.
+     * Meta only. Present and true while historical data is being backfilled.
      */
     backfillPending?: boolean;
 };
@@ -1433,7 +1433,7 @@ export type AdStatus = 'active' | 'paused' | 'pending_review' | 'rejected' | 'co
 
 export type AdsTimelineResponse = {
     /**
-     * Present and true while historical data is being backfilled.
+     * Meta only. Present and true while historical data is being backfilled.
      */
     backfillPending?: boolean;
     rows?: Array<{
@@ -1734,7 +1734,7 @@ export type AdTreeResponse = {
     campaigns?: Array<AdTreeCampaign>;
     pagination?: Pagination;
     /**
-     * Present and true while historical data is being backfilled.
+     * Meta only. Present and true while historical data is being backfilled.
      */
     backfillPending?: boolean;
 };
@@ -3206,7 +3206,7 @@ export type endReason = 'hangup' | 'no_answer' | 'rejected' | 'error';
 
 export type CampaignAnalyticsResponse = {
     /**
-     * Present and true while historical data is being backfilled.
+     * Meta only. Present and true while historical data is being backfilled.
      */
     backfillPending?: boolean;
     campaign?: {
