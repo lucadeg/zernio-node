@@ -449,6 +449,7 @@ try {
 | `adAccounts.createCustomConversion()` | Create custom conversion |
 | `adAccounts.createHighDemandPeriod()` | Schedule a budget increase |
 | `adAccounts.createValueRuleSet()` | Create a value rule set |
+| `adAccounts.getAdAccountBilling()` | Get ad account billing |
 | `adAccounts.getAdAccountFinance()` | Ad account finances |
 | `adAccounts.getAdAccountHierarchy()` | Get manager account hierarchy |
 | `adAccounts.getAdAccountLiveEntities()` | Read an ad account's campaigns and ad sets live |
@@ -489,6 +490,7 @@ try {
 | `adAccounts.replaceAdNegativeKeywordListKeywords()` | Replace negative list keywords |
 | `adAccounts.replyToAdComment()` | Reply to an ad comment |
 | `adAccounts.revokeAdAccountUserInvitation()` | Revoke a user access invitation |
+| `adAccounts.setUpAdAccountBilling()` | Set up ad account billing (monthly invoicing) |
 | `adAccounts.withdrawAdAccountUserInvitationApproval()` | Withdraw an invitation awaiting multi-party approval |
 
 ### Ad Audiences

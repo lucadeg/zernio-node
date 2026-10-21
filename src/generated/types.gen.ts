@@ -48169,6 +48169,134 @@ export type UpdateAdAccountManagerLinkResponse = (GoogleAdsManagerLink);
 
 export type UpdateAdAccountManagerLinkError = (ErrorResponse | unknown);
 
+export type GetAdAccountBillingData = {
+    query: {
+        /**
+         * Google ads SocialAccount id.
+         */
+        accountId: string;
+        /**
+         * Google Ads customer id, digits only. Defaults to the connection's selected customer.
+         */
+        adAccountId?: string;
+    };
+};
+
+export type GetAdAccountBillingResponse = ({
+    customerId?: string;
+    paymentsAccounts?: Array<{
+        /**
+         * Format 1234-5678-9012-3456. Pass it to POST /v1/ads/accounts/billing.
+         */
+        paymentsAccountId?: string;
+        name?: (string) | null;
+        currency?: (string) | null;
+        paymentsProfileId?: (string) | null;
+        /**
+         * Manager whose monthly invoice pays this account.
+         */
+        payingManagerCustomerId?: (string) | null;
+    }>;
+    billingSetups?: Array<{
+        billingSetupId?: string;
+        /**
+         * APPROVED_HELD means approved but waiting for its first account budget to be approved.
+         */
+        status?: 'PENDING' | 'APPROVED_HELD' | 'APPROVED' | 'CANCELLED' | 'UNKNOWN';
+        paymentsAccountId?: (string) | null;
+        /**
+         * In the account time zone, as Google returns it.
+         */
+        startDateTime?: (string) | null;
+        endDateTime?: (string) | null;
+    }>;
+    accountBudgets?: Array<{
+        accountBudgetId?: string;
+        status?: 'PENDING' | 'APPROVED' | 'CANCELLED' | 'UNKNOWN';
+        billingSetupId?: (string) | null;
+        approvedSpendingLimitMicros?: (string) | null;
+        /**
+         * INFINITE for an unlimited budget.
+         */
+        approvedSpendingLimitType?: (string) | null;
+        /**
+         * Account budget proposal still waiting for Google's review.
+         */
+        pendingProposalId?: (string) | null;
+    }>;
+    /**
+     * New account budgets proposed but not yet approved by Google. A setup with one is not reused by the POST.
+     */
+    pendingBudgetProposals?: Array<{
+        accountBudgetProposalId?: string;
+        billingSetupId?: (string) | null;
+    }>;
+    /**
+     * When this data was fetched from Google. Null when the cache is unavailable.
+     */
+    cachedAt?: (string) | null;
+    /**
+     * True when Google's quota was exhausted and this is the last successful fetch.
+     */
+    stale?: boolean;
+});
+
+export type GetAdAccountBillingError = (ErrorResponse | unknown);
+
+export type SetUpAdAccountBillingData = {
+    body: {
+        /**
+         * Google ads SocialAccount id.
+         */
+        accountId: string;
+        /**
+         * Google Ads customer id to bill, digits only.
+         */
+        adAccountId: string;
+        /**
+         * Monthly invoicing payments account from GET /v1/ads/accounts/billing.
+         */
+        paymentsAccountId: string;
+        /**
+         * Account budget cap in the account currency. Omit for an unlimited budget.
+         */
+        spendingLimit?: number;
+        budgetName?: string;
+        /**
+         * Printed on the invoice. No effect on delivery.
+         */
+        purchaseOrderNumber?: string;
+        validateOnly?: boolean;
+    };
+};
+
+export type SetUpAdAccountBillingResponse = ({
+    customerId?: string;
+    paymentsAccountId?: string;
+    paymentsAccountName?: (string) | null;
+    billingSetupId?: (string) | null;
+    reusedBillingSetup?: boolean;
+    /**
+     * Always null for validateOnly.
+     */
+    accountBudgetProposalId?: (string) | null;
+    validateOnly?: boolean;
+} | {
+    customerId?: string;
+    paymentsAccountId?: string;
+    paymentsAccountName?: (string) | null;
+    billingSetupId?: string;
+    /**
+     * True when an existing setup on the same payments account without a budget was completed.
+     */
+    reusedBillingSetup?: boolean;
+    accountBudgetProposalId?: (string) | null;
+    validateOnly?: boolean;
+    nextSteps?: string;
+});
+
+export type SetUpAdAccountBillingError = (ErrorResponse | unknown);
+
 export type ListAdAccountUserInvitationsData = {
     query: {
         /**

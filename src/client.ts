@@ -285,6 +285,7 @@ import {
   getAccountHealth,
   getAccountPosts,
   getAd,
+  getAdAccountBilling,
   getAdAccountFinance,
   getAdAccountHierarchy,
   getAdAccountLiveEntities,
@@ -837,6 +838,7 @@ import {
   setPartnershipAdPermission,
   setRedditPostFlair,
   setTelegramCommands,
+  setUpAdAccountBilling,
   setWhatsAppConversationalAutomation,
   setWhatsAppFlowsEncryptionKey,
   setWhatsappBusinessUsername,
@@ -2249,6 +2251,8 @@ export class Zernio {
     getAdAccountHierarchy: this._bind(getAdAccountHierarchy),
     inviteAdAccountToManager: this._bind(inviteAdAccountToManager),
     updateAdAccountManagerLink: this._bind(updateAdAccountManagerLink),
+    getAdAccountBilling: this._bind(getAdAccountBilling),
+    setUpAdAccountBilling: this._bind(setUpAdAccountBilling),
     listAdAccountUserInvitations: this._bind(listAdAccountUserInvitations),
     inviteAdAccountUser: this._bind(inviteAdAccountUser),
     revokeAdAccountUserInvitation: this._bind(revokeAdAccountUserInvitation),
@@ -2813,6 +2817,10 @@ export class Zernio {
     inviteAdAccountToManager: this._bind(inviteAdAccountToManager),
     /** @deprecated Use `zernio.adaccounts.updateAdAccountManagerLink` instead. */
     updateAdAccountManagerLink: this._bind(updateAdAccountManagerLink),
+    /** @deprecated Use `zernio.adaccounts.getAdAccountBilling` instead. */
+    getAdAccountBilling: this._bind(getAdAccountBilling),
+    /** @deprecated Use `zernio.adaccounts.setUpAdAccountBilling` instead. */
+    setUpAdAccountBilling: this._bind(setUpAdAccountBilling),
     /** @deprecated Use `zernio.adaccounts.listAdAccountUserInvitations` instead. */
     listAdAccountUserInvitations: this._bind(listAdAccountUserInvitations),
     /** @deprecated Use `zernio.adaccounts.inviteAdAccountUser` instead. */
