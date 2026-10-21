@@ -6103,7 +6103,7 @@ export type ErrorResponse = {
      * `POST /v1/ads/ctwa`) carries `stage`, `adAccountId` and `createdObjects`: where
      * it failed, on which ad account, and every object this request had already
      * created with what cleanup did to it. `left_behind` objects still exist on the
-     * ad account (Meta refused the delete, typically on a held account), so delete
+     * ad account (Meta refused the delete, typically on a held account, or the delete hit a network error), so delete
      * them yourself or reuse them. `unconfirmedWrite` is set when Meta answered a
      * create with a 5xx or dropped the connection and Zernio could not confirm
      * whether the object exists: check that parent before creating it again.
@@ -6138,7 +6138,7 @@ export type ErrorResponse = {
              */
             id?: string;
             /**
-             * `deleted`: Zernio deleted it. `left_behind`: Meta refused the delete, so it still exists. `kept`: deliberately not deleted (image hashes are shared by every upload of the same file).
+             * `deleted`: Zernio deleted it. `left_behind`: cleanup could not delete it (Meta refused the delete, or the delete hit a network error), so it still exists. `kept`: deliberately not deleted (image hashes are shared by every upload of the same file).
              */
             cleanup?: 'deleted' | 'left_behind' | 'kept';
         }>;
