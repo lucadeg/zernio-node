@@ -373,6 +373,7 @@ try {
 | `connect.connectOpenAIAdsCredentials()` | Connect an OpenAI Ads account |
 | `connect.connectShopifyWithToken()` | Connect a Shopify store with a custom-app Admin token |
 | `connect.connectSlackChannel()` | Connect a Slack channel |
+| `connect.connectWebflowWithSiteToken()` | Connect Webflow with a site API token |
 | `connect.connectWhatsAppCredentials()` | Connect WhatsApp via credentials |
 | `connect.connectWhatsAppEmbeddedSignup()` | Connect WhatsApp from Embedded Signup |
 | `connect.connectWhopAdsCredentials()` | Connect a Whop account |

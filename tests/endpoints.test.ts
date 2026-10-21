@@ -389,6 +389,11 @@ describe('Endpoint Methods', () => {
       expect(client.connect.getWixConnectUrl).toBeTypeOf('function');
     });
 
+    it('should have connectWebflowWithSiteToken method', () => {
+      expect(client.connect.connectWebflowWithSiteToken).toBeDefined();
+      expect(client.connect.connectWebflowWithSiteToken).toBeTypeOf('function');
+    });
+
     it('should have connectWordPressWithApplicationPassword method', () => {
       expect(client.connect.connectWordPressWithApplicationPassword).toBeDefined();
       expect(client.connect.connectWordPressWithApplicationPassword).toBeTypeOf('function');

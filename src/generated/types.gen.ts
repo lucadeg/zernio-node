@@ -2322,32 +2322,32 @@ export type billingSystem = 'metronome' | 'stripe' | 'shopify';
  */
 export type Blog = {
     /**
-     * Platform-native blog id. Shopify uses a numeric blog id. WordPress.com uses the numeric site id; self-hosted WordPress and Wix use `1`, scoped to the connected account.
+     * Platform-native blog id. Shopify uses a numeric blog id. WordPress.com uses the numeric site id; self-hosted WordPress and Wix use `1`, scoped to the connected account. Webflow uses the CMS collection id.
      */
     id?: string;
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     title?: string;
     /**
-     * URL slug on Shopify; site hostname on WordPress and Wix.
+     * URL slug on Shopify and Webflow (the collection slug); site hostname on WordPress and Wix.
      */
     handle?: string;
 };
 
-export type platform3 = 'shopify' | 'wordpress' | 'wix';
+export type platform3 = 'shopify' | 'wordpress' | 'wix' | 'webflow';
 
 /**
  * An article inside a blog on the connected platform.
  */
 export type BlogArticle = {
     /**
-     * Platform-native article/post id: numeric on Shopify and WordPress, a GUID on Wix.
+     * Platform-native article/post id: numeric on Shopify and WordPress, a GUID on Wix, a hex item id on Webflow.
      */
     id?: string;
     /**
      * Platform-native id of the blog the article belongs to.
      */
     blogId?: string;
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     title?: string;
     /**
      * Article body as HTML. Wix stores rich content, converted from and to HTML; Wix lists return null (get the article for its body).
@@ -11335,7 +11335,7 @@ export type contentType3 = 'story' | 'saved_story' | 'spotlight';
 
 export type SocialAccount = {
     _id: string;
-    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot';
+    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot' | 'webflow';
     profileId: (string | Profile);
     username?: string;
     displayName?: string;
@@ -11445,7 +11445,7 @@ export type SocialAccount = {
     };
 };
 
-export type platform13 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot';
+export type platform13 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot' | 'webflow';
 
 /**
  * TikTok accounts only. The account type TikTok reported when the account was connected. `personal` accounts cannot use TikTok direct messages through the API (TikTok limits Business Messaging to Business Accounts): skip the inbox for them and tell the user to switch to a Business Account in the TikTok app, then reconnect. `business` is the prerequisite, not a guarantee; messaging also needs the messaging scopes granted and TikTok's regional availability. `unknown` on accounts connected before this was captured or whose grant left out the account-type scope.
@@ -20718,7 +20718,7 @@ export type GetAllAccountsHealthData = {
         /**
          * Filter by platform
          */
-        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads' | 'hubspot';
+        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads' | 'hubspot' | 'webflow';
         /**
          * Filter by profile ID
          */
@@ -22486,6 +22486,92 @@ export type GetWixConnectUrlResponse = ({
 });
 
 export type GetWixConnectUrlError = (unknown | ErrorResponse | {
+    /**
+     * Human-readable error message suitable for end-user display.
+     */
+    error: string;
+    /**
+     * Machine-readable error code. Stable across versions.
+     */
+    code: 'PAYMENT_REQUIRED';
+    /**
+     * Discriminator for which gate fired.
+     */
+    reason: 'free_tier_exceeded' | 'twitter_passthrough' | 'enterprise_required' | 'card_verification_required';
+    /**
+     * Link to the relevant documentation page.
+     */
+    documentation_url?: string;
+    /**
+     * Deep-link to send the end-user to. For
+     * `free_tier_exceeded` and `twitter_passthrough` this opens
+     * the add-payment-method drawer on the Zernio billing page.
+     * For `enterprise_required` this is the Zernio enterprise
+     * contact page.
+     *
+     */
+    dashboard_url?: string;
+    /**
+     * Structured context for SDK clients that want to render their own UX. Keys vary by `reason`.
+     */
+    details?: {
+        /**
+         * How many accounts the free tier allows. Only set when reason=free_tier_exceeded.
+         */
+        free_tier_account_limit?: number;
+        /**
+         * How many accounts the team currently has connected. Set when reason=free_tier_exceeded or reason=enterprise_required.
+         */
+        current_account_count?: number;
+        /**
+         * Whether the team currently has a card on file in Stripe. Set when reason=free_tier_exceeded or reason=twitter_passthrough.
+         */
+        has_payment_method?: boolean;
+        /**
+         * One-time card verification charge in USD cents, credited to usage. Only set when reason=card_verification_required.
+         */
+        verification_amount_cents?: number;
+        /**
+         * The negotiated connected-account cap from the
+         * team's enterprise contract. Self-service teams
+         * have no cap and never receive this reason. Only
+         * set when reason=enterprise_required.
+         *
+         */
+        effective_account_limit?: number;
+    };
+});
+
+export type ConnectWebflowWithSiteTokenData = {
+    body: {
+        /**
+         * Your Zernio profile ID (get from /v1/profiles).
+         */
+        profileId: string;
+        /**
+         * Webflow site API token with Sites read and CMS read and write access.
+         */
+        siteToken: string;
+    };
+};
+
+export type ConnectWebflowWithSiteTokenResponse = ({
+    account: {
+        _id: string;
+        platform: 'webflow';
+        /**
+         * Hostname of the connected Webflow site.
+         */
+        username: string;
+        /**
+         * Webflow site name.
+         */
+        displayName: string;
+        profileId: string;
+    };
+});
+
+export type ConnectWebflowWithSiteTokenError = (unknown | ErrorResponse | {
     /**
      * Human-readable error message suitable for end-user display.
      */
@@ -55707,7 +55793,7 @@ export type GetTrackingTagStatsError = (unknown | ErrorResponse);
 export type ListBlogsData = {
     path: {
         /**
-         * Connected Shopify, WordPress or Wix account id.
+         * Connected Shopify, WordPress, Wix or Webflow account id.
          */
         accountId: string;
     };
@@ -55724,7 +55810,7 @@ export type ListBlogsData = {
 };
 
 export type ListBlogsResponse = ({
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     blogs?: Array<Blog>;
     /**
      * Cursor for the next page; null when there are no more pages.
@@ -55760,7 +55846,7 @@ export type CreateBlogError = (ErrorResponse | unknown);
 export type GetBlogData = {
     path: {
         /**
-         * Connected Shopify, WordPress or Wix account id.
+         * Connected Shopify, WordPress, Wix or Webflow account id.
          */
         accountId: string;
         /**
@@ -55771,7 +55857,7 @@ export type GetBlogData = {
 };
 
 export type GetBlogResponse = ({
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     blog?: Blog;
 });
 
@@ -55824,7 +55910,7 @@ export type DeleteBlogError = (ErrorResponse | unknown);
 export type ListBlogArticlesData = {
     path: {
         /**
-         * Connected Shopify, WordPress or Wix account id.
+         * Connected Shopify, WordPress, Wix or Webflow account id.
          */
         accountId: string;
         /**
@@ -55845,7 +55931,7 @@ export type ListBlogArticlesData = {
 };
 
 export type ListBlogArticlesResponse = ({
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     articles?: Array<BlogArticle>;
     /**
      * Cursor for the next page; null when there are no more pages.
@@ -55900,10 +55986,16 @@ export type CreateBlogArticleData = {
          * ISO 8601 datetime with offset (or Z). A future date schedules publication natively on the platform.
          */
         publishDate?: string;
+        /**
+         * Webflow only. The collection's own fields that the Blogs API does not map, keyed by field slug, in Webflow's value format (a Reference is an item id, an Image is { url, alt }). Required by collections with required fields of their own; a create that leaves one empty answers 400 listing them. A slug the API already fills (name, slug, body, summary, image, tags, author, date) or one the collection lacks answers 400. Other platforms answer 400.
+         */
+        fieldData?: {
+            [key: string]: unknown;
+        };
     };
     path: {
         /**
-         * Connected Shopify, WordPress or Wix account id.
+         * Connected Shopify, WordPress, Wix or Webflow account id.
          */
         accountId: string;
         /**
@@ -55914,7 +56006,7 @@ export type CreateBlogArticleData = {
 };
 
 export type CreateBlogArticleResponse = ({
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     article?: BlogArticle;
 });
 
@@ -55923,11 +56015,11 @@ export type CreateBlogArticleError = (ErrorResponse | unknown);
 export type GetBlogArticleData = {
     path: {
         /**
-         * Connected Shopify, WordPress or Wix account id.
+         * Connected Shopify, WordPress, Wix or Webflow account id.
          */
         accountId: string;
         /**
-         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix. Other formats return 400.
+         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix, a 24-character hex item id on Webflow. Other formats return 400.
          */
         articleId: string;
         /**
@@ -55938,7 +56030,7 @@ export type GetBlogArticleData = {
 };
 
 export type GetBlogArticleResponse = ({
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     article?: BlogArticle;
 });
 
@@ -55989,14 +56081,20 @@ export type UpdateBlogArticleData = {
          * ISO 8601 datetime with offset (or Z). A future date schedules publication natively on the platform.
          */
         publishDate?: string;
+        /**
+         * Webflow only. The collection's own fields that the Blogs API does not map, keyed by field slug, in Webflow's value format (a Reference is an item id, an Image is { url, alt }). Required by collections with required fields of their own; a create that leaves one empty answers 400 listing them. A slug the API already fills (name, slug, body, summary, image, tags, author, date) or one the collection lacks answers 400. Other platforms answer 400.
+         */
+        fieldData?: {
+            [key: string]: unknown;
+        };
     };
     path: {
         /**
-         * Connected Shopify, WordPress or Wix account id.
+         * Connected Shopify, WordPress, Wix or Webflow account id.
          */
         accountId: string;
         /**
-         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix. Other formats return 400.
+         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix, a 24-character hex item id on Webflow. Other formats return 400.
          */
         articleId: string;
         /**
@@ -56007,7 +56105,7 @@ export type UpdateBlogArticleData = {
 };
 
 export type UpdateBlogArticleResponse = ({
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     article?: BlogArticle;
 });
 
@@ -56016,11 +56114,11 @@ export type UpdateBlogArticleError = (ErrorResponse | unknown);
 export type DeleteBlogArticleData = {
     path: {
         /**
-         * Connected Shopify, WordPress or Wix account id.
+         * Connected Shopify, WordPress, Wix or Webflow account id.
          */
         accountId: string;
         /**
-         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix. Other formats return 400.
+         * Platform-native article id: numeric on Shopify and WordPress, a GUID on Wix, a 24-character hex item id on Webflow. Other formats return 400.
          */
         articleId: string;
         /**
