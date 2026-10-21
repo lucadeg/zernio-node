@@ -13675,6 +13675,18 @@ export const searchAdInterests = <ThrowOnError extends boolean = false>(options:
  * For geo queries, `q` should contain only the locality name (e.g. `"Amsterdam"`,
  * not `"Amsterdam, NL"`). Use `countryCode` to disambiguate.
  *
+ * Meta language: Meta matches `q` against names in one language and returns names and `path` in
+ * that language. Pass `locale` (e.g. `pl_PL`) to choose it. Without `locale`, the `behavior` and
+ * `workIndustry` catalogs are in `en_US`, and `interest`, `interestSuggestion`, `geo`, `workPosition`
+ * and `workEmployer` follow the language of the Facebook user who connected the account (so a
+ * Russian-language Facebook user gets Russian paths, and Polish names need `locale=pl_PL`).
+ * A non-English `behavior` or `workIndustry` query without `locale` never matches, so pass the
+ * locale of the names you search. Meta's `interest` search matches its own interest names and has no fuzzy or
+ * synonym mode, so a phrase Meta does not use as an interest name (e.g. `dental implants`) can
+ * return nothing while a shorter word (`dentistry`) does. If Meta returns an empty `behavior`,
+ * `workIndustry` or `income` catalog the request fails with a 502 `platform_api_error` instead of
+ * an empty `results` list.
+ *
  */
 export const searchAdTargeting = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<SearchAdTargetingData, ThrowOnError>) => {
     return (options?.client ?? client).get<SearchAdTargetingResponse, SearchAdTargetingError, ThrowOnError>({
