@@ -4681,9 +4681,13 @@ export type ConversionEvent = {
          */
         ctwaClid?: string;
         /**
-         * Messenger and Instagram Direct. Facebook Page id, sent as `page_id`.
+         * Messenger: Facebook Page id, sent as `page_id`. Instagram Direct: when `instagramBusinessAccountId` is absent, Zernio reads the Instagram professional account linked to this Page and sends its id as `instagram_business_account_id`; if none is linked or the lookup fails, `page_id` is sent instead.
          */
         pageId?: string;
+        /**
+         * Instagram Direct only. Instagram professional account id (`instagram_business_account` on the Page), sent as `instagram_business_account_id` next to `ig_sid`.
+         */
+        instagramBusinessAccountId?: string;
         /**
          * Messenger only. The page-scoped user id (PSID) your Messenger webhook gives for the person, sent as `page_scoped_user_id` next to `page_id`.
          */
@@ -52782,6 +52786,16 @@ export type SendConversionsResponse = ({
         eventId?: string;
         message?: string;
         code?: (string | number);
+        /**
+         * Meta only. Meta's own error for the rejected chunk, with credentials
+         * redacted: `message`, `type`, `code`, `error_subcode`, `error_user_title`,
+         * `error_user_msg` and `fbtrace_id` when Meta sends them. `message` above
+         * already ends with `error_user_msg`. Absent when Meta returned no error body.
+         *
+         */
+        platformError?: {
+            [key: string]: unknown;
+        };
     }>;
     /**
      * Platform trace ID for debugging. fbtrace_id for Meta,
@@ -53788,6 +53802,16 @@ export type SendWhatsAppConversionResponse = ({
         eventId?: string;
         message?: string;
         code?: (string | number);
+        /**
+         * Meta's own error for the rejected event, with credentials redacted:
+         * `message`, `type`, `code`, `error_subcode`, `error_user_title`,
+         * `error_user_msg` and `fbtrace_id` when Meta sends them. `message` above
+         * already ends with `error_user_msg`. Absent when Meta returned no error body.
+         *
+         */
+        platformError?: {
+            [key: string]: unknown;
+        };
     }>;
     /**
      * Meta `fbtrace_id` for debugging. Surface in support
