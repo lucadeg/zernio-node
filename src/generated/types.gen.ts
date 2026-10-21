@@ -20053,7 +20053,7 @@ export type UpdatePostData = {
             customContent?: string;
             customMedia?: Array<MediaItem>;
             /**
-             * Optional per-platform scheduled time override.
+             * Optional per-platform scheduled time override. It is kept when a top-level scheduledFor is also sent, except a date sent back unchanged that matched the post scheduled time or is already past, which follows the new top-level scheduledFor.
              */
             scheduledFor?: string;
             /**
