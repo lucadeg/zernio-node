@@ -32276,19 +32276,31 @@ export type ListInboxMentionsResponse = ({
          * Mention document ID
          */
         id?: string;
-        platform?: 'linkedin';
+        platform?: 'linkedin' | 'instagram';
+        /**
+         * Instagram only: `caption` when the account was tagged in a media caption, `comment` when it was tagged in a comment. Null for LinkedIn.
+         */
+        type?: ('caption' | 'comment') | null;
+        /**
+         * Instagram only: ID of the media the account was mentioned in (or under). Null for LinkedIn.
+         */
+        mediaId?: (string) | null;
+        /**
+         * Instagram only: ID of the comment that mentioned the account. Null for caption mentions and LinkedIn.
+         */
+        commentId?: (string) | null;
         accountId?: string;
         accountUsername?: string;
         /**
-         * Text of the post that mentioned you
+         * Text that mentioned you: the post text on LinkedIn, the caption or comment text on Instagram. Empty until it has been read.
          */
         content?: string;
         /**
-         * URL to the source post on LinkedIn
+         * URL to the source post on LinkedIn. Null on Instagram.
          */
         permalink?: (string) | null;
         /**
-         * LinkedIn URN of the person who mentioned you
+         * LinkedIn URN of the person who mentioned you, or the Instagram-scoped ID of the commenter on an Instagram comment mention.
          */
         authorUrn?: (string) | null;
         /**
@@ -32296,7 +32308,7 @@ export type ListInboxMentionsResponse = ({
          */
         authorName?: (string) | null;
         /**
-         * LinkedIn vanity name of the author (the slug in their profile URL)
+         * LinkedIn vanity name of the author (the slug in their profile URL), or the Instagram username of the commenter or media owner.
          */
         authorUsername?: (string) | null;
         /**
@@ -32304,7 +32316,7 @@ export type ListInboxMentionsResponse = ({
          */
         authorPicture?: (string) | null;
         /**
-         * URN of the organization that was mentioned
+         * URN of the LinkedIn organization that was mentioned, or the Instagram user ID of the mentioned account.
          */
         organizationalEntity?: string;
         publishedAt?: string;
