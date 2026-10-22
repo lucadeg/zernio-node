@@ -297,6 +297,7 @@ try {
 | Method | Description |
 |--------|-------------|
 | `media.getMediaPresignedUrl()` | Get upload URL |
+| `media.prepareMedia()` | Prepare media for a platform |
 
 ### Tools
 | Method | Description |

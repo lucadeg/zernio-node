@@ -709,6 +709,11 @@ describe('Endpoint Methods', () => {
       expect(client.media.getMediaPresignedUrl).toBeTypeOf('function');
     });
 
+    it('should have prepareMedia method', () => {
+      expect(client.media.prepareMedia).toBeDefined();
+      expect(client.media.prepareMedia).toBeTypeOf('function');
+    });
+
   });
 
   describe('posts', () => {

@@ -715,6 +715,7 @@ import {
   pinInboxComment,
   preflightBrandedCallingIdentity,
   preflightSmsRegistration,
+  prepareMedia,
   previewQueue,
   publishWhatsAppFlow,
   purchasePhoneNumber,
@@ -1206,6 +1207,7 @@ export class Zernio {
    */
   media = {
     getMediaPresignedUrl: this._bind(getMediaPresignedUrl),
+    prepareMedia: this._bind(prepareMedia),
   };
 
   /**

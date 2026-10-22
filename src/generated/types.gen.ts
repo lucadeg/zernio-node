@@ -58502,6 +58502,49 @@ export type DownloadTikTokVideoResponse = ({
 
 export type DownloadTikTokVideoError = (unknown | ErrorResponse);
 
+export type PrepareMediaData = {
+    body: {
+        /**
+         * Public http(s) URL of the image or video.
+         */
+        url: string;
+        /**
+         * Where the media will be published. `twitter`, `googlebusiness` and `youtube_thumbnail` take images only; `facebook_reel` takes videos only.
+         */
+        target: 'instagram' | 'instagram_story' | 'facebook' | 'facebook_reel' | 'facebook_story' | 'threads' | 'tiktok' | 'linkedin' | 'twitter' | 'bluesky' | 'pinterest' | 'reddit' | 'snapchat' | 'telegram' | 'googlebusiness' | 'youtube_thumbnail';
+    };
+};
+
+export type PrepareMediaResponse = ({
+    target: string;
+    /**
+     * URL to publish: the prepared file, or the input URL when nothing needed to change.
+     */
+    url: string;
+    /**
+     * Whether the media was processed.
+     */
+    changed: boolean;
+    mediaType: 'image' | 'video';
+    /**
+     * Input size in bytes, null when the host does not report it.
+     */
+    originalSize: (number) | null;
+    /**
+     * Size of the returned file in bytes.
+     */
+    outputSize: (number) | null;
+});
+
+export type PrepareMediaError = (ErrorResponse | {
+    error?: string;
+    code?: 'insufficient_permissions' | 'unclassified_resource';
+    /**
+     * The resource group the key needs for this operation. Absent on admin-plane and unclassified-path denials.
+     */
+    required_group?: 'publishing' | 'engagement' | 'messages' | 'contacts' | 'analytics' | 'ads' | 'telephony' | 'accounts' | 'billing' | 'webhooks';
+} | unknown);
+
 export type ListChangelogData = {
     query?: {
         /**
