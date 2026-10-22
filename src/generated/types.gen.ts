@@ -8405,6 +8405,57 @@ export type InstagramMediaCollaborator = {
     inviteStatus: (string) | null;
 };
 
+export type InstagramMentionedComment = {
+    /**
+     * Instagram comment ID of the comment that mentions the account.
+     */
+    id: string;
+    text: (string) | null;
+    /**
+     * Creation time as Meta returns it (ISO 8601).
+     */
+    timestamp: (string) | null;
+    likeCount: (number) | null;
+    /**
+     * The post the comment was left on.
+     */
+    media: {
+        /**
+         * Instagram media ID of the post.
+         */
+        id: string;
+    } | null;
+};
+
+export type InstagramMentionedMedia = {
+    /**
+     * Instagram media ID of the post whose caption mentions the account.
+     */
+    id: string;
+    caption: (string) | null;
+    /**
+     * IMAGE, VIDEO or CAROUSEL_ALBUM.
+     */
+    mediaType: (string) | null;
+    /**
+     * Temporary CDN URL. Meta omits it for videos with copyrighted or licensed audio and reels whose owner disabled downloads.
+     */
+    mediaUrl: (string) | null;
+    /**
+     * Publication time as Meta returns it (ISO 8601).
+     */
+    timestamp: (string) | null;
+    /**
+     * Instagram handle of the account that posted the media and mentioned yours.
+     */
+    username: (string) | null;
+    /**
+     * Null when the owner hides like counts.
+     */
+    likeCount: (number) | null;
+    commentsCount: (number) | null;
+};
+
 /**
  * Feed aspect ratio 0.5625-1.91, carousels up to 20 items, stories require media (no captions). User tag coordinates 0.0-1.0 from top-left. Images over 8 MB and videos over platform limits are auto-compressed.
  */
@@ -26692,6 +26743,40 @@ export type ListInstagramTaggedMediaResponse = ({
 });
 
 export type ListInstagramTaggedMediaError = (ErrorResponse);
+
+export type GetInstagramMentionedMediaData = {
+    path: {
+        /**
+         * The ID of a connected Instagram account (Facebook Login).
+         */
+        accountId: string;
+        /**
+         * Instagram media ID of the post that mentions the account (digits only).
+         */
+        mediaId: string;
+    };
+};
+
+export type GetInstagramMentionedMediaResponse = (InstagramMentionedMedia);
+
+export type GetInstagramMentionedMediaError = (ErrorResponse);
+
+export type GetInstagramMentionedCommentData = {
+    path: {
+        /**
+         * The ID of a connected Instagram account (Facebook Login).
+         */
+        accountId: string;
+        /**
+         * Instagram comment ID of the comment that mentions the account (digits only).
+         */
+        commentId: string;
+    };
+};
+
+export type GetInstagramMentionedCommentResponse = (InstagramMentionedComment);
+
+export type GetInstagramMentionedCommentError = (ErrorResponse);
 
 export type GetInstagramStoryInsightsData = {
     path: {

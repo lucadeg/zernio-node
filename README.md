@@ -1034,6 +1034,8 @@ try {
 | `instagram.listInstagramTaggedMedia()` | List the posts an Instagram account is tagged in |
 | `instagram.getInstagramAudio()` | Get Instagram audio metadata |
 | `instagram.getInstagramBusinessDiscovery()` | Look up a public Instagram Business account |
+| `instagram.getInstagramMentionedComment()` | Get a comment that mentions an Instagram account |
+| `instagram.getInstagramMentionedMedia()` | Get a post that mentions an Instagram account in its caption |
 | `instagram.getInstagramPublishingLimit()` | Get Instagram publishing limit |
 | `instagram.getInstagramStoryInsights()` | Get Instagram story insights |
 | `instagram.searchInstagramAudio()` | Search Instagram audio |

@@ -404,6 +404,8 @@ import {
   getInstagramFollowStatus,
   getInstagramFollowerHistory,
   getInstagramIceBreakers,
+  getInstagramMentionedComment,
+  getInstagramMentionedMedia,
   getInstagramOnlineFollowers,
   getInstagramPublishingLimit,
   getInstagramStoryInsights,
@@ -1545,6 +1547,8 @@ export class Zernio {
     listInstagramMediaCollaborators: this._bind(listInstagramMediaCollaborators),
     listInstagramLiveMedia: this._bind(listInstagramLiveMedia),
     listInstagramTaggedMedia: this._bind(listInstagramTaggedMedia),
+    getInstagramMentionedMedia: this._bind(getInstagramMentionedMedia),
+    getInstagramMentionedComment: this._bind(getInstagramMentionedComment),
     getInstagramStoryInsights: this._bind(getInstagramStoryInsights),
   };
 
