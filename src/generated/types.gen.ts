@@ -46631,7 +46631,7 @@ export type GetTikTokSmartPlusMaterialReportResponse = ({
     }>;
 });
 
-export type GetTikTokSmartPlusMaterialReportError = (ErrorResponse);
+export type GetTikTokSmartPlusMaterialReportError = (ErrorResponse | unknown);
 
 export type ListAdsInstagramAccountsData = {
     query: {
