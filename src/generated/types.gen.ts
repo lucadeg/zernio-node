@@ -2188,7 +2188,15 @@ export type ApiChangelogEntry = {
      */
     platforms: Array<(string)>;
     /**
-     * The announcement, in Markdown.
+     * The change in a few words, for example `Delete inbox conversations`. Null on older entries.
+     */
+    title: (string) | null;
+    /**
+     * One or two plain sentences on what changed and why it matters. Null when `title` is.
+     */
+    summary: (string) | null;
+    /**
+     * The details in Markdown: endpoints, fields and how to use them.
      */
     message: string;
     publishedAt: string;
