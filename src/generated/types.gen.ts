@@ -12275,6 +12275,71 @@ export type TikTokReviewRejection = {
 };
 
 /**
+ * The ad-level verdict of a Smart+ ad (`smart_plus_ad_review_infos`). Null when TikTok returned none.
+ */
+export type TikTokSmartPlusAdLevelReview = {
+    reviewStatus?: TikTokSmartPlusReviewStatus;
+    /**
+     * TikTok `review_status`, verbatim.
+     */
+    rawReviewStatus?: (string) | null;
+    /**
+     * Every distinct reason across `rejections`.
+     */
+    rejectReasons?: Array<(string)>;
+    /**
+     * Location codes that passed the review.
+     */
+    passedLocations?: Array<(string)>;
+    /**
+     * TikTok `appeal_status`, verbatim: NOT_APPEALED, APPEALING, APPEAL_SUCCESSFUL, APPEAL_FAILED, APPEAL_DONE.
+     */
+    appealStatus?: (string) | null;
+    appealRejectReasons?: Array<(string)>;
+    rejections?: Array<TikTokReviewRejection>;
+} | null;
+
+/**
+ * The verdict of one creative of a Smart+ ad (`material_review_infos`).
+ */
+export type TikTokSmartPlusMaterialReview = {
+    /**
+     * TikTok `ad_material_id` of the creative inside this ad.
+     */
+    adMaterialId?: string;
+    /**
+     * Null for a creative TikTok added on its own or a carousel image.
+     */
+    materialType?: ('spark_post' | 'video' | 'carousel' | 'catalog_carousel') | null;
+    /**
+     * The TikTok post id when the creative is a Spark post.
+     */
+    tiktokItemId?: (string) | null;
+    videoId?: (string) | null;
+    name?: (string) | null;
+    /**
+     * TikTok `material_operation_status`: ENABLE or DISABLE.
+     */
+    operationStatus?: (string) | null;
+    reviewStatus?: TikTokSmartPlusReviewStatus;
+    /**
+     * TikTok `review_status`, verbatim.
+     */
+    rawReviewStatus?: (string) | null;
+    /**
+     * Every distinct reason across `rejections`. Empty when approved.
+     */
+    rejectReasons?: Array<(string)>;
+    passedLocations?: Array<(string)>;
+    rejections?: Array<TikTokReviewRejection>;
+};
+
+/**
+ * Null for a creative TikTok added on its own or a carousel image.
+ */
+export type materialType = 'spark_post' | 'video' | 'carousel' | 'catalog_carousel';
+
+/**
  * TikTok `review_status` normalized: ALL_AVAILABLE -> approved, PART_AVAILABLE -> partially_approved (delivers in part of the targeted locations), UNAVAILABLE -> rejected, anything else or missing -> unknown (see `rawReviewStatus`).
  */
 export type TikTokSmartPlusReviewStatus = 'approved' | 'partially_approved' | 'rejected' | 'unknown';
@@ -45477,64 +45542,11 @@ export type GetTikTokSmartPlusAdReviewResponse = ({
      * The TikTok Smart+ ad whose review this is.
      */
     smartPlusAdId?: string;
-    /**
-     * The ad-level verdict (`smart_plus_ad_review_infos`). Null when TikTok returned none.
-     */
-    review?: {
-        reviewStatus?: TikTokSmartPlusReviewStatus;
-        /**
-         * TikTok `review_status`, verbatim.
-         */
-        rawReviewStatus?: (string) | null;
-        /**
-         * Every distinct reason across `rejections`.
-         */
-        rejectReasons?: Array<(string)>;
-        /**
-         * Location codes that passed the review.
-         */
-        passedLocations?: Array<(string)>;
-        /**
-         * TikTok `appeal_status`, verbatim: NOT_APPEALED, APPEALING, APPEAL_SUCCESSFUL, APPEAL_FAILED, APPEAL_DONE.
-         */
-        appealStatus?: (string) | null;
-        appealRejectReasons?: Array<(string)>;
-        rejections?: Array<TikTokReviewRejection>;
-    } | null;
+    review?: TikTokSmartPlusAdLevelReview;
     /**
      * One entry per creative TikTok reviewed (`material_review_infos`).
      */
-    materials?: Array<{
-        /**
-         * TikTok `ad_material_id` of the creative inside this ad.
-         */
-        adMaterialId?: string;
-        /**
-         * Null for a creative TikTok added on its own or a carousel image.
-         */
-        materialType?: ('spark_post' | 'video' | 'carousel' | 'catalog_carousel') | null;
-        /**
-         * The TikTok post id when the creative is a Spark post.
-         */
-        tiktokItemId?: (string) | null;
-        videoId?: (string) | null;
-        name?: (string) | null;
-        /**
-         * TikTok `material_operation_status`: ENABLE or DISABLE.
-         */
-        operationStatus?: (string) | null;
-        reviewStatus?: TikTokSmartPlusReviewStatus;
-        /**
-         * TikTok `review_status`, verbatim.
-         */
-        rawReviewStatus?: (string) | null;
-        /**
-         * Every distinct reason across `rejections`. Empty when approved.
-         */
-        rejectReasons?: Array<(string)>;
-        passedLocations?: Array<(string)>;
-        rejections?: Array<TikTokReviewRejection>;
-    }>;
+    materials?: Array<TikTokSmartPlusMaterialReview>;
     /**
      * When the verdict was read from TikTok.
      */
@@ -46632,6 +46644,83 @@ export type GetTikTokSmartPlusMaterialReportResponse = ({
 });
 
 export type GetTikTokSmartPlusMaterialReportError = (ErrorResponse | unknown);
+
+export type ListTikTokSmartPlusReviewsData = {
+    query: {
+        /**
+         * A tiktok or tiktokads account ID
+         */
+        accountId: string;
+        /**
+         * TikTok advertiser ID
+         */
+        adAccountId: string;
+        /**
+         * Also return Smart+ ads deleted on TikTok (listed with `primary_status: STATUS_ALL`).
+         */
+        includeDeleted?: boolean;
+        page?: number;
+        pageSize?: number;
+    };
+};
+
+export type ListTikTokSmartPlusReviewsResponse = ({
+    adAccountId?: string;
+    includeDeleted?: boolean;
+    page?: number;
+    pageSize?: number;
+    totalPages?: number;
+    /**
+     * Smart+ ads of the advertiser across all pages.
+     */
+    totalSmartPlusAds?: number;
+    items?: Array<{
+        smartPlusAdId?: string;
+        adGroupId?: (string) | null;
+        campaignId?: (string) | null;
+        review?: TikTokSmartPlusAdLevelReview;
+        /**
+         * One entry per creative TikTok reviewed (`material_review_infos`).
+         */
+        materials?: Array<TikTokSmartPlusMaterialReview>;
+        /**
+         * When the verdict was read from TikTok.
+         */
+        readAt?: string;
+    }>;
+    /**
+     * Smart+ ads of this page whose review TikTok refused on its own (for example an ad deleted on TikTok since the listing was cached). Zernio splits a refused batch in halves (at most 16 extra calls per page), so the other ads of the batch are still read; ads left unresolved by that cap carry the batch error. Empty when none.
+     */
+    failedSmartPlusAds?: Array<{
+        smartPlusAdId?: string;
+        adGroupId?: (string) | null;
+        campaignId?: (string) | null;
+        error?: {
+            /**
+             * TikTok's error code, verbatim.
+             */
+            tiktokCode?: (number) | null;
+            /**
+             * TikTok's error message, verbatim.
+             */
+            message?: string;
+        };
+    }>;
+    /**
+     * True when some Smart+ ads of this page could not be read because of TikTok's review quota.
+     */
+    incomplete?: boolean;
+    /**
+     * Smart+ ads of this page still to read. Empty when complete.
+     */
+    pendingSmartPlusAdIds?: Array<(string)>;
+    /**
+     * Seconds to wait before reading this page again. Null when complete.
+     */
+    retryAfterSeconds?: (number) | null;
+});
+
+export type ListTikTokSmartPlusReviewsError = (ErrorResponse | unknown);
 
 export type ListAdsInstagramAccountsData = {
     query: {

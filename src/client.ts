@@ -681,6 +681,7 @@ import {
   listSupportAnswers,
   listTikTokAdPixels,
   listTikTokCommercialMusic,
+  listTikTokSmartPlusReviews,
   listTrackingTagEvents,
   listTrackingTagPartners,
   listTrackingTagSharedAccounts,
@@ -2124,6 +2125,7 @@ export class Zernio {
     removeAdGroupAssets: this._bind(removeAdGroupAssets),
     getAdReview: this._bind(getAdReview),
     getTikTokSmartPlusAdReview: this._bind(getTikTokSmartPlusAdReview),
+    listTikTokSmartPlusReviews: this._bind(listTikTokSmartPlusReviews),
     listCampaignNegativeKeywordLists: this._bind(listCampaignNegativeKeywordLists),
     replaceCampaignNegativeKeywordLists: this._bind(replaceCampaignNegativeKeywordLists),
     boostPost: this._bind(boostPost),
@@ -2703,6 +2705,8 @@ export class Zernio {
     getAdReview: this._bind(getAdReview),
     /** @deprecated Use `zernio.adcampaigns.getTikTokSmartPlusAdReview` instead. */
     getTikTokSmartPlusAdReview: this._bind(getTikTokSmartPlusAdReview),
+    /** @deprecated Use `zernio.adcampaigns.listTikTokSmartPlusReviews` instead. */
+    listTikTokSmartPlusReviews: this._bind(listTikTokSmartPlusReviews),
     /** @deprecated Use `zernio.adcampaigns.listCampaignNegativeKeywordLists` instead. */
     listCampaignNegativeKeywordLists: this._bind(listCampaignNegativeKeywordLists),
     /** @deprecated Use `zernio.adcampaigns.replaceCampaignNegativeKeywordLists` instead. */

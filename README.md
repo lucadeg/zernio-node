@@ -522,6 +522,7 @@ try {
 | `adCampaigns.listGoogleAssetGroups()` | List Performance Max asset groups |
 | `adCampaigns.listGoogleRecommendations()` | List Google Ads recommendations |
 | `adCampaigns.listSharedBudgets()` | List shared budgets |
+| `adCampaigns.listTikTokSmartPlusReviews()` | Review status of every TikTok Smart+ ad of an advertiser |
 | `adCampaigns.bulkUpdateAdCampaignStatus()` | Pause or resume many campaigns |
 | `adCampaigns.createAdCampaign()` | Create a standalone campaign |
 | `adCampaigns.createAdSet()` | Create a standalone ad group |
