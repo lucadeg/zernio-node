@@ -10188,9 +10188,9 @@ export type Post = {
     scheduledFor?: string;
     timezone?: string;
     /**
-     * `cancelled` is set by POST /v1/posts/{postId}/unpublish once every platform entry has been removed from its platform (a post with published entries left becomes `partial`); cancelled posts can be edited and rescheduled like drafts.
+     * `cancelled` is set by POST /v1/posts/{postId}/unpublish once every platform entry has been removed from its platform (a post with published entries left becomes `partial`); cancelled posts can be edited and rescheduled like drafts. `pending_approval` (set by `requiresApproval: true`) never publishes until POST /v1/posts/{postId}/review approves it.
      */
-    status?: 'draft' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
+    status?: 'draft' | 'pending_approval' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
     /**
      * YouTube constraints: each tag max 100 chars, combined max 500 chars, duplicates removed.
      */
@@ -10226,6 +10226,11 @@ export type Post = {
      */
     updatedAt?: string;
 };
+
+/**
+ * `cancelled` is set by POST /v1/posts/{postId}/unpublish once every platform entry has been removed from its platform (a post with published entries left becomes `partial`); cancelled posts can be edited and rescheduled like drafts. `pending_approval` (set by `requiresApproval: true`) never publishes until POST /v1/posts/{postId}/review approves it.
+ */
+export type status28 = 'draft' | 'pending_approval' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
 
 export type visibility2 = 'public' | 'private' | 'unlisted';
 
@@ -10462,7 +10467,7 @@ export type Product = {
     publishedAt?: (string) | null;
 };
 
-export type status28 = 'active' | 'draft' | 'archived';
+export type status29 = 'active' | 'draft' | 'archived';
 
 export type ProductImage = {
     url?: string;
@@ -10681,7 +10686,7 @@ export type RcsAgent = {
     createdAt?: string;
 };
 
-export type status29 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
+export type status30 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
 
 export type useCase = 'MULTI_USE' | 'PROMOTIONAL' | 'TRANSACTIONAL' | 'OTP';
 
@@ -10733,7 +10738,7 @@ export type RcsBrand = RcsBrandInput & {
 /**
  * draft = not filed yet (still editable).
  */
-export type status30 = 'draft' | 'vetting' | 'verified' | 'rejected';
+export type status31 = 'draft' | 'vetting' | 'verified' | 'rejected';
 
 export type RcsBrandInput = {
     displayName: string;
@@ -10820,7 +10825,7 @@ export type RcsCarrierApproval = {
 
 export type scope2 = 'carrier' | 'hub' | 'bot';
 
-export type status31 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
+export type status32 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
 
 /**
  * Message content. `suggestions` (max 11) render as chips under the message.
@@ -11652,7 +11657,7 @@ export type SupportRun = {
 /**
  * queued and running are in progress. needs_human means the assistant handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
  */
-export type status32 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
+export type status33 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
 
 /**
  * Why the run stopped. Null while it is in progress.
@@ -12554,7 +12559,7 @@ export type UploadTokenResponse = {
     status?: 'pending' | 'completed' | 'expired';
 };
 
-export type status33 = 'pending' | 'completed' | 'expired';
+export type status34 = 'pending' | 'completed' | 'expired';
 
 export type UploadTokenStatusResponse = {
     token?: string;
@@ -13061,7 +13066,7 @@ export type Verification = {
     resend?: boolean;
 };
 
-export type status34 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
+export type status35 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
 
 export type channel5 = 'sms' | 'whatsapp';
 
@@ -13219,7 +13224,7 @@ export type WebhookLog = {
 /**
  * Delivery outcome
  */
-export type status35 = 'success' | 'failed';
+export type status36 = 'success' | 'failed';
 
 /**
  * Webhook payload for `account.ads.initial_sync_completed` events.
@@ -13336,7 +13341,7 @@ export type event = 'account.ads.initial_sync_completed';
 /**
  * Overall outcome of the initial sync.
  */
-export type status36 = 'success' | 'failure';
+export type status37 = 'success' | 'failure';
 
 /**
  * Stable category for UX branching. New values may be added; existing ones are
@@ -13727,7 +13732,7 @@ export type event7 = 'ad.video.processed';
 /**
  * `ready`: usable as `video.id` on the create endpoints. `error`: Meta could not process it; upload again.
  */
-export type status37 = 'ready' | 'error';
+export type status38 = 'ready' | 'error';
 
 /**
  * Webhook payload for `analytics.synced`. Fired once per connected account each
@@ -15834,7 +15839,7 @@ export type event30 = 'post.platform.published' | 'post.platform.failed' | 'post
 /**
  * Terminal status this event fires on. Matches the event suffix.
  */
-export type status38 = 'published' | 'failed' | 'deleted';
+export type status39 = 'published' | 'failed' | 'deleted';
 
 /**
  * Webhook payload for reaction received events (WhatsApp, Telegram, Slack, Instagram, Facebook Messenger, TikTok)
@@ -16231,7 +16236,7 @@ export type event39 = 'whatsapp.account.name_status_updated';
 /**
  * Normalized from Meta's `decision` (REJECTED -> DECLINED, DEFERRED -> PENDING_REVIEW; the review is still open on DEFERRED, not a rejection).
  */
-export type status39 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
+export type status40 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
 
 /**
  * Webhook payload for `whatsapp.account.quality_updated`. Fired when a connected
@@ -16365,7 +16370,7 @@ export type event41 = 'whatsapp.account.status_updated';
 /**
  * `active` only on a reinstatement (DISABLED_UPDATE with ban state REINSTATE).
  */
-export type status40 = 'restricted' | 'active';
+export type status41 = 'restricted' | 'active';
 
 /**
  * Webhook payload for the `whatsapp.contact.identity_changed` event. Fired when
@@ -16581,7 +16586,7 @@ export type event44 = 'whatsapp.template.status_updated';
  * request before the template is actually removed.
  *
  */
-export type status41 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
+export type status42 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
 
 export type WebhookPayloadWorkflowRun = {
     /**
@@ -16645,7 +16650,7 @@ export type event45 = 'workflow.run.started' | 'workflow.run.completed' | 'workf
 /**
  * running on workflow.run.started; completed or exited (ended on purpose before the last node, e.g. a handoff) on workflow.run.completed; failed on workflow.run.failed.
  */
-export type status42 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
+export type status43 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
 
 /**
  * The profiles this event belongs to, each with the externalId you set on it (null when none is set). Present on every event tied to a profile and absent on events that belong to none. Events spanning several profiles (a post published to accounts of different profiles) list each once. Use it to route the event to your tenant without storing Zernio profile ids.
@@ -17043,7 +17048,7 @@ export type WorkflowExecutionEvent = {
 
 export type action2 = 'execution_started' | 'execution_completed' | 'execution_exited' | 'execution_paused' | 'execution_resumed' | 'node_started' | 'node_completed' | 'node_failed' | 'node_skipped';
 
-export type status43 = 'success' | 'failed' | 'pending';
+export type status44 = 'success' | 'failed' | 'pending';
 
 /**
  * A node in a workflow graph. `config` shape depends on `type`.
@@ -19886,7 +19891,7 @@ export type ListPostsData = {
          * Which collection to read. `zernio` (default) returns posts authored through Zernio. `external` returns posts synced from the platform (existing/historical posts that were published outside Zernio). Combine with `accountId` and paginate via `page`/`limit` to walk the full synced history (we keep up to the last ~12 months per account).
          */
         source?: 'zernio' | 'external';
-        status?: 'draft' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
+        status?: 'draft' | 'pending_approval' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
         /**
          * Comma-separated tags (at most 20). Returns only posts carrying every listed tag, matched exactly and case-sensitively against the tags set when the post was created. An empty value means no tag filter. `tag` is accepted as an alias.
          */
@@ -19945,6 +19950,10 @@ export type CreatePostData = {
          * When true, saves the post as a draft. When none of scheduledFor, publishNow, or queuedFromProfile are provided, the post defaults to draft automatically.
          */
         isDraft?: boolean;
+        /**
+         * When true, saves the post as pending_approval instead of scheduled. Needs scheduledFor, at the root or on every platform; cannot be combined with isDraft, publishNow, queuedFromProfile or queueId. The post publishes only after POST /v1/posts/{postId}/review approves it; approving after the scheduled time publishes within a couple of minutes.
+         */
+        requiresApproval?: boolean;
         /**
          * TikTok only. Preview whether each `tiktok` entry in `platforms` could publish right now under the TikTok Direct Post daily limits, without creating, scheduling or publishing anything: no post is persisted and no upload slot is claimed, so it can be repeated freely. The request still goes through auth, the payment gate and body validation, then returns HTTP 200 with `{ dryRun: true, canPublish, tiktok: [...] }` instead of 201. Only `tiktok` entries are evaluated; other platforms in the body are ignored, and a body with no `tiktok` entry is rejected with 400 `invalid_field_value` on `platforms`. An entry with `platformSpecificData.tiktokSettings.draft: true` (Creator Inbox upload) is not subject to the limit and always reports `canPublish: true`. Accounts connected through the TikTok for Business app do not go through these limits at all and also always report `canPublish: true`, so on those accounts a dry run confirms the request is well-formed rather than gating it.
          */
@@ -20133,6 +20142,10 @@ export type UpdatePostData = {
          * When omitted, the post keeps its current draft status. Send `false` to promote a draft to scheduled (combined with `scheduledFor`, `publishNow`, or a queue).
          */
         isDraft?: boolean;
+        /**
+         * Send true on a draft to submit it for approval: it becomes pending_approval and publishes only after POST /v1/posts/{postId}/review approves it. Cannot be combined with isDraft, publishNow, queuedFromProfile or queueId. Returns 409 when the post is not a draft.
+         */
+        requiresApproval?: boolean;
         timezone?: string;
         visibility?: 'public' | 'private' | 'unlisted';
         tags?: Array<(string)>;
@@ -20229,6 +20242,24 @@ export type RetryPostError = (ErrorResponse | {
     details?: {
         [key: string]: unknown;
     };
+});
+
+export type ReviewPostData = {
+    body: {
+        /**
+         * approve schedules the post; reject returns it to draft.
+         */
+        decision: 'approve' | 'reject';
+    };
+    path: {
+        postId: string;
+    };
+};
+
+export type ReviewPostResponse = (PostGetResponse);
+
+export type ReviewPostError = (ErrorResponse | {
+    error?: string;
 });
 
 export type UnpublishPostData = {

@@ -180,6 +180,7 @@ try {
 | `posts.deletePost()` | Delete post |
 | `posts.editPost()` | Edit published post |
 | `posts.retryPost()` | Retry failed post |
+| `posts.reviewPost()` | Approve or reject a post |
 | `posts.unpublishPost()` | Unpublish post |
 
 ### Accounts
