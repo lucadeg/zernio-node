@@ -13086,9 +13086,10 @@ export const createAdAccount = <ThrowOnError extends boolean = false>(options: O
  * Every listed ad account carries `selected`: whether it is in the connection's ad-account
  * selection (the ad accounts picked at connect time or in the dashboard picker, the ones
  * Zernio syncs). On a connection without a selection every ad account is `selected: true`.
- * Writes through /v1/ads endpoints to an ad account with `selected: false` are being
- * restricted and will answer `403 ad_account_not_selected`; add it to the selection first
- * (dashboard picker, or `GET /v1/connect/{platform}/ads` with `adAccountIds`).
+ * Writes through /v1/ads endpoints to an ad account with `selected: false` answer
+ * `403 ad_account_not_selected`; add it to the selection first (dashboard picker, or
+ * `GET /v1/connect/{platform}/ads` with `adAccountIds`). The list includes unselected ad
+ * accounts by default; pass `inScopeOnly=true` to get only the ones this connection can use.
  *
  */
 export const listAdAccounts = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<ListAdAccountsData, ThrowOnError>) => {

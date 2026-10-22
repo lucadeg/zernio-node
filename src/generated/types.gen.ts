@@ -49280,7 +49280,7 @@ export type ListAdAccountsData = {
          */
         adAccountId?: string;
         /**
-         * Google Ads only. `true` returns only the customers this connection accepts as `adAccountId` (or `customerId`) on the other /v1/ads endpoints, i.e. those inside its ad-account selection. Without it every customer the Google login can reach is listed, including ones selected on another connection of the same login, which those endpoints answer with a 400. Ignored on other platforms. On every platform, each item's `selected` flags selection membership without narrowing the list.
+         * `true` returns only the ad accounts this connection accepts as `adAccountId` on the other /v1/ads endpoints, i.e. those inside its ad-account selection (every item then has `selected: true`). Without it, every ad account the login can reach is listed and `selected` flags selection membership. On Meta, LinkedIn, X and Reddit it drops the ad accounts with `selected: false`; a connection without a selection keeps them all. On Google Ads it also drops customers the login reaches that are not on this connection (for example ones selected on another connection of the same login), which those endpoints answer with a 400. TikTok and Pinterest have no selection, so the list is unchanged.
          */
         inScopeOnly?: boolean;
         /**
@@ -49424,7 +49424,7 @@ export type ListAdAccountsResponse = ({
          */
         unusableReason?: (string) | null;
         /**
-         * Always present. True when the ad account is in this connection's ad-account selection, or when the connection has no selection (then every ad account is usable). For a posting account (e.g. facebook, twitter) the selection of its ads connection applies. Unrelated to `selectable`, which is the platform's own status. Writes to an ad account with `selected: false` will answer 403 `ad_account_not_selected`.
+         * Always present. True when the ad account is in this connection's ad-account selection, or when the connection has no selection (then every ad account is usable). For a posting account (e.g. facebook, twitter) the selection of its ads connection applies. Unrelated to `selectable`, which is the platform's own status. Writes to an ad account with `selected: false` answer 403 `ad_account_not_selected`; `inScopeOnly=true` lists only the selected ones.
          */
         selected?: boolean;
     }>;
