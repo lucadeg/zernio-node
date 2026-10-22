@@ -1061,6 +1061,63 @@ export type adRelevance = 'BELOW_AVERAGE' | 'AVERAGE' | 'ABOVE_AVERAGE';
  */
 export type landingPageExperience = 'BELOW_AVERAGE' | 'AVERAGE' | 'ABOVE_AVERAGE';
 
+export type AdLead = {
+    /**
+     * Zernio lead id.
+     */
+    id?: string;
+    /**
+     * Meta lead id. On LinkedIn, the leadFormResponse id.
+     */
+    leadgenId?: string;
+    formId?: string;
+    formName?: (string) | null;
+    accountId?: string;
+    adId?: (string) | null;
+    adsetId?: (string) | null;
+    /**
+     * On LinkedIn, this is the LinkedIn Campaign id, which corresponds to platformAdSetId on GET /v1/ads (LinkedIn's Campaign Group is Zernio's campaign).
+     */
+    campaignId?: (string) | null;
+    isOrganic?: boolean;
+    /**
+     * ISO 8601.
+     */
+    createdTime?: (string) | null;
+    /**
+     * Question key → answer. On LinkedIn, the key is the lowercased predefinedField, else the question name, else the numeric questionId; multiple-choice values are option labels (unlike Meta, which returns the option key).
+     */
+    fields?: {
+        [key: string]: (string);
+    };
+    /**
+     * Raw Meta field_data.
+     */
+    fieldData?: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Meta leads only. `contacted` is set when the first WhatsApp message of a lead_received workflow is delivered, `unreachable` when it fails or the phone number is not valid.
+     */
+    status?: 'new' | 'contacted' | 'unreachable' | 'qualified' | 'converted' | 'disqualified';
+    statusChangedAt?: (string) | null;
+    value?: (number) | null;
+    currency?: (string) | null;
+    /**
+     * The contact a lead_received workflow created or matched for this lead.
+     */
+    contactId?: (string) | null;
+    /**
+     * When the first WhatsApp message to the lead was delivered.
+     */
+    firstContactedAt?: (string) | null;
+};
+
+/**
+ * Meta leads only. `contacted` is set when the first WhatsApp message of a lead_received workflow is delivered, `unreachable` when it fails or the phone number is not valid.
+ */
+export type status2 = 'new' | 'contacted' | 'unreachable' | 'qualified' | 'converted' | 'disqualified';
+
 export type AdMetrics = {
     spend?: number;
     impressions?: number;
@@ -2101,7 +2158,7 @@ export type AnalyticsSinglePostResponse = {
 /**
  * Overall post status. "partial" when some platforms published and others failed. While any platform is still pending or processing, the post's own status is returned instead (usually scheduled or publishing), even if another platform already published. A post with no published or failed platform (for example every platform cancelled) returns its own status with syncStatus unavailable and no platformAnalytics.
  */
-export type status2 = 'published' | 'failed' | 'partial' | 'scheduled' | 'publishing' | 'draft' | 'cancelled';
+export type status3 = 'published' | 'failed' | 'partial' | 'scheduled' | 'publishing' | 'draft' | 'cancelled';
 
 /**
  * Overall sync state across all platforms
@@ -2405,7 +2462,7 @@ export type BlogArticle = {
 /**
  * WordPress and Wix. Post status (`future` = scheduled, `pending` = in review on Wix); omitted for Shopify.
  */
-export type status3 = 'publish' | 'future' | 'draft' | 'pending' | 'private';
+export type status4 = 'publish' | 'future' | 'draft' | 'pending' | 'private';
 
 /**
  * Bluesky post settings. Supports text posts with up to 4 images or a single video. threadItems creates a reply chain (Bluesky thread). Images exceeding 1MB are automatically compressed. Alt text supported via mediaItem properties. Use langs to tag post language for feed-generator filtering.
@@ -2553,7 +2610,7 @@ export type BrandedCallingIdentity = {
 /**
  * requested = in Zernio review; changes_requested = answer the review (PATCH); pending_email_verification = confirm the code emailed to the authorizer; in_review = with the carrier vetting team; verified = attach numbers; rejected = fix and PATCH to resubmit; suspended = an infringement claim is open; expired = the yearly verification lapsed; permanently_rejected = terminal.
  */
-export type status4 = 'requested' | 'changes_requested' | 'rejected' | 'pending_email_verification' | 'in_review' | 'verified' | 'suspended' | 'expired' | 'permanently_rejected';
+export type status5 = 'requested' | 'changes_requested' | 'rejected' | 'pending_email_verification' | 'in_review' | 'verified' | 'suspended' | 'expired' | 'permanently_rejected';
 
 export type BrandedCallingIdentityNumber = {
     phoneNumberId?: string;
@@ -2575,7 +2632,7 @@ export type BrandedCallingIdentityNumber = {
 /**
  * verified = the identity shows on calls from this number. permanently_rejected cannot be attached again anywhere.
  */
-export type status5 = 'submitted' | 'in_review' | 'verified' | 'unsuccessful' | 'suspended' | 'expired' | 'permanently_rejected';
+export type status6 = 'submitted' | 'in_review' | 'verified' | 'unsuccessful' | 'suspended' | 'expired' | 'permanently_rejected';
 
 /**
  * A person the carrier vetting team phones to confirm the business. Business references are senior contacts at a vendor, partner or client; the financial reference is a CPA or a bank contact. Calls are placed in the reference's local 8am-9pm window.
@@ -2807,7 +2864,7 @@ export type BusinessAgentEventStatus = {
     updated_at: string;
 };
 
-export type status6 = 'request_received' | 'processing' | 'sent' | 'failed' | 'skipped' | 'success';
+export type status7 = 'request_received' | 'processing' | 'sent' | 'failed' | 'skipped' | 'success';
 
 export type BusinessAgentFaq = BusinessAgentFaqInput & {
     id: string;
@@ -2904,7 +2961,7 @@ export type BusinessAgentSkill = BusinessAgentSkillInput & {
 /**
  * pending_review right after a write; blocked means Meta content review rejected it and the agent never applies it.
  */
-export type status7 = 'active' | 'pending_review' | 'blocked';
+export type status8 = 'active' | 'pending_review' | 'blocked';
 
 export type BusinessAgentSkillInput = {
     /**
@@ -3006,7 +3063,7 @@ export type BusinessAgentUiSkillInput = {
 
 export type component_type = 'carousel_quick_reply' | 'carousel_url' | 'cta_url' | 'flow' | 'image' | 'interactive_list' | 'interactive_reply_buttons' | 'location' | 'location_request';
 
-export type status8 = 'enabled' | 'disabled';
+export type status9 = 'enabled' | 'disabled';
 
 export type BusinessAgentWebsite = BusinessAgentWebsiteInput & {
     id: string;
@@ -3197,7 +3254,7 @@ export type channel = 'whatsapp' | 'pstn';
 
 export type direction = 'inbound' | 'outbound';
 
-export type status9 = 'ringing' | 'answered' | 'ended' | 'failed';
+export type status10 = 'ringing' | 'answered' | 'ended' | 'failed';
 
 /**
  * Caller ID presented on the forwarded leg.
@@ -3575,7 +3632,7 @@ export type source = 'comment' | 'live_comment' | 'story_reply' | 'story_mention
 /**
  * DM outcome. 'pending' = the automation has a dmDelaySeconds and the response is queued but not sent yet. 'gated' = the follow-gate confirmation DM went out and we are waiting for the tap; it flips to 'sent' or 'skipped' when they tap. 'skipped' also covers repeatPolicy, cooldown and dedupeSameTextHours suppressions, with the reason in error.
  */
-export type status10 = 'pending' | 'sent' | 'failed' | 'skipped' | 'gated';
+export type status11 = 'pending' | 'sent' | 'failed' | 'skipped' | 'gated';
 
 /**
  * How the audience rule resolved. Null on automations without one.
@@ -3869,7 +3926,7 @@ export type method = 'code' | 'automatic';
 
 export type type5 = 'percentage' | 'fixed_amount' | 'free_shipping' | 'buy_x_get_y' | 'app';
 
-export type status11 = 'active' | 'scheduled' | 'expired';
+export type status12 = 'active' | 'scheduled' | 'expired';
 
 export type CommerceImage = {
     /**
@@ -3924,7 +3981,7 @@ export type CommerceMarket = {
     type?: string;
 };
 
-export type status12 = 'active' | 'draft';
+export type status13 = 'active' | 'draft';
 
 export type CommerceMenu = {
     id?: string;
@@ -4480,7 +4537,7 @@ export type ConversionDestination = {
  * For LinkedIn, `inactive` means the rule is soft-deleted (`enabled: false`).
  *
  */
-export type status13 = 'active' | 'inactive';
+export type status14 = 'active' | 'inactive';
 
 /**
  * A single conversion event to relay to the ad platform. All PII fields
@@ -5609,7 +5666,7 @@ export type objective = 'OUTCOME_ENGAGEMENT' | 'OUTCOME_SALES' | 'OUTCOME_LEADS'
  * `adSetId`, the new ads themselves.
  *
  */
-export type status14 = 'ACTIVE' | 'PAUSED';
+export type status15 = 'ACTIVE' | 'PAUSED';
 
 /**
  * Campaign-level status, same semantics as `POST /v1/ads/create`. Defaults
@@ -6001,7 +6058,7 @@ export type privacy_level = 2;
 /**
  * 1=SCHEDULED, 2=ACTIVE, 3=COMPLETED, 4=CANCELED
  */
-export type status15 = 1 | 2 | 3 | 4;
+export type status16 = 1 | 2 | 3 | 4;
 
 /**
  * 1=STAGE_INSTANCE, 2=VOICE, 3=EXTERNAL
@@ -6544,7 +6601,7 @@ export type FeedbackReceipt = {
     duplicate?: boolean;
 };
 
-export type status16 = 'received';
+export type status17 = 'received';
 
 export type FollowerStatsResponse = {
     accounts?: Array<AccountWithFollowerStats>;
@@ -6669,7 +6726,7 @@ export type GoogleAdLabel = {
     description?: (string) | null;
 };
 
-export type status17 = 'ENABLED' | 'REMOVED' | 'UNKNOWN';
+export type status18 = 'ENABLED' | 'REMOVED' | 'UNKNOWN';
 
 /**
  * At least one id across the four target lists. Up to 1000 ids per list.
@@ -6772,7 +6829,7 @@ export type GoogleAdsManagerLink = {
 /**
  * Status the link has after this call.
  */
-export type status18 = 'PENDING' | 'ACTIVE' | 'REFUSED' | 'CANCELED' | 'INACTIVE';
+export type status19 = 'PENDING' | 'ACTIVE' | 'REFUSED' | 'CANCELED' | 'INACTIVE';
 
 export type GoogleAdsUserAccessInvitation = {
     invitationId?: string;
@@ -6787,7 +6844,7 @@ export type GoogleAdsUserAccessInvitation = {
 
 export type accessRole = 'ADMIN' | 'STANDARD' | 'READ_ONLY' | 'EMAIL_ONLY' | 'UNKNOWN';
 
-export type status19 = 'PENDING' | 'DECLINED' | 'EXPIRED' | 'UNKNOWN';
+export type status20 = 'PENDING' | 'DECLINED' | 'EXPIRED' | 'UNKNOWN';
 
 export type GoogleAdsUserAccessInvitationResult = {
     customerId?: string;
@@ -6811,7 +6868,7 @@ export type GoogleAdsUserAccessInvitationResult = {
 /**
  * PENDING once the email is sent; PENDING_APPROVAL while Google waits for a second admin's multi-party approval.
  */
-export type status20 = 'PENDING' | 'PENDING_APPROVAL';
+export type status21 = 'PENDING' | 'PENDING_APPROVAL';
 
 export type GoogleAdsUserInvitationApproval = {
     /**
@@ -7576,7 +7633,7 @@ export type GoogleRecommendationResult = {
     error?: string;
 };
 
-export type status21 = 'applied' | 'dismissed' | 'failed';
+export type status22 = 'applied' | 'dismissed' | 'failed';
 
 export type GoogleRsaDescription = {
     text: string;
@@ -7711,7 +7768,7 @@ export type ImessageSandboxContact = {
     createdAt?: string;
 };
 
-export type status22 = 'pending' | 'active';
+export type status23 = 'pending' | 'active';
 
 /**
  * An iMessage sender registered as an account on a profile.
@@ -7786,7 +7843,7 @@ export type region = 'US' | 'GB';
 /**
  * `awaiting_payment`: the first-month charge is still being confirmed by the card; the number is ordered automatically once it is paid (usually under 5 minutes), or the order fails with `failureReason` when the card declines or nothing confirms within 30 minutes.
  */
-export type status23 = 'ordering' | 'awaiting_payment' | 'activating' | 'active' | 'suspended' | 'canceled' | 'failed';
+export type status24 = 'ordering' | 'awaiting_payment' | 'activating' | 'active' | 'suspended' | 'canceled' | 'failed';
 
 /**
  * Attachment snapshot inside an edit-history entry.
@@ -7858,7 +7915,7 @@ export type InboxWebhookConversation = {
     contactId?: string;
 };
 
-export type status24 = 'active' | 'archived';
+export type status25 = 'active' | 'archived';
 
 /**
  * The conversation object included in conversation lifecycle webhook payloads (conversation.started, conversation.control_changed).
@@ -9824,7 +9881,7 @@ export type OwnedPhoneNumber = {
     }>;
 };
 
-export type status25 = 'pending_payment' | 'pending_regulatory' | 'regulatory_declined' | 'provisioning' | 'verifying' | 'active' | 'suspended' | 'releasing' | 'released';
+export type status26 = 'pending_payment' | 'pending_regulatory' | 'regulatory_declined' | 'provisioning' | 'verifying' | 'active' | 'suspended' | 'releasing' | 'released';
 
 export type metaVerificationStatus = 'pending' | 'code_requested' | 'verified' | 'expired';
 
@@ -9962,7 +10019,7 @@ export type PlatformAnalytics = {
     isOwner?: (boolean) | null;
 };
 
-export type status26 = 'published' | 'failed';
+export type status27 = 'published' | 'failed';
 
 /**
  * Sync state of analytics for this platform
@@ -10397,7 +10454,7 @@ export type Product = {
     publishedAt?: (string) | null;
 };
 
-export type status27 = 'active' | 'draft' | 'archived';
+export type status28 = 'active' | 'draft' | 'archived';
 
 export type ProductImage = {
     url?: string;
@@ -10616,7 +10673,7 @@ export type RcsAgent = {
     createdAt?: string;
 };
 
-export type status28 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
+export type status29 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
 
 export type useCase = 'MULTI_USE' | 'PROMOTIONAL' | 'TRANSACTIONAL' | 'OTP';
 
@@ -10668,7 +10725,7 @@ export type RcsBrand = RcsBrandInput & {
 /**
  * draft = not filed yet (still editable).
  */
-export type status29 = 'draft' | 'vetting' | 'verified' | 'rejected';
+export type status30 = 'draft' | 'vetting' | 'verified' | 'rejected';
 
 export type RcsBrandInput = {
     displayName: string;
@@ -10755,7 +10812,7 @@ export type RcsCarrierApproval = {
 
 export type scope2 = 'carrier' | 'hub' | 'bot';
 
-export type status30 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
+export type status31 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
 
 /**
  * Message content. `suggestions` (max 11) render as chips under the message.
@@ -11588,7 +11645,7 @@ export type SupportRun = {
 /**
  * queued and running are in progress. needs_human means the assistant handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
  */
-export type status31 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
+export type status32 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
 
 /**
  * Why the run stopped. Null while it is in progress.
@@ -12490,7 +12547,7 @@ export type UploadTokenResponse = {
     status?: 'pending' | 'completed' | 'expired';
 };
 
-export type status32 = 'pending' | 'completed' | 'expired';
+export type status33 = 'pending' | 'completed' | 'expired';
 
 export type UploadTokenStatusResponse = {
     token?: string;
@@ -12997,7 +13054,7 @@ export type Verification = {
     resend?: boolean;
 };
 
-export type status33 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
+export type status34 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
 
 export type channel5 = 'sms' | 'whatsapp';
 
@@ -13155,7 +13212,7 @@ export type WebhookLog = {
 /**
  * Delivery outcome
  */
-export type status34 = 'success' | 'failed';
+export type status35 = 'success' | 'failed';
 
 /**
  * Webhook payload for `account.ads.initial_sync_completed` events.
@@ -13272,7 +13329,7 @@ export type event = 'account.ads.initial_sync_completed';
 /**
  * Overall outcome of the initial sync.
  */
-export type status35 = 'success' | 'failure';
+export type status36 = 'success' | 'failure';
 
 /**
  * Stable category for UX branching. New values may be added; existing ones are
@@ -13663,7 +13720,7 @@ export type event7 = 'ad.video.processed';
 /**
  * `ready`: usable as `video.id` on the create endpoints. `error`: Meta could not process it; upload again.
  */
-export type status36 = 'ready' | 'error';
+export type status37 = 'ready' | 'error';
 
 /**
  * Webhook payload for `analytics.synced`. Fired once per connected account each
@@ -15770,7 +15827,7 @@ export type event30 = 'post.platform.published' | 'post.platform.failed' | 'post
 /**
  * Terminal status this event fires on. Matches the event suffix.
  */
-export type status37 = 'published' | 'failed' | 'deleted';
+export type status38 = 'published' | 'failed' | 'deleted';
 
 /**
  * Webhook payload for reaction received events (WhatsApp, Telegram, Slack, Instagram, Facebook Messenger, TikTok)
@@ -16167,7 +16224,7 @@ export type event39 = 'whatsapp.account.name_status_updated';
 /**
  * Normalized from Meta's `decision` (REJECTED -> DECLINED, DEFERRED -> PENDING_REVIEW; the review is still open on DEFERRED, not a rejection).
  */
-export type status38 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
+export type status39 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
 
 /**
  * Webhook payload for `whatsapp.account.quality_updated`. Fired when a connected
@@ -16301,7 +16358,7 @@ export type event41 = 'whatsapp.account.status_updated';
 /**
  * `active` only on a reinstatement (DISABLED_UPDATE with ban state REINSTATE).
  */
-export type status39 = 'restricted' | 'active';
+export type status40 = 'restricted' | 'active';
 
 /**
  * Webhook payload for the `whatsapp.contact.identity_changed` event. Fired when
@@ -16517,7 +16574,7 @@ export type event44 = 'whatsapp.template.status_updated';
  * request before the template is actually removed.
  *
  */
-export type status40 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
+export type status41 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
 
 export type WebhookPayloadWorkflowRun = {
     /**
@@ -16581,7 +16638,7 @@ export type event45 = 'workflow.run.started' | 'workflow.run.completed' | 'workf
 /**
  * running on workflow.run.started; completed or exited (ended on purpose before the last node, e.g. a handoff) on workflow.run.completed; failed on workflow.run.failed.
  */
-export type status41 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
+export type status42 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
 
 /**
  * The profiles this event belongs to, each with the externalId you set on it (null when none is set). Present on every event tied to a profile and absent on events that belong to none. Events spanning several profiles (a post published to accounts of different profiles) list each once. Use it to route the event to your tenant without storing Zernio profile ids.
@@ -16979,7 +17036,7 @@ export type WorkflowExecutionEvent = {
 
 export type action2 = 'execution_started' | 'execution_completed' | 'execution_exited' | 'execution_paused' | 'execution_resumed' | 'node_started' | 'node_completed' | 'node_failed' | 'node_skipped';
 
-export type status42 = 'success' | 'failed' | 'pending';
+export type status43 = 'success' | 'failed' | 'pending';
 
 /**
  * A node in a workflow graph. `config` shape depends on `type`.
@@ -17001,9 +17058,9 @@ export type WorkflowNode = {
     /**
      * Type-specific settings. All string fields support `{{variable}}` interpolation against the run's variable bag (resolved at execution time).
      *
-     * **trigger**: `{ triggerType: inbound_message|api_call|whatsapp_event|referral|story_mention|comment|reaction, keywords:[string], matchType: any|contains|exact|regex, onlyFirstMessage:boolean, eventType: message_sent|message_delivered|message_read|message_failed|reaction, referral:{ ref, matchType: exact|prefix|any }, reaction:{ emojis:[string] }, comment:{ keywords:[string], matchType: any|contains|exact|regex, platformPostId }, cooldownHours:int (1-720) }`. Default `triggerType` is `inbound_message` for legacy nodes. A workflow starts only on events of its own trigger type: `inbound_message` on a message, `referral` on an ig.me / m.me / click-to-message ad referral (standalone, or the first message carrying one; the two are deduplicated per conversation within 60 seconds), `story_mention` on an Instagram story mention, `reaction` on a reaction (Instagram, Facebook, WhatsApp, Telegram groups), `comment` on an Instagram or Facebook comment (the run starts with no conversation and its first `send_message`, which must be text (with optional buttons or quick replies) or cards and must follow the trigger directly (checked on save; on some Instagram accounts Meta refuses buttons and cards to commenters who do not follow the account), is sent as a private reply to the comment; the run then continues in the conversation that reply opens; when an active comment automation's keywords match the comment, the automation answers and the workflow does not start), `whatsapp_event` on a WhatsApp status of a message we sent (filtered by `eventType`), `api_call` only via `POST /v1/workflows/{workflowId}/trigger`. `referral.matchType` defaults to `any`. `cooldownHours` (inbound_message, referral, story_mention, reaction and whatsapp_event) stops the same contact from starting the workflow again inside the window. A `whatsapp_event` workflow never starts on the status of a message a workflow, sequence or comment automation sent. A redelivered platform event never starts the same workflow twice.
+     * **trigger**: `{ triggerType: inbound_message|api_call|whatsapp_event|referral|story_mention|comment|reaction|lead_received, keywords:[string], matchType: any|contains|exact|regex, onlyFirstMessage:boolean, eventType: message_sent|message_delivered|message_read|message_failed|reaction, referral:{ ref, matchType: exact|prefix|any }, reaction:{ emojis:[string] }, comment:{ keywords:[string], matchType: any|contains|exact|regex, platformPostId }, leadReceived:{ formIds:[string], pageAccountIds:[string], consentCheckboxKey, defaultCountry, allowCrossProfile:boolean }, cooldownHours:int (1-720) }`. Default `triggerType` is `inbound_message` for legacy nodes. A workflow starts only on events of its own trigger type: `inbound_message` on a message, `referral` on an ig.me / m.me / click-to-message ad referral (standalone, or the first message carrying one; the two are deduplicated per conversation within 60 seconds), `story_mention` on an Instagram story mention, `reaction` on a reaction (Instagram, Facebook, WhatsApp, Telegram groups), `comment` on an Instagram or Facebook comment (the run starts with no conversation and its first `send_message`, which must be text (with optional buttons or quick replies) or cards and must follow the trigger directly (checked on save; on some Instagram accounts Meta refuses buttons and cards to commenters who do not follow the account), is sent as a private reply to the comment; the run then continues in the conversation that reply opens; when an active comment automation's keywords match the comment, the automation answers and the workflow does not start), `whatsapp_event` on a WhatsApp status of a message we sent (filtered by `eventType`), `api_call` only via `POST /v1/workflows/{workflowId}/trigger`, and `lead_received` (WhatsApp workflows only) when a Meta lead ad form is submitted. A `lead_received` trigger needs `leadReceived.consentCheckboxKey` and at least one of `formIds` or `pageAccountIds`; a form scope wins over a Page scope, then the earliest activated workflow. It starts only for leads submitted in the last hour and after the workflow was activated, whose consent checkbox (the form's custom disclaimer, see `POST /v1/ads/lead-forms`) is ticked, and whose phone number parses to a valid international number (`defaultCountry`, ISO 3166 alpha-2, defaults to the country of the workflow's WhatsApp number); otherwise the lead is marked `unreachable`. The Page and the WhatsApp number must be in the same profile unless `allowCrossProfile` is true. Every send or call reached first from the trigger must be a WhatsApp template (checked on save). `referral.matchType` defaults to `any`. `cooldownHours` (inbound_message, referral, story_mention, reaction, whatsapp_event and lead_received, where it defaults to 24) stops the same contact from starting the workflow again inside the window. A `whatsapp_event` workflow never starts on the status of a message a workflow, sequence or comment automation sent. A redelivered platform event never starts the same workflow twice.
      *
-     * **Variables** available from the start of every run (absent values are `''`): `lastMessage`, `inboundText`, `triggerText`, `conversationId`, `contact.name`, `contact.phone`, `contact.handle`, `contact.tags` (array), `contact.fields` (the contact's custom fields object), `contact.lastInteractionAt` (ISO date), `contact.lastInteractionHoursAgo` (number), `contact.isFollower` (Instagram, from the stored profile: true, false or `''` when unknown), `referral.ref`, `referral.source`, `referral.type`, `referral.adId`, `postback.payload`, `postback.title`, `quickReply.payload`, `quickReply.title`, `story.id`, `story.url`, `comment.id`, `comment.text`, `comment.platformPostId`, `reaction.emoji`, `reaction.action` (added|removed). `api_call` runs also get the request's `variables`, merged over these. An array or object interpolated into text renders as JSON.
+     * **Variables** available from the start of every run (absent values are `''`): `lastMessage`, `inboundText`, `triggerText`, `conversationId`, `contact.name`, `contact.phone`, `contact.handle`, `contact.tags` (array), `contact.fields` (the contact's custom fields object), `contact.lastInteractionAt` (ISO date), `contact.lastInteractionHoursAgo` (number), `contact.isFollower` (Instagram, from the stored profile: true, false or `''` when unknown), `referral.ref`, `referral.source`, `referral.type`, `referral.adId`, `postback.payload`, `postback.title`, `quickReply.payload`, `quickReply.title`, `story.id`, `story.url`, `comment.id`, `comment.text`, `comment.platformPostId`, `reaction.emoji`, `reaction.action` (added|removed). `api_call` runs also get the request's `variables`, merged over these. `lead_received` runs also get `lead.id`, `lead.leadgenId`, `lead.formId`, `lead.formName`, `lead.adId`, `lead.adsetId`, `lead.campaignId` and every form answer by its key (`lead.full_name`, `lead.email`, `lead.phone_number`). Template `variableMapping` entries with `field: custom` interpolate `{{...}}` in `customValue`. An array or object interpolated into text renders as JSON.
      *
      * **send_message**: `{ messageType: text|template|media|interactive|cards, text, template, media:{mediaType:image|video|audio|document, url,caption}, interactive, buttons, quickReplies, messageTag }`. `template` is `{name,language,variableMapping}` for `messageType: template` and `{ type: generic, elements:[{ title, subtitle, imageUrl, buttons }] }` (1 to 10 cards) for `messageType: cards`. `template` and `interactive` are WhatsApp-only. `interactive.type` is inferred from the payload shape when omitted; payloads with neither `type` nor an inferable shape are rejected.
      * Facebook and Instagram only (rejected with a 400 on other platforms; WhatsApp keeps `interactive`): `cards`, plus `buttons` on `text` (cards carry their own buttons) and `quickReplies` / `messageTag` on `text`, `media` and `cards`. `media` takes no `buttons` (a 400 at save). `buttons:[{ type: url|postback|phone, title, url, payload, phone, workflowId }]` (1 to 3, text only and the text then 640 characters at most, sent as Meta's button_template, `phone` Facebook-only, not inside cards), `quickReplies:[{ title, payload, imageUrl, workflowId }]` (1 to 13, not combined with `buttons`) and `messageTag: HUMAN_AGENT|CONFIRMED_EVENT_UPDATE|POST_PURCHASE_UPDATE|ACCOUNT_UPDATE` (Instagram accepts only `HUMAN_AGENT`). Titles are capped at 20 characters (80 for card titles and subtitles). A postback button or quick reply with no `payload` gets `zernio:workflow:<this workflow id>`, so a tap answers this workflow's pending `wait_for_reply` or restarts it; with `workflowId` (a 24-hex workflow id, not combined with `payload`) the tap starts that workflow instead.
@@ -51058,42 +51115,7 @@ export type ListLeadsData = {
 
 export type ListLeadsResponse = ({
     status?: string;
-    leads?: Array<{
-        /**
-         * Zernio lead id.
-         */
-        id?: string;
-        /**
-         * Meta lead id. On LinkedIn, the leadFormResponse id.
-         */
-        leadgenId?: string;
-        formId?: string;
-        formName?: (string) | null;
-        accountId?: string;
-        adId?: (string) | null;
-        adsetId?: (string) | null;
-        /**
-         * On LinkedIn, this is the LinkedIn Campaign id, which corresponds to platformAdSetId on GET /v1/ads (LinkedIn's Campaign Group is Zernio's campaign).
-         */
-        campaignId?: (string) | null;
-        isOrganic?: boolean;
-        /**
-         * ISO 8601.
-         */
-        createdTime?: (string) | null;
-        /**
-         * Question key → answer. On LinkedIn, the key is the lowercased predefinedField, else the question name, else the numeric questionId; multiple-choice values are option labels (unlike Meta, which returns the option key).
-         */
-        fields?: {
-            [key: string]: (string);
-        };
-        /**
-         * Raw Meta field_data.
-         */
-        fieldData?: Array<{
-            [key: string]: unknown;
-        }>;
-    }>;
+    leads?: Array<AdLead>;
     pagination?: {
         hasMore?: boolean;
         cursor?: (string) | null;
@@ -51108,6 +51130,37 @@ export type ListLeadsResponse = ({
 });
 
 export type ListLeadsError = (ErrorResponse | unknown);
+
+export type UpdateLeadData = {
+    body: {
+        status: 'new' | 'contacted' | 'unreachable' | 'qualified' | 'converted' | 'disqualified';
+        /**
+         * Deal value; requires currency.
+         */
+        value?: number;
+        /**
+         * ISO 4217 code.
+         */
+        currency?: string;
+        /**
+         * Required when `{id}` is a Meta leadgenId: the facebook or metaads account that received the lead.
+         */
+        accountId?: string;
+    };
+    path: {
+        /**
+         * Zernio lead id, or the Meta leadgenId (then accountId is required).
+         */
+        id: string;
+    };
+};
+
+export type UpdateLeadResponse = ({
+    status?: string;
+    lead?: AdLead;
+});
+
+export type UpdateLeadError = (ErrorResponse | unknown);
 
 export type ListLeadFormsData = {
     query: {
@@ -51265,6 +51318,19 @@ export type CreateLeadFormData = {
          */
         coverPhoto?: string;
     };
+    /**
+     * Consent section with checkboxes (Meta custom_disclaimer). Each lead's answers come back on the lead, and a lead_received workflow only messages leads that ticked its consentCheckboxKey.
+     */
+    customDisclaimer?: {
+        title: string;
+        body: string;
+        checkboxes: Array<{
+            key: string;
+            text: string;
+            isRequired?: boolean;
+            isCheckedByDefault?: boolean;
+        }>;
+    };
 } | {
     /**
      * LinkedIn ad account id (resolves the owning organization).
@@ -51392,7 +51458,18 @@ export type ListFormLeadsData = {
 export type ListFormLeadsResponse = ({
     status?: string;
     leads?: Array<{
+        /**
+         * Meta leadgenId.
+         */
         id?: string;
+        /**
+         * Zernio lead id, for PATCH /v1/ads/leads/{id}. Only on persisted leads.
+         */
+        leadId?: string;
+        /**
+         * Lead status (see PATCH /v1/ads/leads/{id}). Only on persisted leads.
+         */
+        status?: string;
         createdTime?: (string) | null;
         adId?: (string) | null;
         formId?: string;

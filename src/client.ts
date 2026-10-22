@@ -936,6 +936,7 @@ import {
   updateImessageGroup,
   updateImessageSender,
   updateInboxConversation,
+  updateLead,
   updateLinkedInOrganization,
   updatePinterestBoards,
   updatePost,
@@ -2288,6 +2289,7 @@ export class Zernio {
    */
   leadgen = {
     listLeads: this._bind(listLeads),
+    updateLead: this._bind(updateLead),
     listLeadForms: this._bind(listLeadForms),
     createLeadForm: this._bind(createLeadForm),
     getLeadForm: this._bind(getLeadForm),
@@ -2999,6 +3001,8 @@ export class Zernio {
     reserveRfPrediction: this._bind(reserveRfPrediction),
     /** @deprecated Use `zernio.leadgen.listLeads` instead. */
     listLeads: this._bind(listLeads),
+    /** @deprecated Use `zernio.leadgen.updateLead` instead. */
+    updateLead: this._bind(updateLead),
     /** @deprecated Use `zernio.leadgen.listLeadForms` instead. */
     listLeadForms: this._bind(listLeadForms),
     /** @deprecated Use `zernio.leadgen.createLeadForm` instead. */
