@@ -389,6 +389,11 @@ describe('Endpoint Methods', () => {
       expect(client.connect.getWixConnectUrl).toBeTypeOf('function');
     });
 
+    it('should have getWebflowConnectUrl method', () => {
+      expect(client.connect.getWebflowConnectUrl).toBeDefined();
+      expect(client.connect.getWebflowConnectUrl).toBeTypeOf('function');
+    });
+
     it('should have connectWebflowWithSiteToken method', () => {
       expect(client.connect.connectWebflowWithSiteToken).toBeDefined();
       expect(client.connect.connectWebflowWithSiteToken).toBeTypeOf('function');

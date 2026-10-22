@@ -11510,14 +11510,14 @@ export type platform13 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'link
 export type tiktokAccountType = 'business' | 'personal' | 'unknown';
 
 /**
- * A tracking tag's install on a connected store: a Shopify web pixel, a Custom HTML widget on a WordPress site, or the Zernio embedded script on a Wix site. Fields marked Shopify, WordPress or Wix are present only for that platform.
+ * A tracking tag's install on a connected store: a Shopify web pixel, a Custom HTML widget on a WordPress site, the Zernio embedded script on a Wix site, or the Zernio custom code script on a Webflow site. Fields marked with a platform are present only for it.
  */
 export type StorePixelInstall = {
     storeAccountId?: string;
     /**
      * The store platform.
      */
-    platform?: 'shopify' | 'wordpress' | 'wix';
+    platform?: 'shopify' | 'wordpress' | 'wix' | 'webflow';
     /**
      * Platform of the tag this install is about (e.g. `metaads`).
      */
@@ -11527,7 +11527,7 @@ export type StorePixelInstall = {
      */
     siteTagId?: string;
     /**
-     * Shopify and Wix: this tag is the one the store fires for its platform. WordPress: the Zernio widget for this tag is in an active widget area with its script intact.
+     * Shopify, Wix and Webflow: this tag is the one the store fires for its platform. WordPress: the Zernio widget for this tag is in an active widget area with its script intact.
      */
     installed?: boolean;
     /**
@@ -11535,11 +11535,11 @@ export type StorePixelInstall = {
      */
     shopDomain?: string;
     /**
-     * Shopify and Wix only: the tag of the same platform the store fires now (may be a different tag), or null.
+     * Shopify, Wix and Webflow only: the tag of the same platform the store fires now (may be a different tag), or null.
      */
     installedTagId?: (string) | null;
     /**
-     * GET only on WordPress, always on Shopify and Wix: every Zernio tag on the store, all platforms.
+     * GET only on WordPress, always on Shopify, Wix and Webflow: every Zernio tag on the store, all platforms.
      */
     tags?: Array<{
         platform?: string;
@@ -11562,9 +11562,13 @@ export type StorePixelInstall = {
      */
     webPixelId?: (string) | null;
     /**
-     * WordPress and Wix only. Null on a Wix site that was never published.
+     * WordPress, Wix and Webflow only. Null on a Wix site that was never published.
      */
     siteUrl?: (string) | null;
+    /**
+     * Webflow only, always true: the change reaches the live site on its next publish.
+     */
+    publishRequired?: boolean;
     /**
      * WordPress only.
      */
@@ -11578,11 +11582,6 @@ export type StorePixelInstall = {
      */
     sidebarId?: (string) | null;
 };
-
-/**
- * The store platform.
- */
-export type platform14 = 'shopify' | 'wordpress' | 'wix';
 
 /**
  * WordPress only.
@@ -12295,7 +12294,7 @@ export type TrackingTag = {
     autoTagging?: boolean;
 };
 
-export type platform15 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
+export type platform14 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | 'xads' | 'linkedinads' | 'pinterestads' | 'whopads';
 
 /**
  * Platform-native flavor of the tag (Meta: `pixel`).
@@ -14211,7 +14210,7 @@ export type WebhookPayloadComment = {
 
 export type event14 = 'comment.received';
 
-export type platform16 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
+export type platform15 = 'instagram' | 'facebook' | 'threads' | 'youtube' | 'linkedin' | 'bluesky' | 'reddit' | 'tiktok';
 
 export type WebhookPayloadCommerceOrder = {
     /**
@@ -14573,7 +14572,7 @@ export type WebhookPayloadLead = {
 
 export type event22 = 'lead.received';
 
-export type platform17 = 'facebook';
+export type platform16 = 'facebook';
 
 /**
  * Webhook payload for message received events
@@ -15590,7 +15589,7 @@ export type event27 = 'message.sent';
 /**
  * Every platform whose outgoing messages Zernio observes. sms is absent on purpose: its carrier receipts update delivery status and never raise message.sent.
  */
-export type platform18 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
+export type platform17 = 'instagram' | 'facebook' | 'telegram' | 'whatsapp' | 'twitter' | 'reddit' | 'bluesky' | 'slack' | 'tiktok' | 'imessage';
 
 /**
  * WhatsApp send origin. whatsapp_business_app when sent from the WhatsApp Business phone app on a Coexistence number; cloud_api when sent through Zernio (dashboard, API, or broadcasts); meta_business_agent when Meta Business Agent answered on the number. Absent on non-WhatsApp platforms. Says where WhatsApp saw the send come from, not which Zernio surface produced it: read sentVia for that.
@@ -16165,7 +16164,7 @@ export type WebhookPayloadWhatsAppAccountAlertReceived = {
 
 export type event38 = 'whatsapp.account.alert_received';
 
-export type platform19 = 'whatsapp';
+export type platform18 = 'whatsapp';
 
 /**
  * Webhook payload for the `whatsapp.account.name_status_updated` event.
@@ -22543,6 +22542,87 @@ export type GetWixConnectUrlResponse = ({
 });
 
 export type GetWixConnectUrlError = (unknown | ErrorResponse | {
+    /**
+     * Human-readable error message suitable for end-user display.
+     */
+    error: string;
+    /**
+     * Machine-readable error code. Stable across versions.
+     */
+    code: 'PAYMENT_REQUIRED';
+    /**
+     * Discriminator for which gate fired.
+     */
+    reason: 'free_tier_exceeded' | 'twitter_passthrough' | 'enterprise_required' | 'card_verification_required';
+    /**
+     * Link to the relevant documentation page.
+     */
+    documentation_url?: string;
+    /**
+     * Deep-link to send the end-user to. For
+     * `free_tier_exceeded` and `twitter_passthrough` this opens
+     * the add-payment-method drawer on the Zernio billing page.
+     * For `enterprise_required` this is the Zernio enterprise
+     * contact page.
+     *
+     */
+    dashboard_url?: string;
+    /**
+     * Structured context for SDK clients that want to render their own UX. Keys vary by `reason`.
+     */
+    details?: {
+        /**
+         * How many accounts the free tier allows. Only set when reason=free_tier_exceeded.
+         */
+        free_tier_account_limit?: number;
+        /**
+         * How many accounts the team currently has connected. Set when reason=free_tier_exceeded or reason=enterprise_required.
+         */
+        current_account_count?: number;
+        /**
+         * Whether the team currently has a card on file in Stripe. Set when reason=free_tier_exceeded or reason=twitter_passthrough.
+         */
+        has_payment_method?: boolean;
+        /**
+         * One-time card verification charge in USD cents, credited to usage. Only set when reason=card_verification_required.
+         */
+        verification_amount_cents?: number;
+        /**
+         * The negotiated connected-account cap from the
+         * team's enterprise contract. Self-service teams
+         * have no cap and never receive this reason. Only
+         * set when reason=enterprise_required.
+         *
+         */
+        effective_account_limit?: number;
+    };
+});
+
+export type GetWebflowConnectUrlData = {
+    query: {
+        /**
+         * Your Zernio profile ID (get from /v1/profiles).
+         */
+        profileId: string;
+        /**
+         * Custom redirect after connection. Must be an absolute http(s) URL or custom app scheme such as `myapp://callback`; relative and unsafe URLs return 400.
+         */
+        redirect_url?: string;
+    };
+};
+
+export type GetWebflowConnectUrlResponse = ({
+    /**
+     * Webflow consent URL to open in the user agent.
+     */
+    authUrl: string;
+    /**
+     * Authenticated, expiring state handled by the callback.
+     */
+    state: string;
+});
+
+export type GetWebflowConnectUrlError = (unknown | ErrorResponse | {
     /**
      * Human-readable error message suitable for end-user display.
      */
@@ -55636,7 +55716,7 @@ export type RemoveTrackingTagSharedAccountError = (unknown | ErrorResponse);
 export type InstallTrackingTagOnStoreData = {
     body: {
         /**
-         * The connected Shopify (`shopify`), WordPress (`wordpress`) or Wix (`wix`) account id.
+         * The connected Shopify (`shopify`), WordPress (`wordpress`), Wix (`wix`) or Webflow (`webflow`) account id.
          */
         storeAccountId: string;
         /**
@@ -55665,7 +55745,7 @@ export type InstallTrackingTagOnStoreResponse = ({
     platform?: 'metaads' | 'tiktokads' | 'googleads' | 'xads' | 'openaiads' | 'linkedinads' | 'pinterestads' | 'whopads';
     install?: (StorePixelInstall & {
     /**
-     * Shopify and Wix only: the pixel this install replaced on the store, if any.
+     * Shopify, Wix and Webflow only: the pixel this install replaced on the store, if any.
      */
     replacedTagId?: (string) | null;
     /**
@@ -55708,7 +55788,7 @@ export type GetTrackingTagStoreInstallData = {
          */
         adAccountId?: string;
         /**
-         * The connected Shopify, WordPress or Wix account id.
+         * The connected Shopify, WordPress, Wix or Webflow account id.
          */
         storeAccountId: string;
     };
@@ -55756,7 +55836,7 @@ export type RemoveTrackingTagFromStoreData = {
          */
         adAccountId?: string;
         /**
-         * The connected Shopify, WordPress or Wix account id.
+         * The connected Shopify, WordPress, Wix or Webflow account id.
          */
         storeAccountId: string;
     };

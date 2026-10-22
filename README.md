@@ -350,6 +350,7 @@ try {
 | `connect.getShopifyConnectUrl()` | Get Shopify OAuth connect URL |
 | `connect.getSubredditRules()` | Get subreddit rules |
 | `connect.getTelegramConnectStatus()` | Generate Telegram code |
+| `connect.getWebflowConnectUrl()` | Get Webflow OAuth URL |
 | `connect.getWhatsAppSdkConfig()` | Get Embedded Signup SDK config |
 | `connect.getWixConnectUrl()` | Get Wix site install URL |
 | `connect.getWordPressAuthUrl()` | Get WordPress.com OAuth connect URL |
@@ -1253,8 +1254,8 @@ try {
 | `trackingTags.deleteTrackingTagEvent()` | Delete a conversion event |
 | `trackingTags.addTrackingTagSharedAccount()` | Share with an ad account |
 | `trackingTags.assignTrackingTagUser()` | Assign a user to a tag |
-| `trackingTags.installTrackingTagOnStore()` | Install on a Shopify store, WordPress site or Wix site |
-| `trackingTags.removeTrackingTagFromStore()` | Remove from a Shopify store, WordPress site or Wix site |
+| `trackingTags.installTrackingTagOnStore()` | Install on a Shopify, WordPress, Wix or Webflow site |
+| `trackingTags.removeTrackingTagFromStore()` | Remove from a Shopify, WordPress, Wix or Webflow site |
 | `trackingTags.removeTrackingTagSharedAccount()` | Stop sharing with an account |
 | `trackingTags.removeTrackingTagUser()` | Remove a user from a tag |
 
