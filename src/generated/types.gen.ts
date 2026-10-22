@@ -42405,6 +42405,10 @@ export type GetAdsSearchTermsResponse = ({
          * How the term matched (BROAD, PHRASE, EXACT, NEAR_PHRASE, NEAR_EXACT).
          */
         matchType?: (string) | null;
+        /**
+         * What matched the term: ADVERTISER_PROVIDED_KEYWORD (one of your keywords), AI_MAX_BROAD_MATCH or AI_MAX_KEYWORDLESS (AI Max expansion).
+         */
+        matchSource?: (string) | null;
         campaignId?: (string) | null;
         campaignName?: (string) | null;
         adGroupId?: (string) | null;
