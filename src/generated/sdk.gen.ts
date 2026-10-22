@@ -11457,6 +11457,14 @@ export const getAdReview = <ThrowOnError extends boolean = false>(options: Optio
  * (creator content, authorized TikTok posts, Creative Library content) and lists each image of a
  * carousel under its own material id, so those entries come back with the review verdict and
  * null descriptive fields. TikTok returns no review timestamp; `readAt` is when Zernio read it.
+ *
+ * TikTok's review endpoint has a strict quota of its own. One TikTok call reads the review of
+ * every live Smart+ ad of the ad group (up to 100), and each review is cached for 10 minutes per
+ * connection, advertiser and Smart+ ad, so sibling ads are answered from the cache and `readAt`
+ * can be up to 10 minutes old. Read reviews when you need them instead of sweeping every ad on a
+ * loop. When TikTok answers over quota, Zernio returns 429 with `Retry-After: 60` and answers
+ * 429 for that advertiser and connection without calling TikTok until the minute is over; cached
+ * reviews are still served.
  */
 export const getTikTokSmartPlusAdReview = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetTikTokSmartPlusAdReviewData, ThrowOnError>) => {
     return (options?.client ?? client).get<GetTikTokSmartPlusAdReviewResponse, GetTikTokSmartPlusAdReviewError, ThrowOnError>({
