@@ -505,6 +505,7 @@ try {
 | `adAudiences.updateAdAudience()` | Update an audience |
 | `adAudiences.deleteAdAudience()` | Delete custom audience |
 | `adAudiences.addUsersToAdAudience()` | Add users to audience |
+| `adAudiences.removeUsersFromAdAudience()` | Remove users from audience |
 | `adAudiences.replaceAdAudienceCompanies()` | Replace audience companies |
 
 ### Ad Campaigns

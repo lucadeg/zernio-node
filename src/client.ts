@@ -757,6 +757,7 @@ import {
   removeTrackingTagFromStore,
   removeTrackingTagSharedAccount,
   removeTrackingTagUser,
+  removeUsersFromAdAudience,
   removeWhatsAppGroupParticipants,
   reorderCommerceCollectionProducts,
   reorderCommerceProductImages,
@@ -2365,6 +2366,7 @@ export class Zernio {
     updateAdAudience: this._bind(updateAdAudience),
     deleteAdAudience: this._bind(deleteAdAudience),
     addUsersToAdAudience: this._bind(addUsersToAdAudience),
+    removeUsersFromAdAudience: this._bind(removeUsersFromAdAudience),
     replaceAdAudienceCompanies: this._bind(replaceAdAudienceCompanies),
   };
 
@@ -2921,6 +2923,8 @@ export class Zernio {
     deleteAdAudience: this._bind(deleteAdAudience),
     /** @deprecated Use `zernio.adaudiences.addUsersToAdAudience` instead. */
     addUsersToAdAudience: this._bind(addUsersToAdAudience),
+    /** @deprecated Use `zernio.adaudiences.removeUsersFromAdAudience` instead. */
+    removeUsersFromAdAudience: this._bind(removeUsersFromAdAudience),
     /** @deprecated Use `zernio.adaudiences.replaceAdAudienceCompanies` instead. */
     replaceAdAudienceCompanies: this._bind(replaceAdAudienceCompanies),
     /** @deprecated Use `zernio.adtargeting.searchAdInterests` instead. */

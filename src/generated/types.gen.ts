@@ -53884,10 +53884,50 @@ export type AddUsersToAdAudienceData = {
 export type AddUsersToAdAudienceResponse = ({
     message?: string;
     numReceived?: number;
+    /**
+     * Rows the platform could not read. Returned on Meta only.
+     */
     numInvalid?: number;
 });
 
 export type AddUsersToAdAudienceError = (unknown | ErrorResponse | {
+    error?: string;
+});
+
+export type RemoveUsersFromAdAudienceData = {
+    body: {
+        users: Array<{
+            email?: string;
+            phone?: string;
+        }>;
+    };
+    path: {
+        /**
+         * The Zernio audience id (the id field of GET /v1/ads/audiences), not the platform segment id.
+         */
+        audienceId: string;
+    };
+};
+
+export type RemoveUsersFromAdAudienceResponse = ({
+    message?: string;
+    /**
+     * Rows Meta received.
+     */
+    numReceived?: number;
+    /**
+     * Rows Meta could not read.
+     */
+    numInvalid?: number;
+    /**
+     * A sample of the rows Meta could not read, passed through as Meta returns it. Empty when every row was valid.
+     */
+    invalidEntrySamples?: {
+        [key: string]: (string);
+    };
+});
+
+export type RemoveUsersFromAdAudienceError = (ErrorResponse | unknown | {
     error?: string;
 });
 
