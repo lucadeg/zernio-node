@@ -4483,6 +4483,59 @@ export type ConnectedApp = {
     tokenCount?: number;
 };
 
+export type ConnectHandoff = {
+    id?: string;
+    status?: 'waiting' | 'opened' | 'connected' | 'failed' | 'expired';
+    platform?: string;
+    /**
+     * Filled when `status` is `connected`: every account the connect added (several when the user picked several pages, locations or organizations), each checked to be on the profile the connect was started for and written during this handoff. Empty otherwise.
+     */
+    accounts?: Array<{
+        /**
+         * The Zernio account id.
+         */
+        id?: string;
+        profileId?: string;
+        username?: string;
+    }>;
+    /**
+     * Set when `status` is `failed`.
+     */
+    error?: {
+        /**
+         * The `error` code the flow ended on, as on a redirect_url. `connect_incomplete` when the phone reported no outcome, `connect_unverified` when it reported an account Zernio could not match to this connect.
+         */
+        code?: string;
+        message?: (string) | null;
+        /**
+         * The other params the redirect flow appends for that error, such as `is_user_fixable`, `reason`, `dashboard_url`, `request_id` and `stage`. All optional.
+         */
+        details?: {
+            [key: string]: (string);
+        };
+    } | null;
+};
+
+export type status14 = 'waiting' | 'opened' | 'connected' | 'failed' | 'expired';
+
+/**
+ * Only with `handoff=true`: the link to show as a QR code.
+ */
+export type ConnectHandoffLink = {
+    /**
+     * Pass to `GET /v1/connect/handoffs/{handoffId}`.
+     */
+    id?: string;
+    /**
+     * Short link to encode in the QR code. It opens the welcome screen on the phone.
+     */
+    url?: string;
+    /**
+     * When `url` stops working (30 minutes).
+     */
+    expiresAt?: string;
+};
+
 export type ConnectWelcomeScreen = {
     showByDefault?: boolean;
     brandName?: (string) | null;
@@ -4684,7 +4737,7 @@ export type ConversionDestination = {
  * For LinkedIn, `inactive` means the rule is soft-deleted (`enabled: false`).
  *
  */
-export type status14 = 'active' | 'inactive';
+export type status15 = 'active' | 'inactive';
 
 /**
  * A single conversion event to relay to the ad platform. All PII fields
@@ -5821,7 +5874,7 @@ export type objective = 'OUTCOME_ENGAGEMENT' | 'OUTCOME_SALES' | 'OUTCOME_LEADS'
  * `adSetId`, the new ads themselves.
  *
  */
-export type status15 = 'ACTIVE' | 'PAUSED';
+export type status16 = 'ACTIVE' | 'PAUSED';
 
 /**
  * Campaign-level status, same semantics as `POST /v1/ads/create`. Defaults
@@ -6213,7 +6266,7 @@ export type privacy_level = 2;
 /**
  * 1=SCHEDULED, 2=ACTIVE, 3=COMPLETED, 4=CANCELED
  */
-export type status16 = 1 | 2 | 3 | 4;
+export type status17 = 1 | 2 | 3 | 4;
 
 /**
  * 1=STAGE_INSTANCE, 2=VOICE, 3=EXTERNAL
@@ -6756,7 +6809,7 @@ export type FeedbackReceipt = {
     duplicate?: boolean;
 };
 
-export type status17 = 'received';
+export type status18 = 'received';
 
 export type FollowerStatsResponse = {
     accounts?: Array<AccountWithFollowerStats>;
@@ -6885,7 +6938,7 @@ export type GoogleAdLabel = {
     description?: (string) | null;
 };
 
-export type status18 = 'ENABLED' | 'REMOVED' | 'UNKNOWN';
+export type status19 = 'ENABLED' | 'REMOVED' | 'UNKNOWN';
 
 /**
  * At least one id across the four target lists. Up to 1000 ids per list.
@@ -6988,7 +7041,7 @@ export type GoogleAdsManagerLink = {
 /**
  * Status the link has after this call.
  */
-export type status19 = 'PENDING' | 'ACTIVE' | 'REFUSED' | 'CANCELED' | 'INACTIVE';
+export type status20 = 'PENDING' | 'ACTIVE' | 'REFUSED' | 'CANCELED' | 'INACTIVE';
 
 export type GoogleAdsUserAccessInvitation = {
     invitationId?: string;
@@ -7003,7 +7056,7 @@ export type GoogleAdsUserAccessInvitation = {
 
 export type accessRole = 'ADMIN' | 'STANDARD' | 'READ_ONLY' | 'EMAIL_ONLY' | 'UNKNOWN';
 
-export type status20 = 'PENDING' | 'DECLINED' | 'EXPIRED' | 'UNKNOWN';
+export type status21 = 'PENDING' | 'DECLINED' | 'EXPIRED' | 'UNKNOWN';
 
 export type GoogleAdsUserAccessInvitationResult = {
     customerId?: string;
@@ -7027,7 +7080,7 @@ export type GoogleAdsUserAccessInvitationResult = {
 /**
  * PENDING once the email is sent; PENDING_APPROVAL while Google waits for a second admin's multi-party approval.
  */
-export type status21 = 'PENDING' | 'PENDING_APPROVAL';
+export type status22 = 'PENDING' | 'PENDING_APPROVAL';
 
 export type GoogleAdsUserInvitationApproval = {
     /**
@@ -7792,7 +7845,7 @@ export type GoogleRecommendationResult = {
     error?: string;
 };
 
-export type status22 = 'applied' | 'dismissed' | 'failed';
+export type status23 = 'applied' | 'dismissed' | 'failed';
 
 export type GoogleRsaDescription = {
     text: string;
@@ -7927,7 +7980,7 @@ export type ImessageSandboxContact = {
     createdAt?: string;
 };
 
-export type status23 = 'pending' | 'active';
+export type status24 = 'pending' | 'active';
 
 /**
  * An iMessage sender registered as an account on a profile.
@@ -8002,7 +8055,7 @@ export type region = 'US' | 'GB';
 /**
  * `awaiting_payment`: the first-month charge is still being confirmed by the card; the number is ordered automatically once it is paid (usually under 5 minutes), or the order fails with `failureReason` when the card declines or nothing confirms within 30 minutes.
  */
-export type status24 = 'ordering' | 'awaiting_payment' | 'activating' | 'active' | 'suspended' | 'canceled' | 'failed';
+export type status25 = 'ordering' | 'awaiting_payment' | 'activating' | 'active' | 'suspended' | 'canceled' | 'failed';
 
 /**
  * Click attribution for a conversation that started from a Meta ad or
@@ -8205,7 +8258,7 @@ export type InboxWebhookConversation = {
     contactId?: string;
 };
 
-export type status25 = 'active' | 'archived';
+export type status26 = 'active' | 'archived';
 
 /**
  * The conversation object included in conversation lifecycle webhook payloads (conversation.started, conversation.control_changed).
@@ -10222,7 +10275,7 @@ export type OwnedPhoneNumber = {
     }>;
 };
 
-export type status26 = 'pending_payment' | 'pending_regulatory' | 'regulatory_declined' | 'provisioning' | 'verifying' | 'active' | 'suspended' | 'releasing' | 'released';
+export type status27 = 'pending_payment' | 'pending_regulatory' | 'regulatory_declined' | 'provisioning' | 'verifying' | 'active' | 'suspended' | 'releasing' | 'released';
 
 export type metaVerificationStatus = 'pending' | 'code_requested' | 'verified' | 'expired';
 
@@ -10360,7 +10413,7 @@ export type PlatformAnalytics = {
     isOwner?: (boolean) | null;
 };
 
-export type status27 = 'published' | 'failed';
+export type status28 = 'published' | 'failed';
 
 /**
  * Sync state of analytics for this platform
@@ -10563,7 +10616,7 @@ export type Post = {
 /**
  * `cancelled` is set by POST /v1/posts/{postId}/unpublish once every platform entry has been removed from its platform (a post with published entries left becomes `partial`); cancelled posts can be edited and rescheduled like drafts. `pending_approval` (set by `requiresApproval: true`) never publishes until POST /v1/posts/{postId}/review approves it.
  */
-export type status28 = 'draft' | 'pending_approval' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
+export type status29 = 'draft' | 'pending_approval' | 'scheduled' | 'publishing' | 'published' | 'partial' | 'failed' | 'cancelled';
 
 export type visibility2 = 'public' | 'private' | 'unlisted';
 
@@ -10800,7 +10853,7 @@ export type Product = {
     publishedAt?: (string) | null;
 };
 
-export type status29 = 'active' | 'draft' | 'archived';
+export type status30 = 'active' | 'draft' | 'archived';
 
 export type ProductImage = {
     url?: string;
@@ -11019,7 +11072,7 @@ export type RcsAgent = {
     createdAt?: string;
 };
 
-export type status30 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
+export type status31 = 'requested' | 'changes_requested' | 'brand_vetting' | 'agent_review' | 'testing' | 'launch_review' | 'launching' | 'live' | 'rejected' | 'deactivated';
 
 export type useCase = 'MULTI_USE' | 'PROMOTIONAL' | 'TRANSACTIONAL' | 'OTP';
 
@@ -11071,7 +11124,7 @@ export type RcsBrand = RcsBrandInput & {
 /**
  * draft = not filed yet (still editable).
  */
-export type status31 = 'draft' | 'vetting' | 'verified' | 'rejected';
+export type status32 = 'draft' | 'vetting' | 'verified' | 'rejected';
 
 export type RcsBrandInput = {
     displayName: string;
@@ -11158,7 +11211,7 @@ export type RcsCarrierApproval = {
 
 export type scope2 = 'carrier' | 'hub' | 'bot';
 
-export type status32 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
+export type status33 = 'PENDING' | 'SUBMITTED' | 'APPROVED' | 'REJECTED';
 
 /**
  * Message content. `suggestions` (max 11) render as chips under the message.
@@ -11990,7 +12043,7 @@ export type SupportRun = {
 /**
  * queued and running are in progress. needs_human means the assistant handed the question to a person instead of answering; when `supportTicket` is set, a Zernio teammate has been notified and will follow up by email.
  */
-export type status33 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
+export type status34 = 'queued' | 'running' | 'completed' | 'needs_human' | 'failed';
 
 /**
  * Why the run stopped. Null while it is in progress.
@@ -12957,7 +13010,7 @@ export type UploadTokenResponse = {
     status?: 'pending' | 'completed' | 'expired';
 };
 
-export type status34 = 'pending' | 'completed' | 'expired';
+export type status35 = 'pending' | 'completed' | 'expired';
 
 export type UploadTokenStatusResponse = {
     token?: string;
@@ -13309,6 +13362,10 @@ export type User = {
     email?: string;
     name?: string;
     role?: string;
+    /**
+     * Resource groups turned off for this team member. Empty for owners and unrestricted members.
+     */
+    disabledResourceGroups?: Array<(string)>;
     createdAt?: string;
 };
 
@@ -13464,7 +13521,7 @@ export type Verification = {
     resend?: boolean;
 };
 
-export type status35 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
+export type status36 = 'pending' | 'approved' | 'expired' | 'max_attempts_reached' | 'canceled' | 'delivery_failed';
 
 export type channel5 = 'sms' | 'whatsapp';
 
@@ -13642,7 +13699,7 @@ export type WebhookLog = {
 /**
  * Delivery outcome
  */
-export type status36 = 'success' | 'failed';
+export type status37 = 'success' | 'failed';
 
 /**
  * Webhook payload for `account.ads.initial_sync_completed` events.
@@ -13759,7 +13816,7 @@ export type event = 'account.ads.initial_sync_completed';
 /**
  * Overall outcome of the initial sync.
  */
-export type status37 = 'success' | 'failure';
+export type status38 = 'success' | 'failure';
 
 /**
  * Stable category for UX branching. New values may be added; existing ones are
@@ -14138,7 +14195,7 @@ export type WebhookPayloadAdReview = {
 
 export type event8 = 'ad.review.approved' | 'ad.review.rejected';
 
-export type status38 = 'approved' | 'rejected';
+export type status39 = 'approved' | 'rejected';
 
 /**
  * Webhook payload for the `ad.status_changed` event. Currently emitted
@@ -14341,7 +14398,7 @@ export type event10 = 'ad.video.processed';
 /**
  * `ready`: usable as `video.id` on the create endpoints. `error`: Meta could not process it; upload again.
  */
-export type status39 = 'ready' | 'error';
+export type status40 = 'ready' | 'error';
 
 /**
  * Webhook payload for `analytics.synced`. Fired once per connected account each
@@ -16533,7 +16590,7 @@ export type event34 = 'post.platform.published' | 'post.platform.failed' | 'post
 /**
  * Terminal status this event fires on. Matches the event suffix.
  */
-export type status40 = 'published' | 'failed' | 'deleted';
+export type status41 = 'published' | 'failed' | 'deleted';
 
 /**
  * Webhook payload for reaction received events (WhatsApp, Telegram, Slack, Instagram, Facebook Messenger, TikTok)
@@ -16930,7 +16987,7 @@ export type event43 = 'whatsapp.account.name_status_updated';
 /**
  * Normalized from Meta's `decision` (REJECTED -> DECLINED, DEFERRED -> PENDING_REVIEW; the review is still open on DEFERRED, not a rejection).
  */
-export type status41 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
+export type status42 = 'APPROVED' | 'DECLINED' | 'PENDING_REVIEW';
 
 /**
  * Webhook payload for `whatsapp.account.quality_updated`. Fired when a connected
@@ -17064,7 +17121,7 @@ export type event45 = 'whatsapp.account.status_updated';
 /**
  * `active` only on a reinstatement (DISABLED_UPDATE with ban state REINSTATE).
  */
-export type status42 = 'restricted' | 'active';
+export type status43 = 'restricted' | 'active';
 
 /**
  * Webhook payload for the `whatsapp.contact.identity_changed` event. Fired when
@@ -17280,7 +17337,7 @@ export type event48 = 'whatsapp.template.status_updated';
  * request before the template is actually removed.
  *
  */
-export type status43 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
+export type status44 = 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED' | 'IN_APPEAL' | 'PENDING_DELETION';
 
 export type WebhookPayloadWorkflowRun = {
     /**
@@ -17344,7 +17401,7 @@ export type event49 = 'workflow.run.started' | 'workflow.run.completed' | 'workf
 /**
  * running on workflow.run.started; completed or exited (ended on purpose before the last node, e.g. a handoff) on workflow.run.completed; failed on workflow.run.failed.
  */
-export type status44 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
+export type status45 = 'running' | 'waiting' | 'completed' | 'exited' | 'failed';
 
 /**
  * The profiles this event belongs to, each with the externalId you set on it (null when none is set). Present on every event tied to a profile and absent on events that belong to none. Events spanning several profiles (a post published to accounts of different profiles) list each once. Use it to route the event to your tenant without storing Zernio profile ids.
@@ -17742,7 +17799,7 @@ export type WorkflowExecutionEvent = {
 
 export type action2 = 'execution_started' | 'execution_completed' | 'execution_exited' | 'execution_paused' | 'execution_resumed' | 'node_started' | 'node_completed' | 'node_failed' | 'node_skipped';
 
-export type status45 = 'success' | 'failed' | 'pending';
+export type status46 = 'success' | 'failed' | 'pending';
 
 /**
  * A node in a workflow graph. `config` shape depends on `type`.
@@ -22335,6 +22392,10 @@ export type CreateInviteTokenData = {
          */
         role?: 'admin' | 'member' | 'billing_admin' | 'viewer';
         /**
+         * Resource groups the invitee may not use once they join (the same groups as restricted API keys). Their dashboard hides those sections and every API request into a disabled group, with any credential they hold, is refused with 403. Omitted or empty means full access. Groups the caller lacks themselves are always added.
+         */
+        disabledResourceGroups?: Array<('publishing' | 'engagement' | 'messages' | 'contacts' | 'analytics' | 'ads' | 'telephony' | 'accounts' | 'billing' | 'webhooks' | 'commerce')>;
+        /**
          * Deprecated. Use role 'viewer' instead. When true, the invite is created with role 'viewer'. Cannot be combined with role 'billing_admin' or 'admin'.
          * @deprecated
          */
@@ -22346,6 +22407,7 @@ export type CreateInviteTokenResponse = ({
     token?: string;
     scope?: string;
     invitedProfileIds?: Array<(string)>;
+    disabledResourceGroups?: Array<(string)>;
     expiresAt?: string;
     inviteUrl?: string;
 });
@@ -22383,6 +22445,10 @@ export type GetConnectUrlData = {
          * Instagram Login only (the default loginMethod); ignored elsewhere. Makes Instagram show its login page and ask for the credentials of the account to connect even when another Instagram account is logged in on the device or in the app, and hides the Facebook login option on that page. Use it when the person connecting manages several Instagram accounts on one phone: Instagram otherwise logs in, and converts to a professional account, whichever account is active, before any consent screen. Pair it with expectedUsername to also refuse a wrong account at the end.
          */
         forceReauth?: boolean;
+        /**
+         * Let the user finish on their phone. When `true`, the response also carries `handoff`: show `handoff.url` as a QR code in your app (any QR library), the user scans it and the welcome screen opens on the phone, already carrying this connect, so they log in to the platform there without signing in to anything else. The phone ends on a Zernio result screen telling them to go back to their computer. Learn the outcome by polling `GET /v1/connect/handoffs/{handoffId}` (every 2 to 5 seconds is fine) or from the `account.connected` webhook. Shows the welcome screen with your branding parameters or saved settings. Cannot be combined with `welcome=false`, `headless=true`, `signup`, `redirect=true` or `redirect_url` (400 `INVALID_FIELD_VALUE`). `handoff.url` works for 30 minutes. When the account is re-enabled straight away the response carries `account` instead, as without `handoff`.
+         */
+        handoff?: boolean;
         /**
          * When true, the user is redirected to your redirect_url with raw OAuth data (code, state) instead of Zernio's default account selection UI. Use this to build a custom connect experience.
          */
@@ -22623,6 +22689,7 @@ export type GetConnectUrlResponse = ({
      * State parameter for security (handled automatically)
      */
     state?: string;
+    handoff?: ConnectHandoffLink;
 });
 
 export type GetConnectUrlError = (unknown | ErrorResponse | {
@@ -25417,6 +25484,19 @@ export type DeleteGoogleBusinessReviewReplyResponse = ({
 export type DeleteGoogleBusinessReviewReplyError = (ErrorResponse | {
     error?: string;
 });
+
+export type GetConnectHandoffData = {
+    path: {
+        /**
+         * `handoff.id` from the connect response.
+         */
+        handoffId: string;
+    };
+};
+
+export type GetConnectHandoffResponse = (ConnectHandoff);
+
+export type GetConnectHandoffError = (ErrorResponse | unknown);
 
 export type GetConnectWelcomeScreenResponse = (ConnectWelcomeScreen);
 

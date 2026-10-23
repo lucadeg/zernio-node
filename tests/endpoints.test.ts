@@ -419,6 +419,11 @@ describe('Endpoint Methods', () => {
       expect(client.connect.selectInstagramAccount).toBeTypeOf('function');
     });
 
+    it('should have getConnectHandoff method', () => {
+      expect(client.connect.getConnectHandoff).toBeDefined();
+      expect(client.connect.getConnectHandoff).toBeTypeOf('function');
+    });
+
     it('should have getConnectWelcomeScreen method', () => {
       expect(client.connect.getConnectWelcomeScreen).toBeDefined();
       expect(client.connect.getConnectWelcomeScreen).toBeTypeOf('function');

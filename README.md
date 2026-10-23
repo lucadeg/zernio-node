@@ -338,6 +338,7 @@ try {
 | `connect.listWhatsAppPhoneNumbers()` | List numbers for selection |
 | `connect.createPinterestBoard()` | Create Pinterest board |
 | `connect.createYoutubePlaylist()` | Create YouTube playlist |
+| `connect.getConnectHandoff()` | Get a phone handoff |
 | `connect.getConnectUrl()` | Get OAuth connect URL |
 | `connect.getConnectWelcomeScreen()` | Get the saved welcome screen |
 | `connect.getFacebookPages()` | List Facebook pages |
