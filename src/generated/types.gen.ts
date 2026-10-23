@@ -1202,7 +1202,7 @@ export type AdMetrics = {
      */
     uniqueCtr?: number;
     /**
-     * Number of times the video started playing, summed over the date range and across children at ad-set/campaign level. 0 for non-video ads. Sources: Meta `video_play_actions`, TikTok `video_play_actions`, X `video_content_starts`, Reddit `video_started`. X and Reddit history note: added 2026-10-23, and their syncs only re-fetch recent days, so older days read 0 on every X and Reddit video field.
+     * Number of times the video started playing, summed over the date range and across children at ad-set/campaign level. 0 for non-video ads. Sources: Meta `video_play_actions`, TikTok `video_play_actions`, X `video_content_starts`, Reddit `video_started`, Pinterest `TOTAL_VIDEO_P0_COMBINED`. X, Reddit and Pinterest history note: added 2026-10-23, and their syncs only re-fetch recent days, so older days read 0 on every X, Reddit and Pinterest video field.
      */
     videoPlayActions?: number;
     /**
@@ -1214,23 +1214,23 @@ export type AdMetrics = {
      */
     videoThruplayWatchedActions?: number;
     /**
-     * Views reaching 25% of the video's length. With the other percentile fields, powers hook/hold/drop-off analysis (e.g. hook rate = videoP25WatchedActions / videoPlayActions). Sources: Meta `video_p25_watched_actions`, TikTok `video_views_p25`, X `video_views_25`, Reddit `video_watched_25_percent`, Google `video_quartile_p25_rate` x impressions.
+     * Views reaching 25% of the video's length. With the other percentile fields, powers hook/hold/drop-off analysis (e.g. hook rate = videoP25WatchedActions / videoPlayActions). Sources: Meta `video_p25_watched_actions`, TikTok `video_views_p25`, X `video_views_25`, Reddit `video_watched_25_percent`, Google `video_quartile_p25_rate` x impressions, Pinterest `TOTAL_VIDEO_P25_COMBINED`.
      */
     videoP25WatchedActions?: number;
     /**
-     * Views reaching 50% of the video's length. Sources: Meta `video_p50_watched_actions`, TikTok `video_views_p50`, X `video_views_50`, Reddit `video_watched_50_percent`, Google `video_quartile_p50_rate` x impressions.
+     * Views reaching 50% of the video's length. Sources: Meta `video_p50_watched_actions`, TikTok `video_views_p50`, X `video_views_50`, Reddit `video_watched_50_percent`, Google `video_quartile_p50_rate` x impressions, Pinterest `TOTAL_VIDEO_P50_COMBINED`.
      */
     videoP50WatchedActions?: number;
     /**
-     * Views reaching 75% of the video's length. Sources: Meta `video_p75_watched_actions`, TikTok `video_views_p75`, X `video_views_75`, Reddit `video_watched_75_percent`, Google `video_quartile_p75_rate` x impressions.
+     * Views reaching 75% of the video's length. Sources: Meta `video_p75_watched_actions`, TikTok `video_views_p75`, X `video_views_75`, Reddit `video_watched_75_percent`, Google `video_quartile_p75_rate` x impressions, Pinterest `TOTAL_VIDEO_P75_COMBINED`.
      */
     videoP75WatchedActions?: number;
     /**
-     * Views reaching 95% of the video's length. Sources: Meta `video_p95_watched_actions` (Meta only).
+     * Views reaching 95% of the video's length. Sources: Meta `video_p95_watched_actions`, Pinterest `TOTAL_VIDEO_P95_COMBINED`.
      */
     videoP95WatchedActions?: number;
     /**
-     * Views reaching 100% of the video's length. Sources: Meta `video_p100_watched_actions`, TikTok `video_views_p100`, X `video_views_100`, Reddit `video_watched_100_percent`, Google `video_quartile_p100_rate` x impressions.
+     * Views reaching 100% of the video's length. Sources: Meta `video_p100_watched_actions`, TikTok `video_views_p100`, X `video_views_100`, Reddit `video_watched_100_percent`, Google `video_quartile_p100_rate` x impressions, Pinterest `TOTAL_VIDEO_P100_COMPLETE`.
      */
     videoP100WatchedActions?: number;
     /**
