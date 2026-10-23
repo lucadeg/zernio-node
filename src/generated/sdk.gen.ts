@@ -15026,8 +15026,9 @@ export const listWhatsAppConversions = <ThrowOnError extends boolean = false>(op
 /**
  * Send WhatsApp conversion event
  * Forward a WhatsApp Business Messaging conversion event (`LeadSubmitted`,
- * `Purchase`, `AddToCart`, `InitiateCheckout`, `ViewContent`) to Meta's
- * Conversions API with `action_source = business_messaging` and
+ * `QualifiedLead`, `Purchase`, `AddToCart`, `InitiateCheckout`,
+ * `ViewContent`, `OrderCreated`, `OrderCanceled`, `OrderReturned`) to
+ * Meta's Conversions API with `action_source = business_messaging` and
  * `messaging_channel = whatsapp`. The endpoint looks up the originating
  * CTWA click ID (`ctwa_clid`) captured on the first inbound message of
  * the conversation and replays it on every event so Meta can attribute

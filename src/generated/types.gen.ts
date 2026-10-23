@@ -4864,6 +4864,11 @@ export type ConversionEvent = {
      * for Business Messaging). `channel` is sent as the event's `messaging_channel`
      * (`instagram_direct` goes out as `instagram`). Each id lands in Meta's
      * `user_data` unhashed, and an id that does not belong to `channel` is ignored.
+     * Meta accepts only its business messaging event names here (`LeadSubmitted`,
+     * `QualifiedLead`, `Purchase`, `AddToCart`, `InitiateCheckout`, `ViewContent`,
+     * `OrderCreated`, `OrderShipped`, `OrderDelivered`, `OrderCanceled`,
+     * `OrderReturned`, `CartAbandoned`, `RatingProvided`, `ReviewProvided`);
+     * `eventName` is forwarded unchanged.
      *
      */
     messaging?: {
@@ -54898,7 +54903,7 @@ export type ListWhatsAppConversionsResponse = ({
          */
         timestamp?: string;
         /**
-         * One of LeadSubmitted, Purchase, AddToCart, InitiateCheckout, ViewContent.
+         * One of LeadSubmitted, QualifiedLead, Purchase, AddToCart, InitiateCheckout, ViewContent, OrderCreated, OrderCanceled, OrderReturned.
          */
         eventName?: string;
         conversationId?: (string) | null;
@@ -54927,9 +54932,8 @@ export type SendWhatsAppConversionData = {
          */
         accountId: string;
         /**
-         * Live-verified allowlist of event names accepted by Meta's
-         * CAPI for Business Messaging (Graph API v25.0). Other
-         * standard pixel events including `Lead`,
+         * Event names accepted by Meta's CAPI for Business
+         * Messaging. Other standard pixel events including `Lead`,
          * `CompleteRegistration`, `Subscribe`, `Schedule`, `Contact`,
          * `StartTrial`, `AddPaymentInfo`, `Search`, and
          * `SubmitApplication` are rejected with subcode 2804066
@@ -54937,10 +54941,14 @@ export type SendWhatsAppConversionData = {
          * `action_source = business_messaging` events. Custom event
          * names are also rejected.
          *
-         * Use `LeadSubmitted` (NOT `Lead`) for lead-style conversions.
+         * Use `LeadSubmitted` (NOT `Lead`) when a lead comes in and
+         * `QualifiedLead` once your team qualifies it. `OrderCreated`,
+         * `OrderCanceled` and `OrderReturned` track an order placed in
+         * the chat; send `value` and `currency` with them (and with
+         * `Purchase`) to report the order amount.
          *
          */
-        eventName: 'LeadSubmitted' | 'Purchase' | 'AddToCart' | 'InitiateCheckout' | 'ViewContent';
+        eventName: 'LeadSubmitted' | 'QualifiedLead' | 'Purchase' | 'AddToCart' | 'InitiateCheckout' | 'ViewContent' | 'OrderCreated' | 'OrderCanceled' | 'OrderReturned';
         /**
          * Unix seconds. Defaults to the time of the request when
          * omitted. Meta's attribution window is 7 days from click;
