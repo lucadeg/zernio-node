@@ -1202,7 +1202,7 @@ export type AdMetrics = {
      */
     uniqueCtr?: number;
     /**
-     * Number of times the video started playing, summed over the date range and across children at ad-set/campaign level. 0 for non-video ads. Sources: Meta `video_play_actions`, TikTok `video_play_actions`.
+     * Number of times the video started playing, summed over the date range and across children at ad-set/campaign level. 0 for non-video ads. Sources: Meta `video_play_actions`, TikTok `video_play_actions`, X `video_content_starts`. X history note: added 2026-10-23, and X syncs only re-fetch the last 7 days, so older days read 0 on every X video field.
      */
     videoPlayActions?: number;
     /**
@@ -1214,15 +1214,15 @@ export type AdMetrics = {
      */
     videoThruplayWatchedActions?: number;
     /**
-     * Views reaching 25% of the video's length. With the other percentile fields, powers hook/hold/drop-off analysis (e.g. hook rate = videoP25WatchedActions / videoPlayActions). Sources: Meta `video_p25_watched_actions`, TikTok `video_views_p25`.
+     * Views reaching 25% of the video's length. With the other percentile fields, powers hook/hold/drop-off analysis (e.g. hook rate = videoP25WatchedActions / videoPlayActions). Sources: Meta `video_p25_watched_actions`, TikTok `video_views_p25`, X `video_views_25`.
      */
     videoP25WatchedActions?: number;
     /**
-     * Views reaching 50% of the video's length. Sources: Meta `video_p50_watched_actions`, TikTok `video_views_p50`.
+     * Views reaching 50% of the video's length. Sources: Meta `video_p50_watched_actions`, TikTok `video_views_p50`, X `video_views_50`.
      */
     videoP50WatchedActions?: number;
     /**
-     * Views reaching 75% of the video's length. Sources: Meta `video_p75_watched_actions`, TikTok `video_views_p75`.
+     * Views reaching 75% of the video's length. Sources: Meta `video_p75_watched_actions`, TikTok `video_views_p75`, X `video_views_75`.
      */
     videoP75WatchedActions?: number;
     /**
@@ -1230,7 +1230,7 @@ export type AdMetrics = {
      */
     videoP95WatchedActions?: number;
     /**
-     * Views reaching 100% of the video's length. Sources: Meta `video_p100_watched_actions`, TikTok `video_views_p100`.
+     * Views reaching 100% of the video's length. Sources: Meta `video_p100_watched_actions`, TikTok `video_views_p100`, X `video_views_100`.
      */
     videoP100WatchedActions?: number;
     /**
