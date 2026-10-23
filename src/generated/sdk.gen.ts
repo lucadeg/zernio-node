@@ -1366,8 +1366,9 @@ export const deleteProfile = <ThrowOnError extends boolean = false>(options: Opt
 /**
  * List accounts
  * Returns connected accounts. Only includes accounts within the plan limit by default. Follower data requires analytics add-on.
- * Supports optional server-side pagination via page/limit params. When omitted, returns all accounts (backward-compatible).
- * page and limit must be supplied together; out-of-range page/limit values are rejected with 400 rather than silently clamped.
+ * Supports optional server-side pagination. When omitted, returns all accounts (backward-compatible).
+ * Cursor paging: send `limit` alone for the first page, then pass `pagination.nextCursor` back as `cursor` until it is null. Pages are ordered by account id, so accounts added or removed between calls never shift a page. Cannot be combined with `page`, `sort` or `perProfile`.
+ * Offset paging: send `page` and `limit` together. Out-of-range page/limit values are rejected with 400 rather than silently clamped.
  *
  */
 export const listAccounts = <ThrowOnError extends boolean = false>(options?: OptionsLegacyParser<ListAccountsData, ThrowOnError>) => {
