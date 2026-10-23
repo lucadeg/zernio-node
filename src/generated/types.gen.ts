@@ -1140,7 +1140,7 @@ export type AdMetrics = {
     cpm?: number;
     engagement?: number;
     /**
-     * Count of conversion events over the requested date range. FRACTIONAL: attribution splits one conversion across touchpoints and Google additionally reports modeled conversions, so values like 0.347 are normal. Meta: the ad set's Ads Manager Results, derived per ad set: the optimization goal's result (LEAD_GENERATION and QUALITY_LEAD = leads, CONVERSATIONS = messaging conversations started, APP_INSTALLS = installs, LANDING_PAGE_VIEWS = landing page views, LINK_CLICKS = link clicks, THRUPLAY = ThruPlays; REACH, IMPRESSIONS, POST_ENGAGEMENT and PAGE_LIKES report 0), otherwise the promoted_object event (custom_conversion_id when set, else custom_event_type, else PURCHASE). Google: the account's tracked conversions. X and LinkedIn: their reported website/lead conversions (added 2026-07). 0 for non-conversion campaigns or when no events have fired.
+     * Count of conversion events over the requested date range. FRACTIONAL: attribution splits one conversion across touchpoints and Google additionally reports modeled conversions, so values like 0.347 are normal. Meta: the ad set's Ads Manager Results, derived per ad set: the optimization goal's result (LEAD_GENERATION and QUALITY_LEAD = leads, CONVERSATIONS = messaging conversations started, APP_INSTALLS = installs, LANDING_PAGE_VIEWS = landing page views, LINK_CLICKS = link clicks, THRUPLAY = ThruPlays; REACH, IMPRESSIONS, POST_ENGAGEMENT and PAGE_LIKES report 0), otherwise the promoted_object event (custom_conversion_id when set, else custom_event_type, else PURCHASE). Google: the account's tracked conversions. X and LinkedIn: their reported website/lead conversions (added 2026-07). Reddit: key conversions (`key_conversion_total_count`, added 2026-10-23; older days read 0). 0 for non-conversion campaigns or when no events have fired.
      */
     conversions?: number;
     /**
@@ -1164,7 +1164,7 @@ export type AdMetrics = {
         [key: string]: (number);
     };
     /**
-     * Convenience sum of purchase-type action values, picked from `actionValues` for the ad set promoted_object event (custom conversion, custom_event_type, else PURCHASE). It matches `conversions` for conversion-optimized ad sets; when the optimization goal reports a different result (LINK_CLICKS, LANDING_PAGE_VIEWS, ...) it stays on the promoted event so ROAS keeps its purchase basis. In ad-account native currency. 0 when the campaign has no purchase event configured. TikTok: app purchase value plus website complete-payment value (from 2026-10-08), or the Place an Order value when that is larger (they are never summed, since a pixel can fire both for one sale); days synced before each was added carry the app value only until the ad is re-synced. Google: `conversions_value` of every primary conversion action. Pinterest: checkout value. LinkedIn: `conversionValueInLocalCurrency`, the advertiser-defined value of every conversion (days synced before 2026-10-23 report 0). Other platforms report 0.
+     * Convenience sum of purchase-type action values, picked from `actionValues` for the ad set promoted_object event (custom conversion, custom_event_type, else PURCHASE). It matches `conversions` for conversion-optimized ad sets; when the optimization goal reports a different result (LINK_CLICKS, LANDING_PAGE_VIEWS, ...) it stays on the promoted event so ROAS keeps its purchase basis. In ad-account native currency. 0 when the campaign has no purchase event configured. TikTok: app purchase value plus website complete-payment value (from 2026-10-08), or the Place an Order value when that is larger (they are never summed, since a pixel can fire both for one sale); days synced before each was added carry the app value only until the ad is re-synced. Google: `conversions_value` of every primary conversion action. Pinterest: checkout value. LinkedIn: `conversionValueInLocalCurrency`, the advertiser-defined value of every conversion (days synced before 2026-10-23 report 0). Reddit: `conversion_purchase_total_value` (same history note). Other platforms report 0.
      */
     purchaseValue?: number;
     /**
@@ -1202,11 +1202,11 @@ export type AdMetrics = {
      */
     uniqueCtr?: number;
     /**
-     * Number of times the video started playing, summed over the date range and across children at ad-set/campaign level. 0 for non-video ads. Sources: Meta `video_play_actions`, TikTok `video_play_actions`, X `video_content_starts`. X history note: added 2026-10-23, and X syncs only re-fetch the last 7 days, so older days read 0 on every X video field.
+     * Number of times the video started playing, summed over the date range and across children at ad-set/campaign level. 0 for non-video ads. Sources: Meta `video_play_actions`, TikTok `video_play_actions`, X `video_content_starts`, Reddit `video_started`. X and Reddit history note: added 2026-10-23, and their syncs only re-fetch recent days, so older days read 0 on every X and Reddit video field.
      */
     videoPlayActions?: number;
     /**
-     * Views of at least 30 seconds (or to the end, for shorter videos). Sources: Meta `video_30_sec_watched_actions` (Meta only).
+     * Views of at least 30 seconds (or to the end, for shorter videos). Sources: Meta `video_30_sec_watched_actions`, Google `video_trueview_views` (a TrueView view: 30 seconds, the whole video if shorter, or an interaction; Google history note: added 2026-10-23, older days read 0).
      */
     video30SecWatchedActions?: number;
     /**
@@ -1214,15 +1214,15 @@ export type AdMetrics = {
      */
     videoThruplayWatchedActions?: number;
     /**
-     * Views reaching 25% of the video's length. With the other percentile fields, powers hook/hold/drop-off analysis (e.g. hook rate = videoP25WatchedActions / videoPlayActions). Sources: Meta `video_p25_watched_actions`, TikTok `video_views_p25`, X `video_views_25`.
+     * Views reaching 25% of the video's length. With the other percentile fields, powers hook/hold/drop-off analysis (e.g. hook rate = videoP25WatchedActions / videoPlayActions). Sources: Meta `video_p25_watched_actions`, TikTok `video_views_p25`, X `video_views_25`, Reddit `video_watched_25_percent`, Google `video_quartile_p25_rate` x impressions.
      */
     videoP25WatchedActions?: number;
     /**
-     * Views reaching 50% of the video's length. Sources: Meta `video_p50_watched_actions`, TikTok `video_views_p50`, X `video_views_50`.
+     * Views reaching 50% of the video's length. Sources: Meta `video_p50_watched_actions`, TikTok `video_views_p50`, X `video_views_50`, Reddit `video_watched_50_percent`, Google `video_quartile_p50_rate` x impressions.
      */
     videoP50WatchedActions?: number;
     /**
-     * Views reaching 75% of the video's length. Sources: Meta `video_p75_watched_actions`, TikTok `video_views_p75`, X `video_views_75`.
+     * Views reaching 75% of the video's length. Sources: Meta `video_p75_watched_actions`, TikTok `video_views_p75`, X `video_views_75`, Reddit `video_watched_75_percent`, Google `video_quartile_p75_rate` x impressions.
      */
     videoP75WatchedActions?: number;
     /**
@@ -1230,7 +1230,7 @@ export type AdMetrics = {
      */
     videoP95WatchedActions?: number;
     /**
-     * Views reaching 100% of the video's length. Sources: Meta `video_p100_watched_actions`, TikTok `video_views_p100`, X `video_views_100`.
+     * Views reaching 100% of the video's length. Sources: Meta `video_p100_watched_actions`, TikTok `video_views_p100`, X `video_views_100`, Reddit `video_watched_100_percent`, Google `video_quartile_p100_rate` x impressions.
      */
     videoP100WatchedActions?: number;
     /**
