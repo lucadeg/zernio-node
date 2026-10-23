@@ -5745,6 +5745,9 @@ export type CtwaAdRequestBody = {
      * settings (seen on AUSTRALIA_FINSERV), so sending them explicitly is the reliable path.
      * The value is the Verified identity ID (Meta Business Settings > Verified identities),
      * not a Page or Business ID, and beneficiary and payer may be the same ID.
+     * Send each ID as a string of digits: Verified identity IDs can have 17 digits, more than a
+     * JSON number holds exactly, and a number that arrives rounded is rejected. Numbers up to
+     * 9007199254740991 are still accepted. The IDs reach Meta unchanged.
      * Keys by category: AUSTRALIA_FINSERV uses australia_finserv_beneficiary /
      * australia_finserv_payer; TAIWAN_FINSERV uses taiwan_finserv_beneficiary /
      * taiwan_finserv_payer; INDIA_FINSERV uses india_finserv_beneficiary / india_finserv_payer;
@@ -5759,7 +5762,7 @@ export type CtwaAdRequestBody = {
      *
      */
     regionalRegulationIdentities?: {
-        [key: string]: (number);
+        [key: string]: (string | number);
     };
 };
 
@@ -50092,6 +50095,9 @@ export type BoostPostData = {
          * settings (seen on AUSTRALIA_FINSERV), so sending them explicitly is the reliable path.
          * The value is the Verified identity ID (Meta Business Settings > Verified identities),
          * not a Page or Business ID, and beneficiary and payer may be the same ID.
+         * Send each ID as a string of digits: Verified identity IDs can have 17 digits, more than a
+         * JSON number holds exactly, and a number that arrives rounded is rejected. Numbers up to
+         * 9007199254740991 are still accepted. The IDs reach Meta unchanged.
          * Keys by category: AUSTRALIA_FINSERV uses australia_finserv_beneficiary /
          * australia_finserv_payer; TAIWAN_FINSERV uses taiwan_finserv_beneficiary /
          * taiwan_finserv_payer; INDIA_FINSERV uses india_finserv_beneficiary / india_finserv_payer;
@@ -50106,7 +50112,7 @@ export type BoostPostData = {
          *
          */
         regionalRegulationIdentities?: {
-            [key: string]: (number);
+            [key: string]: (string | number);
         };
         /**
          * Website URL for non-messaging CTA buttons. Send it with `callToAction`. Omit for messaging boosts.
@@ -51175,6 +51181,9 @@ export type CreateStandaloneAdData = {
          * settings (seen on AUSTRALIA_FINSERV), so sending them explicitly is the reliable path.
          * The value is the Verified identity ID (Meta Business Settings > Verified identities),
          * not a Page or Business ID, and beneficiary and payer may be the same ID.
+         * Send each ID as a string of digits: Verified identity IDs can have 17 digits, more than a
+         * JSON number holds exactly, and a number that arrives rounded is rejected. Numbers up to
+         * 9007199254740991 are still accepted. The IDs reach Meta unchanged.
          * Keys by category: AUSTRALIA_FINSERV uses australia_finserv_beneficiary /
          * australia_finserv_payer; TAIWAN_FINSERV uses taiwan_finserv_beneficiary /
          * taiwan_finserv_payer; INDIA_FINSERV uses india_finserv_beneficiary / india_finserv_payer;
@@ -51189,7 +51198,7 @@ export type CreateStandaloneAdData = {
          *
          */
         regionalRegulationIdentities?: {
-            [key: string]: (number);
+            [key: string]: (string | number);
         };
         /**
          * Required for lifetime budgets. Read like `startDate` (account timezone on Meta, TikTok, X, Pinterest, OpenAI and Reddit; whole account-local days on Google; UTC on LinkedIn), and a date-only end runs to 23:59:59 local.
