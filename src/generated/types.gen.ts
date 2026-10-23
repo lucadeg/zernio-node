@@ -1500,7 +1500,11 @@ export type AdsTimelineResponse = {
     rows?: Array<{
         date?: string;
         /**
-         * Native currency units (matches /ads/tree convention).
+         * ISO 4217 currency of every money field in this row (spend, cpc, cpm, costPerConversion, purchaseValue, actionValues). An account whose ad accounts bill in different currencies gets one row per currency for that day, never a sum across currencies. Null when the currency of the ad accounts in this row is unknown. Added 2026-10-23.
+         */
+        currency?: (string) | null;
+        /**
+         * Native currency units (matches /ads/tree convention), in `currency`.
          */
         spend?: number;
         impressions?: number;

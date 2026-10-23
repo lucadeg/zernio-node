@@ -10980,7 +10980,8 @@ export const getAdTree = <ThrowOnError extends boolean = false>(options?: Option
  * Returns an ads account's spend, results and other metrics day by day, ready for a daily performance chart.
  *
  * Returns daily aggregate metrics across all ads in a SocialAccount as a single
- * time series, one row per calendar day in the requested range. Use this for
+ * time series, one row per calendar day and currency in the requested range (one row
+ * per day unless the account's ad accounts bill in different currencies). Use this for
  * dashboards that draw a daily-spend or daily-conversions chart, instead of
  * calling `/v1/ads/tree` once per day.
  *
