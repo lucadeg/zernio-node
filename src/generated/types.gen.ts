@@ -4484,6 +4484,74 @@ export type ConnectWelcomeScreen = {
 };
 
 /**
+ * The ad that opened the conversation, enriched from the ads Zernio syncs for
+ * the account owner. null when the conversation did not start from a Meta
+ * referral (ad click or ig.me / m.me ref link).
+ *
+ * Meta's referral carries the ad ID but no campaign or ad set ID. When the ad
+ * is in your synced ads (`GET /v1/ads`), `synced` is true and the ad name,
+ * campaign, ad set and ad account come from there. Otherwise `synced` is false,
+ * `name` falls back to the ad title (Instagram, Facebook) or headline (WhatsApp)
+ * Meta sent with the click, and the other fields are null.
+ *
+ * A team member limited to some profiles, or an API key scoped to profiles, is
+ * enriched only from the ads it can list with `GET /v1/ads`; any other ad comes
+ * back `synced` false.
+ *
+ * A non-null object with `adId` null is a referral that is not an ad click:
+ * an ig.me / m.me ref link (`name` null) or a WhatsApp click on a post
+ * (`ctwa_source_type` post, `name` is Meta's headline). Nothing is looked up
+ * in your ads for it and `synced` is false.
+ *
+ */
+export type ConversationAdAttribution = {
+    /**
+     * Meta's ad ID: `meta_ad_id` on Instagram and Facebook, `ctwa_source_id` on WhatsApp when `ctwa_source_type` is `ad`. Accepted by `GET /v1/ads/{adId}`.
+     */
+    adId: (string) | null;
+    /**
+     * The synced ad's name, else the ad title or headline Meta sent.
+     */
+    name: (string) | null;
+    /**
+     * True when the ad was found in your synced ads.
+     */
+    synced: boolean;
+    /**
+     * Meta campaign ID. Synced ads only.
+     */
+    campaignId: (string) | null;
+    /**
+     * Campaign name. Synced ads only.
+     */
+    campaignName: (string) | null;
+    /**
+     * Meta ad set ID. Synced ads only.
+     */
+    adSetId: (string) | null;
+    /**
+     * Ad set name. Synced ads only.
+     */
+    adSetName: (string) | null;
+    /**
+     * Meta ad account ID (act_...). Synced ads only.
+     */
+    adAccountId: (string) | null;
+    /**
+     * Ad account name. Synced ads only.
+     */
+    adAccountName: (string) | null;
+    /**
+     * The post the ad promotes, from the synced ad or else Meta's `post_id` on the click.
+     */
+    platformPostId: (string) | null;
+    /**
+     * True when the ad was created outside Zernio (synced from Ads Manager), false when created through Zernio, null when not synced.
+     */
+    isExternal: (boolean) | null;
+} | null;
+
+/**
  * A Google Ads conversion action, e.g. a WEBPAGE conversion created via
  * `createConversionAction`. Returned by `listConversionActions` and
  * `createConversionAction`.
@@ -7911,6 +7979,137 @@ export type region = 'US' | 'GB';
  * `awaiting_payment`: the first-month charge is still being confirmed by the card; the number is ordered automatically once it is paid (usually under 5 minutes), or the order fails with `failureReason` when the card declines or nothing confirms within 30 minutes.
  */
 export type status24 = 'ordering' | 'awaiting_payment' | 'activating' | 'active' | 'suspended' | 'canceled' | 'failed';
+
+/**
+ * Click attribution for a conversation that started from a Meta ad or
+ * a ref-tagged ig.me / m.me link, as Meta sent it. Absent when the
+ * conversation did not originate from an attributable click. For the ad
+ * name, campaign and ad set read `adAttribution` instead.
+ *
+ * Captured from the referral Meta delivers for the click. If the same
+ * person later arrives through a different ad or link, the original
+ * values are kept, so the first referral wins; read the fresh referral
+ * per click on the `message.received` / `referral.received` webhooks
+ * instead. On Instagram Click-to-Direct Meta usually delivers the ad post
+ * first as an attachment-only `share` / `ig_post` message with no
+ * referral, then attaches the referral to the next message. One exception
+ * on WhatsApp: when Meta omits `ctwa_clid` from that referral, a later
+ * Meta automatic event can supply it and refresh `ctwa_captured_at`, so
+ * treat `ctwa_captured_at` as the time Zernio stored the value, not the
+ * time of the click.
+ *
+ * Two families of keys, one per surface. They never appear together:
+ *
+ * - `ctwa_*` is WhatsApp Click-to-WhatsApp. The ad ID is
+ * `ctwa_source_id`. There is no `meta_ad_id` on WhatsApp.
+ * - `meta_ad_*` is Instagram Click-to-Direct, Facebook Messenger
+ * Click-to-Message, and ig.me / m.me ref links. The ad ID is
+ * `meta_ad_id` (ad clicks only; a link capture carries
+ * `meta_ad_ref` without it). `ctwa_clid` never appears on these
+ * platforms.
+ *
+ * Every key is optional and only the keys Meta supplied are returned, so
+ * read defensively. Meta does not send a campaign or ad set ID; they are
+ * resolved from your synced ads in `adAttribution`. More keys may be added
+ * over time. Treat any key you do not recognise as an opaque string.
+ *
+ * Key names differ from the `message.received` webhook on purpose. The
+ * webhook forwards Meta's referral verbatim (`ad_id`, `source`, `type`)
+ * while the stored conversation record uses the prefixed names below.
+ * Renaming either side would break existing integrations, so both
+ * spellings are kept.
+ *
+ */
+export type InboxConversationAdMetadata = {
+    /**
+     * WhatsApp only. Meta's click identifier, the value to forward to the Meta Conversions API for Business Messaging. Meta omits it on some numbers, so a WhatsApp referral can arrive without it.
+     */
+    ctwa_clid?: string;
+    /**
+     * WhatsApp only. The Meta ad ID the user clicked (or the post ID when `ctwa_source_type` is post). This is the WhatsApp equivalent of meta_ad_id.
+     */
+    ctwa_source_id?: string;
+    /**
+     * WhatsApp only. What the user clicked, as supplied by Meta (for example ad or post).
+     */
+    ctwa_source_type?: string;
+    /**
+     * WhatsApp only. Meta's URL for the ad that was clicked, normally an fb.me short link.
+     */
+    ctwa_source_url?: string;
+    /**
+     * WhatsApp only. Headline of the ad creative at click time.
+     */
+    ctwa_headline?: string;
+    /**
+     * WhatsApp only. Body text of the ad creative at click time.
+     */
+    ctwa_body?: string;
+    /**
+     * WhatsApp only. Media type of the ad creative, image or video.
+     */
+    ctwa_media_type?: string;
+    /**
+     * WhatsApp only. Image of the ad creative at click time (image ads).
+     */
+    ctwa_image_url?: string;
+    /**
+     * WhatsApp only. Video of the ad creative at click time (video ads).
+     */
+    ctwa_video_url?: string;
+    /**
+     * WhatsApp only. Thumbnail of the ad video at click time (video ads).
+     */
+    ctwa_thumbnail_url?: string;
+    /**
+     * WhatsApp only. When Zernio stored this referral. Always present when a WhatsApp referral was captured.
+     */
+    ctwa_captured_at?: string;
+    /**
+     * Instagram and Facebook only. The Meta ad ID the user clicked. Present for ad clicks; absent when the capture came from an ig.me / m.me ref link.
+     */
+    meta_ad_id?: string;
+    /**
+     * Instagram and Facebook only. Meta-supplied source identifier: ADS for ad clicks; SHORTLINK, SHORTLINKS or IGME-SOURCE-LINK for ref links (treat as opaque).
+     */
+    meta_ad_source?: string;
+    /**
+     * Instagram and Facebook only. Meta-supplied referral type, for example OPEN_THREAD.
+     */
+    meta_ad_type?: string;
+    /**
+     * Instagram and Facebook only. The ref parameter passed through from the ad creative or the ig.me / m.me link.
+     */
+    meta_ad_ref?: string;
+    /**
+     * Instagram and Facebook only. Title of the ad creative at click time.
+     */
+    meta_ad_title?: string;
+    /**
+     * Instagram and Facebook only. Image of the ad creative at click time.
+     */
+    meta_ad_photo_url?: string;
+    /**
+     * Instagram and Facebook only. Video of the ad creative at click time.
+     */
+    meta_ad_video_url?: string;
+    /**
+     * Instagram and Facebook only. The organic post the ad promoted, when the ad was a boosted post.
+     */
+    meta_ad_post_id?: string;
+    /**
+     * Instagram and Facebook only. The catalogue product the user clicked, for product ads.
+     */
+    meta_ad_product_id?: string;
+    /**
+     * Instagram and Facebook only. The Meta flow the ad launched, for flow ads.
+     */
+    meta_ad_flow_id?: string;
+    /**
+     * Instagram and Facebook only. When Zernio stored this referral. Always present when an Instagram or Facebook referral was captured.
+     */
+    meta_ad_captured_at?: string;
+} | null;
 
 /**
  * Attachment snapshot inside an edit-history entry.
@@ -14888,6 +15087,20 @@ export type previousOwner = 'app' | 'ai_agent' | 'other';
  * platform (Instagram, Messenger/Facebook, Telegram, WhatsApp, X, Reddit,
  * Bluesky, SMS, TikTok). Platform-agnostic: one subscription covers every DM platform.
  *
+ * `conversation.metadata` (the referral as Meta sent it) and
+ * `conversation.adAttribution` (the ad, campaign and ad set from your synced
+ * ads) are filled only when the message that created the conversation carried
+ * Meta's referral. That holds for WhatsApp Click-to-WhatsApp and Facebook
+ * Messenger Click-to-Message, and for ig.me / m.me ref links. On Instagram
+ * Click-to-Direct it usually does NOT: Meta creates the thread with the ad post
+ * itself, an attachment-only `share` / `ig_post` message with no referral, and
+ * attaches the referral to the next message. That conversation.started then
+ * has `adAttribution` null and no `metadata`. Read the click from `metadata.ad`
+ * and `metadata.referral` on the `message.received` that follows, or from
+ * `adAttribution` on `GET /v1/inbox/conversations` and
+ * `GET /v1/inbox/conversations/{conversationId}`, which carry it once the
+ * referral is stored.
+ *
  */
 export type WebhookPayloadConversationStarted = {
     /**
@@ -14900,7 +15113,10 @@ export type WebhookPayloadConversationStarted = {
     id: string;
     profiles?: WebhookProfiles;
     event: 'conversation.started';
-    conversation: InboxWebhookConversationDetail;
+    conversation: (InboxWebhookConversationDetail & {
+    metadata?: InboxConversationAdMetadata;
+    adAttribution: ConversationAdAttribution;
+});
     account: InboxWebhookAccount;
     /**
      * When the conversation document was created.
@@ -15567,6 +15783,18 @@ export type WebhookPayloadMessage = {
                 flow_id?: string;
             };
         } | null;
+        /**
+         * Present with `referral` whenever the referral is attributable: on
+         * Instagram and Facebook every forwarded referral (an `ad_id` or a
+         * `ref`), on WhatsApp a referral carrying `ctwa_clid`, `source_id`,
+         * `source_url` or `headline`. The same click enriched from your
+         * synced ads: the ad name, campaign, ad set and ad account Zernio
+         * holds for this ad ID. Built from this message's referral, so it
+         * follows a returning click, while the conversation's
+         * `adAttribution` keeps the first one.
+         *
+         */
+        ad?: (ConversationAdAttribution);
         /**
          * WhatsApp only. Meta's own reason this message has no
          * renderable body. Present when Meta attached an error to the
@@ -17514,7 +17742,7 @@ export type WorkflowNode = {
      *
      * **trigger**: `{ triggerType: inbound_message|api_call|whatsapp_event|referral|story_mention|comment|reaction|lead_received, keywords:[string], matchType: any|contains|exact|regex, onlyFirstMessage:boolean, eventType: message_sent|message_delivered|message_read|message_failed|reaction, referral:{ ref, matchType: exact|prefix|any }, reaction:{ emojis:[string] }, comment:{ keywords:[string], matchType: any|contains|exact|regex, platformPostId }, leadReceived:{ formIds:[string], pageAccountIds:[string], consentCheckboxKey, defaultCountry, allowCrossProfile:boolean }, cooldownHours:int (1-720) }`. Default `triggerType` is `inbound_message` for legacy nodes. A workflow starts only on events of its own trigger type: `inbound_message` on a message, `referral` on an ig.me / m.me / click-to-message ad referral (standalone, or the first message carrying one; the two are deduplicated per conversation within 60 seconds), `story_mention` on an Instagram story mention, `reaction` on a reaction (Instagram, Facebook, WhatsApp, Telegram groups), `comment` on an Instagram or Facebook comment (the run starts with no conversation and its first `send_message`, which must be text (with optional buttons or quick replies) or cards and must follow the trigger directly (checked on save; on some Instagram accounts Meta refuses buttons and cards to commenters who do not follow the account), is sent as a private reply to the comment; the run then continues in the conversation that reply opens; when an active comment automation's keywords match the comment, the automation answers and the workflow does not start), `whatsapp_event` on a WhatsApp status of a message we sent (filtered by `eventType`), `api_call` only via `POST /v1/workflows/{workflowId}/trigger`, and `lead_received` (WhatsApp workflows only) when a Meta lead ad form is submitted. A `lead_received` trigger needs `leadReceived.consentCheckboxKey` and at least one of `formIds` or `pageAccountIds`; a form scope wins over a Page scope, then the earliest activated workflow. It starts only for leads submitted in the last hour and after the workflow was activated, whose consent checkbox (the form's custom disclaimer, see `POST /v1/ads/lead-forms`) is ticked, and whose phone number parses to a valid international number (`defaultCountry`, ISO 3166 alpha-2, defaults to the country of the workflow's WhatsApp number); otherwise the lead is marked `unreachable`. The Page and the WhatsApp number must be in the same profile unless `allowCrossProfile` is true. Every send or call reached first from the trigger must be a WhatsApp template (checked on save). `referral.matchType` defaults to `any`. `cooldownHours` (inbound_message, referral, story_mention, reaction, whatsapp_event and lead_received, where it defaults to 24) stops the same contact from starting the workflow again inside the window. A `whatsapp_event` workflow never starts on the status of a message a workflow, sequence or comment automation sent. A redelivered platform event never starts the same workflow twice.
      *
-     * **Variables** available from the start of every run (absent values are `''`): `lastMessage`, `inboundText`, `triggerText`, `conversationId`, `contact.name`, `contact.phone`, `contact.handle`, `contact.tags` (array), `contact.fields` (the contact's custom fields object), `contact.lastInteractionAt` (ISO date), `contact.lastInteractionHoursAgo` (number), `contact.isFollower` (Instagram, from the stored profile: true, false or `''` when unknown), `referral.ref`, `referral.source`, `referral.type`, `referral.adId`, `postback.payload`, `postback.title`, `quickReply.payload`, `quickReply.title`, `story.id`, `story.url`, `comment.id`, `comment.text`, `comment.platformPostId`, `reaction.emoji`, `reaction.action` (added|removed). `api_call` runs also get the request's `variables`, merged over these. `lead_received` runs also get `lead.id`, `lead.leadgenId`, `lead.formId`, `lead.formName`, `lead.adId`, `lead.adsetId`, `lead.campaignId` and every form answer by its key (`lead.full_name`, `lead.email`, `lead.phone_number`). Template `variableMapping` entries with `field: custom` interpolate `{{...}}` in `customValue`. An array or object interpolated into text renders as JSON.
+     * **Variables** available from the start of every run (absent values are `''`): `lastMessage`, `inboundText`, `triggerText`, `conversationId`, `contact.name`, `contact.phone`, `contact.handle`, `contact.tags` (array), `contact.fields` (the contact's custom fields object), `contact.lastInteractionAt` (ISO date), `contact.lastInteractionHoursAgo` (number), `contact.isFollower` (Instagram, from the stored profile: true, false or `''` when unknown), `referral.ref`, `referral.source`, `referral.type`, `referral.adId`, `referral.adTitle` (the ad title or headline Meta sent), `referral.adName` (the synced ad's name, else `referral.adTitle`), `referral.campaignName` (the synced ad's campaign), `postback.payload`, `postback.title`, `quickReply.payload`, `quickReply.title`, `story.id`, `story.url`, `comment.id`, `comment.text`, `comment.platformPostId`, `reaction.emoji`, `reaction.action` (added|removed). `api_call` runs also get the request's `variables`, merged over these. `lead_received` runs also get `lead.id`, `lead.leadgenId`, `lead.formId`, `lead.formName`, `lead.adId`, `lead.adsetId`, `lead.campaignId` and every form answer by its key (`lead.full_name`, `lead.email`, `lead.phone_number`). Template `variableMapping` entries with `field: custom` interpolate `{{...}}` in `customValue`. An array or object interpolated into text renders as JSON.
      *
      * **send_message**: `{ messageType: text|template|media|interactive|cards, text, template, media:{mediaType:image|video|audio|document, url,caption}, interactive, buttons, quickReplies, messageTag }`. `template` is `{name,language,variableMapping}` for `messageType: template` and `{ type: generic, elements:[{ title, subtitle, imageUrl, buttons }] }` (1 to 10 cards) for `messageType: cards`. `template` and `interactive` are WhatsApp-only. `interactive.type` is inferred from the payload shape when omitted; payloads with neither `type` nor an inferable shape are rejected.
      * Facebook and Instagram only (rejected with a 400 on other platforms; WhatsApp keeps `interactive`): `cards`, plus `buttons` on `text` (cards carry their own buttons) and `quickReplies` / `messageTag` on `text`, `media` and `cards`. `media` takes no `buttons` (a 400 at save). `buttons:[{ type: url|postback|phone, title, url, payload, phone, workflowId }]` (1 to 3, text only and the text then 640 characters at most, sent as Meta's button_template, `phone` Facebook-only, not inside cards), `quickReplies:[{ title, payload, imageUrl, workflowId }]` (1 to 13, not combined with `buttons`) and `messageTag: HUMAN_AGENT|CONFIRMED_EVENT_UPDATE|POST_PURCHASE_UPDATE|ACCOUNT_UPDATE` (Instagram accepts only `HUMAN_AGENT`). Titles are capped at 20 characters (80 for card titles and subtitles). A postback button or quick reply with no `payload` gets `zernio:workflow:<this workflow id>`, so a tap answers this workflow's pending `wait_for_reply` or restarts it; with `workflowId` (a 24-hex workflow id, not combined with `payload`) the tap starts that workflow instead.
@@ -29350,112 +29578,8 @@ export type ListInboxConversationsResponse = ({
              */
             fetchedAt?: (string) | null;
         } | null;
-        /**
-         * Click attribution for a conversation that started from a Meta ad or
-         * a ref-tagged ig.me / m.me link. Absent when the conversation did not
-         * originate from an attributable click.
-         *
-         * Captured from the referral Meta delivers for the click. If the same
-         * person later arrives through a different ad or link, the original
-         * values are kept, so the first referral wins; read the fresh referral
-         * per click on the `message.received` / `referral.received` webhooks
-         * instead. One exception on WhatsApp: when Meta omits `ctwa_clid`
-         * from that referral, a later Meta automatic event can supply it and
-         * refresh `ctwa_captured_at`, so treat `ctwa_captured_at` as the time
-         * Zernio stored the value, not the time of the click.
-         *
-         * Two families of keys, one per surface. They never appear together:
-         *
-         * - `ctwa_*` is WhatsApp Click-to-WhatsApp. The ad ID is
-         * `ctwa_source_id`. There is no `meta_ad_id` on WhatsApp.
-         * - `meta_ad_*` is Instagram Click-to-Direct, Facebook Messenger
-         * Click-to-Message, and ig.me / m.me ref links. The ad ID is
-         * `meta_ad_id` (ad clicks only; a link capture carries
-         * `meta_ad_ref` without it). `ctwa_clid` never appears on these
-         * platforms.
-         *
-         * Every key is optional and only the keys Meta supplied are returned, so
-         * read defensively. Meta does not send a campaign or ad set ID, so none
-         * is exposed here. More keys may be added over time. Treat any key you
-         * do not recognise as an opaque string.
-         *
-         * Key names differ from the `message.received` webhook on purpose. The
-         * webhook forwards Meta's referral verbatim (`ad_id`, `source`, `type`)
-         * while the stored conversation record uses the prefixed names below.
-         * Renaming either side would break existing integrations, so both
-         * spellings are kept.
-         *
-         */
-        metadata?: {
-            /**
-             * WhatsApp only. Meta's click identifier, the value to forward to the Meta Conversions API for Business Messaging. Meta omits it on some numbers, so a WhatsApp referral can arrive without it.
-             */
-            ctwa_clid?: string;
-            /**
-             * WhatsApp only. The Meta ad ID the user clicked. This is the WhatsApp equivalent of meta_ad_id.
-             */
-            ctwa_source_id?: string;
-            /**
-             * WhatsApp only. What the user clicked, as supplied by Meta (for example ad or post).
-             */
-            ctwa_source_type?: string;
-            /**
-             * WhatsApp only. Meta's URL for the ad that was clicked, normally an fb.me short link.
-             */
-            ctwa_source_url?: string;
-            /**
-             * WhatsApp only. Headline of the ad creative at click time.
-             */
-            ctwa_headline?: string;
-            /**
-             * WhatsApp only. When Zernio stored this referral. Always present when a WhatsApp referral was captured.
-             */
-            ctwa_captured_at?: string;
-            /**
-             * Instagram and Facebook only. The Meta ad ID the user clicked. Present for ad clicks; absent when the capture came from an ig.me / m.me ref link.
-             */
-            meta_ad_id?: string;
-            /**
-             * Instagram and Facebook only. Meta-supplied source identifier: ADS for ad clicks; SHORTLINK, SHORTLINKS or IGME-SOURCE-LINK for ref links (treat as opaque).
-             */
-            meta_ad_source?: string;
-            /**
-             * Instagram and Facebook only. Meta-supplied referral type, for example OPEN_THREAD.
-             */
-            meta_ad_type?: string;
-            /**
-             * Instagram and Facebook only. The ref parameter passed through from the ad creative or the ig.me / m.me link.
-             */
-            meta_ad_ref?: string;
-            /**
-             * Instagram and Facebook only. Title of the ad creative at click time.
-             */
-            meta_ad_title?: string;
-            /**
-             * Instagram and Facebook only. Image of the ad creative at click time.
-             */
-            meta_ad_photo_url?: string;
-            /**
-             * Instagram and Facebook only. Video of the ad creative at click time.
-             */
-            meta_ad_video_url?: string;
-            /**
-             * Instagram and Facebook only. The organic post the ad promoted, when the ad was a boosted post.
-             */
-            meta_ad_post_id?: string;
-            /**
-             * Instagram and Facebook only. The catalogue product the user clicked, for product ads.
-             */
-            meta_ad_product_id?: string;
-            /**
-             * Instagram and Facebook only. The Meta flow the ad launched, for flow ads.
-             */
-            meta_ad_flow_id?: string;
-            /**
-             * Instagram and Facebook only. When Zernio stored this referral. Always present when an Instagram or Facebook referral was captured.
-             */
-            meta_ad_captured_at?: string;
-        } | null;
+        metadata?: InboxConversationAdMetadata;
+        adAttribution?: ConversationAdAttribution;
     }>;
     pagination?: {
         hasMore?: boolean;
@@ -29853,81 +29977,8 @@ export type GetInboxConversationResponse = ({
              */
             fetchedAt?: (string) | null;
         } | null;
-        /**
-         * Ad-click attribution for a conversation that started from a Meta ad.
-         * Absent when the conversation did not originate from an ad click.
-         *
-         * Captured once, from the first inbound message Meta attaches the referral
-         * to, and never overwritten. If the same person later clicks a different
-         * ad, the original values are kept. On Instagram Click-to-Direct that is
-         * usually not the first message: Meta first delivers the ad post as an
-         * attachment-only `share` / `ig_post` message with no referral, then
-         * attaches the referral to the next message.
-         *
-         * This operation currently returns only the `meta_ad_*` family, which
-         * covers Instagram Click-to-Direct and Facebook Messenger
-         * Click-to-Message. WhatsApp Click-to-WhatsApp attribution (the `ctwa_*`
-         * keys, where the ad ID is `ctwa_source_id`) is returned by
-         * `GET /v1/inbox/conversations` instead.
-         *
-         * Every key is optional and only the keys Meta supplied are returned, so
-         * read defensively. Meta does not send a campaign or ad set ID, so none is
-         * exposed here. More keys may be added over time. Treat any key you do not
-         * recognise as an opaque string.
-         *
-         * Key names differ from the `message.received` webhook on purpose. The
-         * webhook forwards Meta's referral verbatim (`ad_id`, `source`, `type`)
-         * while the stored conversation record uses the prefixed names below.
-         * Renaming either side would break existing integrations, so both
-         * spellings are kept.
-         *
-         */
-        metadata?: {
-            /**
-             * The Meta ad ID the user clicked. Always present when a referral was captured.
-             */
-            meta_ad_id?: string;
-            /**
-             * Meta-supplied source identifier, for example ADS.
-             */
-            meta_ad_source?: string;
-            /**
-             * Meta-supplied referral type, for example OPEN_THREAD.
-             */
-            meta_ad_type?: string;
-            /**
-             * The ref parameter passed through from the ad creative.
-             */
-            meta_ad_ref?: string;
-            /**
-             * Title of the ad creative at click time.
-             */
-            meta_ad_title?: string;
-            /**
-             * Image of the ad creative at click time.
-             */
-            meta_ad_photo_url?: string;
-            /**
-             * Video of the ad creative at click time.
-             */
-            meta_ad_video_url?: string;
-            /**
-             * The organic post the ad promoted, when the ad was a boosted post.
-             */
-            meta_ad_post_id?: string;
-            /**
-             * The catalogue product the user clicked, for product ads.
-             */
-            meta_ad_product_id?: string;
-            /**
-             * The Meta flow the ad launched, for flow ads.
-             */
-            meta_ad_flow_id?: string;
-            /**
-             * When Zernio stored this referral. Always present when a referral was captured.
-             */
-            meta_ad_captured_at?: string;
-        } | null;
+        metadata?: InboxConversationAdMetadata;
+        adAttribution?: ConversationAdAttribution;
     };
 });
 
