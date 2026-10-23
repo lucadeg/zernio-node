@@ -47100,6 +47100,10 @@ export type GetTikTokSmartPlusMaterialReportResponse = ({
     pageSize?: number;
     totalRows?: number;
     totalPages?: number;
+    /**
+     * Rows TikTok declared that a read and its retry could not return. 0 when the result is complete.
+     */
+    missingRows?: number;
     rows?: Array<{
         /**
          * TikTok main material id
