@@ -27241,7 +27241,7 @@ export type GetLinkedInMentionsData = {
     };
     query: {
         /**
-         * Exact display name as shown on LinkedIn. Required for person mentions to be clickable. Optional for org mentions.
+         * Optional override for a person's mention text. When omitted, the real name is resolved from LinkedIn. Ignored for org mentions, which always use the organization's LinkedIn name.
          */
         displayName?: string;
         /**
@@ -27273,14 +27273,12 @@ export type GetLinkedInMentionsResponse = ({
      */
     vanityName?: string;
     /**
-     * Warning about clickable mentions (only present for person mentions if displayName was not provided)
+     * Only present for person mentions when displayName was not provided and the real name could not be resolved from LinkedIn
      */
     warning?: string;
 });
 
-export type GetLinkedInMentionsError = ({
-    error?: string;
-} | ErrorResponse);
+export type GetLinkedInMentionsError = (ErrorResponse);
 
 export type ListInstagramStoriesData = {
     path: {

@@ -3055,9 +3055,9 @@ export const updateLinkedInOrganization = <ThrowOnError extends boolean = false>
  * Important: The mentions array field in POST /v1/posts is stored for reference only and does NOT trigger @mentions on LinkedIn. You must embed the mention format directly in the content text.
  *
  * Requirements:
- * - Person mentions require the LinkedIn account to be admin of at least one organization: both endpoints that resolve a profile URL to a member URN take an organization you administer. Organization mentions (e.g. @Microsoft) have no such requirement.
+ * - Resolving a profile URL to a person mention requires the LinkedIn account to be admin of at least one organization: both endpoints that resolve a profile URL to a member URN take an organization you administer. A resolved person mention publishes from any account. Organization mentions (e.g. @Microsoft) have no such requirement.
  * - The two are not scoped alike. peopleTypeahead?q=organizationFollowers only returns that organization's followers; vanityUrl?q=vanityUrlAsOrganization does not, and its resolvable set is opaque. A 404 here does not mean the person is unknown to you or unknown to LinkedIn: a live public profile can 404 with no reason given.
- * - For person mentions to be clickable, the displayName parameter must exactly match the name shown on their LinkedIn profile.
+ * - displayName is optional: the endpoint looks up the person's real name itself. LinkedIn renders a person mention as a link when the mention text is the person's first name, last name or full name (case-sensitive).
  * - Person mentions DO work when published from personal profiles (the URN only needs to be valid). The limitation is only in the resolution step (URL to URN), not in publishing.
  *
  */
