@@ -44336,11 +44336,17 @@ export type ListAdSetsData = {
          * Platform campaign ID
          */
         campaignId?: string;
+        limit?: number;
         /**
          * Read the on/off switches live from the platform instead of returning the synced values. The fresh values are stored (so later reads return them too) and the response carries `statusReadAt`, the time of the read. At most 20 platform objects are read per request. Where a read fails (credentials, platform error, no reader on that platform), the stored values come back with `statusReadAt: null`. See "Status freshness" in the operation description. On X the budget is read live in the same read: on GET /v1/ads/{adId} `budget`, `adSetBudget`, `campaignBudget` and `budgetLevel` are the line item and campaign budgets X holds now (stored like the switches); on the ad set and campaign listings `budget` is the one that line item or campaign holds now (returned, not stored); a row whose budget the other level holds keeps its synced `budget`.
          */
         live?: boolean;
+        page?: number;
         platform?: 'facebook' | 'instagram' | 'tiktok' | 'linkedin' | 'pinterest' | 'google' | 'twitter' | 'openai' | 'reddit';
+        /**
+         * Filter by the ad set's stored `status`, the value each row returns. A live read does not change it. Rows whose `status` is null match no filter.
+         */
+        status?: AdStatus;
     };
 };
 
@@ -44349,6 +44355,9 @@ export type ListAdSetsResponse = ({
         platformAdSetId?: string;
         platform?: string;
         adSetName?: (string) | null;
+        /**
+         * Stored ad set status (active, paused, pending_review, rejected, completed, cancelled, error), as last synced. The `status` filter matches it.
+         */
         status?: (string) | null;
         /**
          * Raw platform ad set status. On TikTok the ad group's own switch `operation_status` (ENABLE / DISABLE), independent of its campaign. On Meta and Reddit the ad set's `effective_status` (e.g. CAMPAIGN_PAUSED).
@@ -44479,6 +44488,7 @@ export type ListAdSetsResponse = ({
          */
         configReadAt?: (string) | null;
     }>;
+    pagination?: Pagination;
 });
 
 export type ListAdSetsError = (ErrorResponse | unknown);

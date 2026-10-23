@@ -10690,8 +10690,10 @@ export const updateCampaignTargeting = <ThrowOnError extends boolean = false>(op
  * directly, independent of the `ads` rollup GET /v1/ads/tree uses, so a
  * newly created standalone ad group with no ad yet (POST /v1/ads/ad-sets,
  * Google only) is visible here even though it is invisible in the tree
- * until an ad joins it via `adSetId` on POST /v1/ads/create. Returns at most 500
- * rows, newest first.
+ * until an ad joins it via `adSetId` on POST /v1/ads/create. Rows come newest first
+ * (by platform creation time, then id, so pages never overlap), 500 per page unless `limit`
+ * says otherwise; `pagination.total` counts every matching ad set and `page` reaches the
+ * rest.
  *
  * **This list is SYNCED, not live** (refreshed by background sync, see below). Each row also
  * carries the ad set's config (`targeting`, `bidStrategy`, `bidAmount`, `optimizationGoal`,
@@ -10710,8 +10712,8 @@ export const updateCampaignTargeting = <ThrowOnError extends boolean = false>(op
  * which reads the switches from the platform now, stores them, and returns `statusReadAt`
  * (null when the read failed and the stored values were returned).
  * With `live=true` (which needs a `campaignId` or `adSetId` filter) each listed ad set's own
- * switch (`platformAdSetStatus`) is read live, for the first 20 rows; later rows keep their
- * synced value with `statusReadAt: null`. Live reads cover TikTok, Meta, Google, OpenAI and Reddit.
+ * switch (`platformAdSetStatus`) is read live, for the first 20 rows of the page; later rows keep their
+ * synced value with `statusReadAt: null`. To read more ad sets live, page with `limit=20`. Live reads cover TikTok, Meta, Google, OpenAI and Reddit.
  * The rolled-up `status` is not re-derived by a live read. On TikTok the same live read also
  * returns the ad group's applied `optimizationGoal` and `billingEvent`, as TikTok's adgroup/get
  * reports them, so you can verify the goal TikTok applied rather than the one you requested.
