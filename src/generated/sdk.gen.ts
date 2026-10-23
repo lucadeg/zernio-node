@@ -13726,8 +13726,10 @@ export const searchAdInterests = <ThrowOnError extends boolean = false>(options:
  * comma-separated (`NBA,Michael Jordan`) or, for names that contain a comma, a JSON array of
  * strings (`["Earth, Wind & Fire","Yoga"]`, URL-encoded). A `q` starting with `[` is always read as
  * JSON. A `q` with no name or malformed JSON returns 400 naming `q`. Meta also suggests behaviors
- * and demographics; Zernio keeps only interests (entries whose `path` starts with `Interests`), so
- * every id goes in `TargetingSpec.interests`, like `interest` results. Zernio asks Meta for three
+ * and demographics; Zernio keeps only interests, so every id goes in `TargetingSpec.interests`, like
+ * `interest` results. Zernio classifies them with a Meta call pinned to `en_US` (ids whose `path`
+ * starts with `Interests`). Without `locale` results are in English; with another `locale`, a second
+ * call in that locale returns the same interests with localized names and `path`. Zernio asks Meta for three
  * times `limit` (at most 100) before filtering, so fewer than `limit` results can come back. Meta
  * weights the first name heavily: a multi-name `q` mostly returns suggestions for the first one
  * - `behavior`: Meta, TikTok and LinkedIn, matched by name; ids feed `TargetingSpec.behaviors`.
@@ -13856,7 +13858,7 @@ export const searchAdInterests = <ThrowOnError extends boolean = false>(options:
  *
  * Meta language: Meta matches `q` against names in one language and returns names and `path` in
  * that language. Pass `locale` (e.g. `pl_PL`) to choose it. Without `locale`, the `behavior` and
- * `workIndustry` catalogs are in `en_US`, and `interest`, `interestSuggestion`, `geo`, `workPosition`
+ * `workIndustry` catalogs and `interestSuggestion` are in `en_US`, and `interest`, `geo`, `workPosition`
  * and `workEmployer` follow the language of the Facebook user who connected the account (so a
  * Russian-language Facebook user gets Russian paths, and Polish names need `locale=pl_PL`).
  * A non-English `behavior` or `workIndustry` query without `locale` never matches, so pass the

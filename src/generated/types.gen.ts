@@ -52554,7 +52554,7 @@ export type SearchAdTargetingData = {
          */
         limit?: number;
         /**
-         * Meta only: the language Meta matches `q` against and names results and `path` in, as language_TERRITORY (e.g. `pl_PL`, `en_US`). Applies to `geo`, `interest`, `interestSuggestion`, `behavior`, `workPosition`, `workEmployer` and `workIndustry`. Without it, `behavior` and `workIndustry` use `en_US` and the other searches use the language of the Facebook user who connected the account. `income` always uses `en_US`. Ignored on other platforms.
+         * Meta only: the language Meta matches `q` against and names results and `path` in, as language_TERRITORY (e.g. `pl_PL`, `en_US`). Applies to `geo`, `interest`, `interestSuggestion`, `behavior`, `workPosition`, `workEmployer` and `workIndustry`. Without it, `behavior`, `workIndustry` and `interestSuggestion` use `en_US` and the other searches use the language of the Facebook user who connected the account. `income` always uses `en_US`. Ignored on other platforms.
          */
         locale?: string;
         /**
