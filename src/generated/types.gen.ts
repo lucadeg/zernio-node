@@ -6797,6 +6797,37 @@ export type FacebookSettings = {
     textFormatPresetId?: string;
 };
 
+export type FacebookTaggedPost = {
+    /**
+     * Facebook post ID of the post that tags the Page.
+     */
+    id: string;
+    message: (string) | null;
+    /**
+     * Publication time as Meta returns it (ISO 8601).
+     */
+    createdTime: (string) | null;
+    /**
+     * When the Page was tagged in the post (ISO 8601).
+     */
+    taggedTime: (string) | null;
+    /**
+     * Public Facebook URL of the post.
+     */
+    permalinkUrl: (string) | null;
+    /**
+     * Full-size picture attached to the post.
+     */
+    pictureUrl: (string) | null;
+    /**
+     * Null when Meta does not return the author, which is common for posts by people.
+     */
+    from: {
+        id: string;
+        name: (string) | null;
+    } | null;
+};
+
 export type FeedbackReceipt = {
     /**
      * Feedback id. Quote it if you follow up with support.
@@ -27941,6 +27972,35 @@ export type GetFacebookPostReactionsResponse = ({
 });
 
 export type GetFacebookPostReactionsError = (unknown | ErrorResponse);
+
+export type ListFacebookTaggedPostsData = {
+    path: {
+        /**
+         * The ID of a connected Facebook account.
+         */
+        accountId: string;
+    };
+    query?: {
+        /**
+         * The `nextCursor` of the previous page.
+         */
+        cursor?: string;
+        /**
+         * Page size.
+         */
+        limit?: number;
+    };
+};
+
+export type ListFacebookTaggedPostsResponse = ({
+    data: Array<FacebookTaggedPost>;
+    /**
+     * Pass as `cursor` to read the next page. Null when there are no more pages.
+     */
+    nextCursor: (string) | null;
+});
+
+export type ListFacebookTaggedPostsError = (ErrorResponse);
 
 export type GetRedditSubredditsData = {
     path: {

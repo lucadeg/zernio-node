@@ -318,6 +318,11 @@ describe('Endpoint Methods', () => {
       expect(client.analytics.getFacebookPostReactions).toBeTypeOf('function');
     });
 
+    it('should have listFacebookTaggedPosts method', () => {
+      expect(client.analytics.listFacebookTaggedPosts).toBeDefined();
+      expect(client.analytics.listFacebookTaggedPosts).toBeTypeOf('function');
+    });
+
   });
 
   describe('api Keys', () => {
