@@ -368,6 +368,7 @@ import {
   getDsaDefaults,
   getDsaRecommendations,
   getFacebookDemographics,
+  getFacebookPageInfo,
   getFacebookPageInsights,
   getFacebookPages,
   getFacebookPostEarnings,
@@ -937,6 +938,7 @@ import {
   updateDiscordScheduledEvent,
   updateDiscordSettings,
   updateFacebookPage,
+  updateFacebookPageInfo,
   updateGmbLocation,
   updateGoogleAssetGroup,
   updateGoogleBusinessAttributes,
@@ -1548,6 +1550,32 @@ export class Zernio {
   };
 
   /**
+   * accountsettings API
+   */
+  accountsettings = {
+    getFacebookPageInfo: this._bind(getFacebookPageInfo),
+    updateFacebookPageInfo: this._bind(updateFacebookPageInfo),
+    getMessengerMenu: this._bind(getMessengerMenu),
+    setMessengerMenu: this._bind(setMessengerMenu),
+    deleteMessengerMenu: this._bind(deleteMessengerMenu),
+    getMessengerGetStarted: this._bind(getMessengerGetStarted),
+    setMessengerGetStarted: this._bind(setMessengerGetStarted),
+    deleteMessengerGetStarted: this._bind(deleteMessengerGetStarted),
+    getMessengerGreeting: this._bind(getMessengerGreeting),
+    setMessengerGreeting: this._bind(setMessengerGreeting),
+    deleteMessengerGreeting: this._bind(deleteMessengerGreeting),
+    getMessengerIceBreakers: this._bind(getMessengerIceBreakers),
+    setMessengerIceBreakers: this._bind(setMessengerIceBreakers),
+    deleteMessengerIceBreakers: this._bind(deleteMessengerIceBreakers),
+    getInstagramIceBreakers: this._bind(getInstagramIceBreakers),
+    setInstagramIceBreakers: this._bind(setInstagramIceBreakers),
+    deleteInstagramIceBreakers: this._bind(deleteInstagramIceBreakers),
+    getTelegramCommands: this._bind(getTelegramCommands),
+    setTelegramCommands: this._bind(setTelegramCommands),
+    deleteTelegramCommands: this._bind(deleteTelegramCommands),
+  };
+
+  /**
    * instagram API
    */
   instagram = {
@@ -1655,30 +1683,6 @@ export class Zernio {
     removeMessageReaction: this._bind(removeMessageReaction),
     uploadMediaDirect: this._bind(uploadMediaDirect),
     getMessageAttachment: this._bind(getMessageAttachment),
-  };
-
-  /**
-   * accountsettings API
-   */
-  accountsettings = {
-    getMessengerMenu: this._bind(getMessengerMenu),
-    setMessengerMenu: this._bind(setMessengerMenu),
-    deleteMessengerMenu: this._bind(deleteMessengerMenu),
-    getMessengerGetStarted: this._bind(getMessengerGetStarted),
-    setMessengerGetStarted: this._bind(setMessengerGetStarted),
-    deleteMessengerGetStarted: this._bind(deleteMessengerGetStarted),
-    getMessengerGreeting: this._bind(getMessengerGreeting),
-    setMessengerGreeting: this._bind(setMessengerGreeting),
-    deleteMessengerGreeting: this._bind(deleteMessengerGreeting),
-    getMessengerIceBreakers: this._bind(getMessengerIceBreakers),
-    setMessengerIceBreakers: this._bind(setMessengerIceBreakers),
-    deleteMessengerIceBreakers: this._bind(deleteMessengerIceBreakers),
-    getInstagramIceBreakers: this._bind(getInstagramIceBreakers),
-    setInstagramIceBreakers: this._bind(setInstagramIceBreakers),
-    deleteInstagramIceBreakers: this._bind(deleteInstagramIceBreakers),
-    getTelegramCommands: this._bind(getTelegramCommands),
-    setTelegramCommands: this._bind(setTelegramCommands),
-    deleteTelegramCommands: this._bind(deleteTelegramCommands),
   };
 
   /**

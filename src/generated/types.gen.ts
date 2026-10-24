@@ -6639,6 +6639,26 @@ export type ExternalPostWebhookPost = {
  */
 export type source2 = 'external';
 
+export type FacebookPageInfo = {
+    /**
+     * Short description, shown as Description in the Page's Edit Page Info.
+     */
+    about: (string) | null;
+    /**
+     * Longer text, shown as Additional Information.
+     */
+    description: (string) | null;
+    website: (string) | null;
+    phone: (string) | null;
+    emails: Array<(string)>;
+    /**
+     * Opening hours keyed `{day}_{slot}_{open|close}`, for example `mon_1_open: "09:00"`. Empty when the Page has none.
+     */
+    hours: {
+        [key: string]: (string);
+    };
+};
+
 /**
  * Feed posts support up to 10 images (no mixed video+image). Stories require single media (24h, no captions). Reels require a single vertical video (9:16). The Zernio API does not preflight Reel duration. Meta's Reels publishing guide documents 3-90 seconds. Geo-restriction is a hard visibility restriction: users outside the specified countries cannot see the post. Not supported for stories. Draft, carousel, and colored-background text options live under facebookSettings, see FacebookSettings.
  *
@@ -27135,6 +27155,57 @@ export type UpdateFacebookPageResponse = ({
 });
 
 export type UpdateFacebookPageError = (unknown | ErrorResponse);
+
+export type GetFacebookPageInfoData = {
+    path: {
+        /**
+         * The ID of a connected Facebook account.
+         */
+        accountId: string;
+    };
+};
+
+export type GetFacebookPageInfoResponse = (FacebookPageInfo);
+
+export type GetFacebookPageInfoError = (ErrorResponse);
+
+export type UpdateFacebookPageInfoData = {
+    body: {
+        /**
+         * Short description, shown as Description in the Page's Edit Page Info.
+         */
+        about?: string;
+        /**
+         * Longer text, shown as Additional Information.
+         */
+        description?: string;
+        /**
+         * URL of the Page's website.
+         */
+        website?: string;
+        phone?: string;
+        /**
+         * Replaces every email listed on the Page.
+         */
+        emails?: Array<(string)>;
+        /**
+         * Replaces the opening hours. Keys are `{day}_{slot}_{open|close}` with day `mon` to `sun` and slot 1 or 2, values are 24h `HH:MM` times.
+         */
+        hours?: {
+            [key: string]: (string);
+        };
+    };
+    path: {
+        /**
+         * The ID of a connected Facebook account.
+         */
+        accountId: string;
+    };
+};
+
+export type UpdateFacebookPageInfoResponse = (FacebookPageInfo);
+
+export type UpdateFacebookPageInfoError = (ErrorResponse);
 
 export type GetLinkedInOrganizationsData = {
     path: {

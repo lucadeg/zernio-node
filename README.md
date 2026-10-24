@@ -408,12 +408,14 @@ try {
 ### Account Settings
 | Method | Description |
 |--------|-------------|
+| `accountSettings.getFacebookPageInfo()` | Get a Facebook Page's public info |
 | `accountSettings.getInstagramIceBreakers()` | Get IG ice breakers |
 | `accountSettings.getMessengerGetStarted()` | Get FB Get Started button |
 | `accountSettings.getMessengerGreeting()` | Get FB greeting text |
 | `accountSettings.getMessengerIceBreakers()` | Get FB ice breakers |
 | `accountSettings.getMessengerMenu()` | Get persistent menu |
 | `accountSettings.getTelegramCommands()` | Get TG bot commands |
+| `accountSettings.updateFacebookPageInfo()` | Update a Facebook Page's public info |
 | `accountSettings.deleteInstagramIceBreakers()` | Delete IG ice breakers |
 | `accountSettings.deleteMessengerGetStarted()` | Delete FB Get Started button |
 | `accountSettings.deleteMessengerGreeting()` | Delete FB greeting text |
