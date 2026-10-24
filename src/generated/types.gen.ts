@@ -9406,6 +9406,29 @@ export type LinkedInAggregateAnalyticsTotalResponse = {
 export type aggregation2 = 'TOTAL';
 
 /**
+ * One LinkedIn mention that could not be resolved, listed under `details.mentions[]` of the error.
+ */
+export type LinkedInMentionIssue = {
+    /**
+     * The mention exactly as written in the request, for example `@[https://www.linkedin.com/in/jane-doe]`.
+     */
+    input: string;
+    /**
+     * Why it failed.
+     */
+    code: 'linkedin_mention_unresolvable' | 'linkedin_mention_requires_page_admin' | 'linkedin_mention_name_unavailable' | 'linkedin_mentions_limit_exceeded' | 'rate_limited' | 'reconnect_required' | 'temporarily_unavailable';
+    /**
+     * Human-readable reason.
+     */
+    message: string;
+};
+
+/**
+ * Why it failed.
+ */
+export type code = 'linkedin_mention_unresolvable' | 'linkedin_mention_requires_page_admin' | 'linkedin_mention_name_unavailable' | 'linkedin_mentions_limit_exceeded' | 'rate_limited' | 'reconnect_required' | 'temporarily_unavailable';
+
+/**
  * Up to 20 images, no multi-video. Single PDF supported (max 100MB). Link previews auto-generated when no media attached. Use organizationUrn for multi-org posting. Geo-restriction only works for organization pages (not personal profiles) and requires the targeted audience to exceed 300 followers. Polls are supported via the poll object: 2-4 options, cannot be combined with media or reshareUrl, cannot be edited after publishing, and API-created polls are non-sponsored only.
  *
  */
@@ -10617,7 +10640,7 @@ export type Post = {
      */
     hashtags?: Array<(string)>;
     /**
-     * Stored for reference only. This field does NOT automatically create @mentions when publishing. For LinkedIn @mentions, use the /v1/accounts/{accountId}/linkedin-mentions endpoint to resolve profile URLs to URNs, then embed the returned mentionFormat directly in the post content field.
+     * Stored for reference only. This field does NOT automatically create @mentions when publishing. For LinkedIn @mentions, write them in the post content, for example @[https://www.linkedin.com/in/jane-doe] or @[https://www.linkedin.com/company/acme].
      */
     mentions?: Array<(string)>;
     visibility?: 'public' | 'private' | 'unlisted';
@@ -17749,7 +17772,7 @@ export type WhatsAppTemplateLookupError = {
 
 export type type20 = 'platform_error';
 
-export type code = 'platform_api_error';
+export type code2 = 'platform_api_error';
 
 export type phase = 'template_lookup';
 
@@ -20696,7 +20719,7 @@ export type CreatePostData = {
          */
         title?: string;
         /**
-         * Post caption/text. Optional when media is attached, all platforms have customContent, every platform entry is an X Article (platformSpecificData.article), or every platform entry is a LinkedIn text-free reshare (platformSpecificData.reshareUrl with no text). Required for other text-only posts.
+         * Post caption/text. Optional when media is attached, all platforms have customContent, every platform entry is an X Article (platformSpecificData.article), or every platform entry is a LinkedIn text-free reshare (platformSpecificData.reshareUrl with no text). Required for other text-only posts. LinkedIn @mentions: write @[https://www.linkedin.com/in/jane-doe] or @[https://www.linkedin.com/company/acme] in the text (see the operation description).
          */
         content?: string;
         /**
@@ -20753,7 +20776,7 @@ export type CreatePostData = {
          */
         hashtags?: Array<(string)>;
         /**
-         * Stored for reference only. This field does NOT automatically create @mentions when publishing. For LinkedIn @mentions, use the /v1/accounts/{accountId}/linkedin-mentions endpoint to resolve profile URLs to URNs, then embed the returned mentionFormat directly in the post content field.
+         * Stored for reference only. This field does NOT automatically create @mentions when publishing. For LinkedIn @mentions, write them in the post content, for example @[https://www.linkedin.com/in/jane-doe] or @[https://www.linkedin.com/company/acme].
          */
         mentions?: Array<(string)>;
         /**
@@ -20805,6 +20828,10 @@ export type CreatePostResponse = ((TikTokDryRunVerdict | PostCreateResponse) | P
 
 export type CreatePostError = ({
     error?: string;
+    code?: string;
+    details?: {
+        mentions?: Array<LinkedInMentionIssue>;
+    };
 } | ErrorResponse | {
     error?: string;
     /**
@@ -27272,7 +27299,8 @@ export type GetLinkedInMentionsData = {
     };
     query: {
         /**
-         * Optional override for a person's mention text. When omitted, the real name is resolved from LinkedIn. Ignored for org mentions, which always use the organization's LinkedIn name.
+         * Deprecated: omit it. When sent for a person it overrides the mention text, and LinkedIn renders the mention only if it is exactly the person's first name, last name or full name (case-sensitive). When omitted the real name is read from LinkedIn. Ignored for org mentions, which always use the organization's LinkedIn name.
+         * @deprecated
          */
         displayName?: string;
         /**

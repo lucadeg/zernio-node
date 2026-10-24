@@ -986,6 +986,12 @@ export const listPosts = <ThrowOnError extends boolean = false>(options?: Option
  *
  * See each platform's schema for media constraints.
  *
+ * ## LinkedIn @mentions
+ *
+ * Put the profile or company URL inside `@[...]` in `content`, or in a LinkedIn entry's `customContent`: `@[https://www.linkedin.com/in/jane-doe]` or `@[https://www.linkedin.com/company/acme]`. The post is published with LinkedIn's real name and link, and no lookup call is needed first. Custom text is optional, as in `@[Jane](https://www.linkedin.com/in/jane-doe)`: for a person it must be the first name, last name or full name, for a company the exact company name, both case-sensitive. Any other text is replaced with LinkedIn's name and a `warnings` entry is returned (`linkedin_mention_name_replaced`). `@[Text](urn:li:person:ID)` markup, as returned by `GET /v1/accounts/{accountId}/linkedin-mentions`, is published exactly as you wrote it: it is not looked up, checked or changed, so its text must already be LinkedIn's name.
+ *
+ * Resolving a person's profile URL needs one of your LinkedIn accounts to administer a Page; publishing does not. Only profile and company URLs can fail. A scheduled or published post is rejected when one cannot be resolved: `400` with code `linkedin_mentions_invalid`, `429` with `rate_limited` (LinkedIn is rate limiting), `401` with `reconnect_required` (expired token) or a retryable `503` with `temporarily_unavailable` (LinkedIn did not answer within 8 seconds in total). Each failing mention is listed under `details.mentions[]` (`LinkedInMentionIssue`) with its own code: `linkedin_mention_unresolvable`, `linkedin_mention_requires_page_admin` or `linkedin_mention_name_unavailable` (LinkedIn withheld the name and none was given). A post can resolve at most 10 profile or company URL mentions across its shared content and LinkedIn entries: more is a `400` with `linkedin_mentions_limit_exceeded`. Drafts never fail on a mention: unresolved ones (and more than 10) stay as written and come back as `warnings`. A draft is checked again when it is scheduled. On platforms other than LinkedIn, `@[linkedin.com/in/jane]` is posted as its text, or as the vanity (`jane`) when you wrote no text, and `@[Text](urn:li:...)` as `Text`.
+ *
  * ## Scheduling
  *
  * Pick one of:
@@ -1083,6 +1089,17 @@ export const getPost = <ThrowOnError extends boolean = false>(options: OptionsLe
  *
  * Non-draft updates run the same per-platform validation as post creation (media requirements, platform-specific
  * field rules, etc.) against the resulting platforms, returning 400 on failure.
+ *
+ * ## LinkedIn @mentions
+ *
+ * Profile and company URLs written as `@[https://www.linkedin.com/in/jane-doe]` or
+ * `@[Jane](https://www.linkedin.com/company/acme)` in the `content` or LinkedIn `customContent` you send are
+ * resolved to LinkedIn's name and link, exactly as on `POST /v1/posts` (see Create post for the rules). Only what
+ * the request sends is looked up: an update of the schedule, status or media makes no LinkedIn call, and
+ * `@[Text](urn:li:...)` markup is stored as written. Moving a draft out of draft also resolves the stored
+ * `content` and the stored `customContent` of its LinkedIn entries, and saves the result. A mention that cannot be resolved on a non-draft returns `400` `linkedin_mentions_invalid`, `429`
+ * `rate_limited`, `401` `reconnect_required` or a retryable `503` `temporarily_unavailable`, with each mention
+ * under `details.mentions[]` (`LinkedInMentionIssue`). Drafts get `warnings` instead.
  *
  */
 export const updatePost = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<UpdatePostData, ThrowOnError>) => {
@@ -3042,22 +3059,19 @@ export const updateLinkedInOrganization = <ThrowOnError extends boolean = false>
  * Resolve LinkedIn mention
  * Converts a LinkedIn profile or company URL to a URN for @mentions in posts.
  *
- * How to use LinkedIn @mentions (2-step workflow):
- *
- * 1. Call this endpoint with the LinkedIn profile/company URL to get the mention URN and format.
- * 2. Embed the returned mentionFormat (e.g. @[Vincent Jong](urn:li:person:xxx)) directly in your post's content field.
+ * You usually do not need this endpoint. Put the profile or company URL inside `@[...]` in the post `content` (for example `@[https://www.linkedin.com/in/vincentjong]`) and the post resolves it for you, using LinkedIn's own name. Use this endpoint to preview what a URL resolves to, or to get ready-made `@[Name](urn)` markup, which still works in `content` and is published exactly as written.
  *
  * Example:
- * - Resolve: GET /v1/accounts/{id}/linkedin-mentions?url=linkedin.com/in/vincentjong&displayName=Vincent Jong
+ * - Resolve: GET /v1/accounts/{id}/linkedin-mentions?url=linkedin.com/in/vincentjong
  * - Returns: mentionFormat: "@[Vincent Jong](urn:li:person:xxx)"
  * - Use in post content: "Great talk with @[Vincent Jong](urn:li:person:xxx) today!"
  *
- * Important: The mentions array field in POST /v1/posts is stored for reference only and does NOT trigger @mentions on LinkedIn. You must embed the mention format directly in the content text.
+ * Important: The mentions array field in POST /v1/posts is stored for reference only and does NOT trigger @mentions on LinkedIn. Write the mention in the content text.
  *
  * Requirements:
  * - Resolving a profile URL to a person mention requires the LinkedIn account to be admin of at least one organization: both endpoints that resolve a profile URL to a member URN take an organization you administer. A resolved person mention publishes from any account. Organization mentions (e.g. @Microsoft) have no such requirement.
  * - The two are not scoped alike. peopleTypeahead?q=organizationFollowers only returns that organization's followers; vanityUrl?q=vanityUrlAsOrganization does not, and its resolvable set is opaque. A 404 here does not mean the person is unknown to you or unknown to LinkedIn: a live public profile can 404 with no reason given.
- * - displayName is optional: the endpoint looks up the person's real name itself. LinkedIn renders a person mention as a link when the mention text is the person's first name, last name or full name (case-sensitive).
+ * - displayName is deprecated and ignored in practice: the endpoint reads the person's real name from LinkedIn itself. LinkedIn renders a person mention as a link only when the mention text is the person's first name, last name or full name (case-sensitive).
  * - Person mentions DO work when published from personal profiles (the URN only needs to be valid). The limitation is only in the resolution step (URL to URN), not in publishing.
  *
  */
