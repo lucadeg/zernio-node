@@ -19125,7 +19125,7 @@ export type GetInstagramAccountInsightsData = {
         accountId: string;
         /**
          * Breakdown dimension (only valid with metricType=total_value).
-         * Valid values depend on the metric: media_product_type, follow_type, follower_type, contact_button_type.
+         * Valid values per metric: reach and views take follow_type or media_product_type; follows_and_unfollows takes follow_type; profile_links_taps takes contact_button_type; comments, likes, saves, shares and total_interactions take media_product_type.
          *
          */
         breakdown?: string;
