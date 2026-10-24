@@ -32923,35 +32923,39 @@ export type ListInboxMentionsResponse = ({
          * Mention document ID
          */
         id?: string;
-        platform?: 'linkedin' | 'instagram';
+        platform?: 'linkedin' | 'instagram' | 'facebook';
         /**
-         * Instagram only: `caption` when the account was tagged in a media caption, `comment` when it was tagged in a comment. Null for LinkedIn.
+         * Instagram and Facebook: `caption` when the Instagram account was tagged in a media caption, `post` when the Facebook Page was tagged in a post, `comment` when either was tagged in a comment. Null for LinkedIn.
          */
-        type?: ('caption' | 'comment') | null;
+        type?: ('caption' | 'post' | 'comment') | null;
         /**
-         * Instagram only: ID of the media the account was mentioned in (or under). Null for LinkedIn.
+         * Instagram only: ID of the media the account was mentioned in (or under). Null for LinkedIn and Facebook.
          */
         mediaId?: (string) | null;
         /**
-         * Instagram only: ID of the comment that mentioned the account. Null for caption mentions and LinkedIn.
+         * Facebook only: ID of the post the Page was mentioned in (or under). Null for LinkedIn and Instagram.
+         */
+        postId?: (string) | null;
+        /**
+         * Instagram and Facebook: ID of the comment that mentioned the account. Null for caption and post mentions and for LinkedIn.
          */
         commentId?: (string) | null;
         accountId?: string;
         accountUsername?: string;
         /**
-         * Text that mentioned you: the post text on LinkedIn, the caption or comment text on Instagram. Empty until it has been read.
+         * Text that mentioned you: the post text on LinkedIn, the caption or comment text on Instagram, the post or comment text on Facebook. Empty until it has been read.
          */
         content?: string;
         /**
-         * URL to the source post on LinkedIn. Null on Instagram.
+         * URL to the source post on LinkedIn. Null on Instagram and Facebook.
          */
         permalink?: (string) | null;
         /**
-         * LinkedIn URN of the person who mentioned you, or the Instagram-scoped ID of the commenter on an Instagram comment mention.
+         * LinkedIn URN of the person who mentioned you, the Instagram-scoped ID of the commenter on an Instagram comment mention, or the ID of the Facebook user or Page that mentioned your Page when Meta sends it.
          */
         authorUrn?: (string) | null;
         /**
-         * Display name of the author, resolved from authorUrn. Null when LinkedIn does not allow resolving the profile.
+         * Display name of the author, resolved from authorUrn on LinkedIn (null when LinkedIn does not allow resolving the profile) and taken from the webhook on Facebook.
          */
         authorName?: (string) | null;
         /**
@@ -32963,7 +32967,7 @@ export type ListInboxMentionsResponse = ({
          */
         authorPicture?: (string) | null;
         /**
-         * URN of the LinkedIn organization that was mentioned, or the Instagram user ID of the mentioned account.
+         * URN of the LinkedIn organization that was mentioned, the Instagram user ID of the mentioned account, or the ID of the mentioned Facebook Page.
          */
         organizationalEntity?: string;
         publishedAt?: string;

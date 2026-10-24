@@ -5490,6 +5490,10 @@ export const getTweet = <ThrowOnError extends boolean = false>(options: OptionsL
  * own posts are never listed, even when they contain its @handle. Their text is read from Instagram
  * in the background after the first request, so `content` can be empty on the first read. Pass
  * `mediaId` and `commentId` to `POST /v1/inbox/mentions/reply` to answer one.
+ * - **Facebook**: post mentions (someone tags the Page in a post) and comment mentions (someone tags
+ * it in a comment), delivered by the Page `mention` webhook with their text. Comments on the Page's
+ * own posts and anything the Page wrote itself are never listed. Facebook mentions cannot be replied
+ * to through `POST /v1/inbox/mentions/reply`.
  *
  * Requires Inbox addon.
  *
