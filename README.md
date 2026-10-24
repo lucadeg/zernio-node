@@ -227,6 +227,7 @@ try {
 | Method | Description |
 |--------|-------------|
 | `analytics.listFacebookTaggedPosts()` | List the posts a Facebook Page is tagged in |
+| `analytics.listFacebookVisitorPosts()` | List visitor posts on a Facebook Page |
 | `analytics.getAnalytics()` | Get post analytics |
 | `analytics.getAnalyticsDashboard()` | Get an analytics dashboard |
 | `analytics.getAnalyticsDelta()` | Analytics changed since a cursor |

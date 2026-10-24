@@ -6828,6 +6828,56 @@ export type FacebookTaggedPost = {
     } | null;
 };
 
+export type FacebookVisitorPost = {
+    /**
+     * Facebook post ID (`{pageId}_{postId}`).
+     */
+    id: string;
+    /**
+     * Text of the post. Null for media-only posts.
+     */
+    message: (string) | null;
+    /**
+     * Creation time as Meta returns it (ISO 8601).
+     */
+    createdTime: (string) | null;
+    /**
+     * The person or Page that published the post. Null when Meta omits the author.
+     */
+    from: {
+        /**
+         * App-scoped ID of the author.
+         */
+        id: string;
+        name: (string) | null;
+    } | null;
+    /**
+     * Public Facebook URL of the post.
+     */
+    permalinkUrl: (string) | null;
+    /**
+     * Media of the first attachment, in the same shape as Facebook Page posts. Null when the post has no attachment.
+     */
+    media: {
+        mediaType: 'image' | 'video' | 'carousel' | 'text';
+        /**
+         * Temporary CDN URL of the cover image. Empty when there is none.
+         */
+        thumbnailUrl: string;
+        mediaItems: Array<{
+            type: 'image' | 'video';
+            /**
+             * Temporary CDN URL.
+             */
+            url: string;
+            /**
+             * Poster frame of a video.
+             */
+            thumbnail?: string;
+        }>;
+    } | null;
+};
+
 export type FeedbackReceipt = {
     /**
      * Feedback id. Quote it if you follow up with support.
@@ -28000,6 +28050,35 @@ export type GetFacebookPostReactionsResponse = ({
 });
 
 export type GetFacebookPostReactionsError = (unknown | ErrorResponse);
+
+export type ListFacebookVisitorPostsData = {
+    path: {
+        /**
+         * The ID of a connected Facebook Page account.
+         */
+        accountId: string;
+    };
+    query?: {
+        /**
+         * The `nextCursor` of the previous page.
+         */
+        cursor?: string;
+        /**
+         * Number of Page feed entries to scan. The Page's own posts are dropped from them.
+         */
+        limit?: number;
+    };
+};
+
+export type ListFacebookVisitorPostsResponse = ({
+    data: Array<FacebookVisitorPost>;
+    /**
+     * Pass as `cursor` to read the next page. Null when there are no more pages.
+     */
+    nextCursor: (string) | null;
+});
+
+export type ListFacebookVisitorPostsError = (ErrorResponse);
 
 export type ListFacebookTaggedPostsData = {
     path: {

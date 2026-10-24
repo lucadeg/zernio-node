@@ -625,6 +625,7 @@ import {
   listDiscordScheduledEvents,
   listFacebookPages,
   listFacebookTaggedPosts,
+  listFacebookVisitorPosts,
   listFormLeads,
   listGoogleAssetGroups,
   listGoogleBusinessLocations,
@@ -1183,6 +1184,7 @@ export class Zernio {
     getLinkedInPostAnalytics: this._bind(getLinkedInPostAnalytics),
     getLinkedInPostReactions: this._bind(getLinkedInPostReactions),
     getFacebookPostReactions: this._bind(getFacebookPostReactions),
+    listFacebookVisitorPosts: this._bind(listFacebookVisitorPosts),
     listFacebookTaggedPosts: this._bind(listFacebookTaggedPosts),
   };
 
