@@ -52215,10 +52215,13 @@ export type CreateLeadFormData = {
     thankYouTitle?: string;
     thankYouBody?: string;
     thankYouButtonText?: string;
+    /**
+     * Meta thank_you_page.button_type. Defaults to VIEW_WEBSITE. Meta rejects MESSAGE_BUSINESS on thank-you pages with (#100) This button type is not yet supported for Thank You Page.
+     */
     thankYouButtonType?: string;
     thankYouWebsiteUrl?: string;
     /**
-     * Adds a 'Continue in Messenger' option to the thank-you page (Meta thank_you_page.enable_messenger), so the lead can carry on chatting with the Page. Set thankYouButtonType to MESSAGE_BUSINESS or P2B_MESSENGER to make the chat the primary button.
+     * Sent as Meta thank_you_page.enable_messenger (boolean). Accepted only inside platformSpecificData: a top-level thankYouEnableMessenger is a 400.
      */
     thankYouEnableMessenger?: boolean;
     /**
