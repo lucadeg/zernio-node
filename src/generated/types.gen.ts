@@ -6350,12 +6350,13 @@ export type ErrorResponse = {
      * single reply is already spent, and `privateReplyOutcome: "unknown"` on its 502 when Meta
      * answered a server error and the reply may have been delivered.
      *
-     * On a Google Ads 429 it carries `quotaExhausted: true`, which marks the failure as
-     * Google's own ads quota rather than a Zernio rate limit, so you can keep calling
-     * other platforms instead of backing off everywhere. When Google names the scope it
-     * also carries `quotaScope`: `DEVELOPER` means the shared developer-token budget
-     * (every Google account is affected and there is nothing to change on your side),
-     * `ACCOUNT` means your own ad account. A Meta 429 carries neither field.
+     * On a Google Ads or YouTube Analytics 429 it carries `quotaExhausted: true`, which marks
+     * the failure as Google's own quota rather than a Zernio rate limit, so you can keep
+     * calling other platforms instead of backing off everywhere. When Google names the scope
+     * it also carries `quotaScope`: `DEVELOPER` means the shared budget (the developer token
+     * for Google Ads, the Google Cloud project for YouTube Analytics; every account on
+     * Zernio is affected and there is nothing to change on your side), `ACCOUNT` means your
+     * own ad account (Google Ads only). A Meta 429 carries neither field.
      *
      * A Zernio Google Ads burst-limit 429 carries `budgetScope` instead, and never
      * `quotaExhausted`: these are Zernio's own limits, applied before the call
@@ -6418,11 +6419,11 @@ export type ErrorResponse = {
             parentId?: string;
         };
         /**
-         * Google Ads 429 only. True when the upstream Google Ads quota is spent rather than a Zernio limit.
+         * Google Ads and YouTube Analytics 429 only. True when the upstream Google quota is spent rather than a Zernio limit.
          */
         quotaExhausted?: boolean;
         /**
-         * Google Ads 429 only, when Google names the scope. DEVELOPER is the shared developer-token budget; ACCOUNT is your ad account.
+         * Google Ads and YouTube Analytics 429 only, when the scope is known. DEVELOPER is the shared budget (the developer token for Google Ads, the Google Cloud project for YouTube Analytics); ACCOUNT is your ad account (Google Ads only).
          */
         quotaScope?: 'DEVELOPER' | 'ACCOUNT';
         /**
@@ -6444,7 +6445,7 @@ export type type8 = 'invalid_request_error' | 'authentication_error' | 'permissi
 export type stage = 'media' | 'campaign' | 'adset' | 'creative' | 'ad' | 'activation' | 'other';
 
 /**
- * Google Ads 429 only, when Google names the scope. DEVELOPER is the shared developer-token budget; ACCOUNT is your ad account.
+ * Google Ads and YouTube Analytics 429 only, when the scope is known. DEVELOPER is the shared budget (the developer token for Google Ads, the Google Cloud project for YouTube Analytics); ACCOUNT is your ad account (Google Ads only).
  */
 export type quotaScope = 'DEVELOPER' | 'ACCOUNT';
 
