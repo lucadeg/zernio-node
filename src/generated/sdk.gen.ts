@@ -4718,7 +4718,7 @@ export const setConversationThreadControl = <ThrowOnError extends boolean = fals
 
 /**
  * Accept a message request
- * Accept a Facebook or Instagram Message Request (listed with `GET /v1/inbox/conversations?folder=requests`) by replying to it.
+ * Accept a Facebook or Instagram Message Request by replying to it (Facebook Page requests are listed with `GET /v1/inbox/conversations?folder=requests`; Instagram answers PLATFORM_LIMITATION there).
  * Meta has no separate accept call: the first reply is what moves the thread into the inbox, so this sends `message`
  * through the same path, checks and webhooks as `POST /v1/inbox/conversations/{conversationId}/messages`, and answers the same way.
  * Supports the `Idempotency-Key` header.
