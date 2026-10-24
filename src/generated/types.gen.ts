@@ -3496,7 +3496,11 @@ export type CommentAutomationAudience = {
      * * `skip` - stay silent.
      * * `verify` - send `followGate.message` with a confirm button. Tapping it is a
      * message, which grants consent, so the re-check on the tap resolves and the
-     * real DM (or `followGate.notFollowingMessage`) follows automatically.
+     * real DM (or `followGate.notFollowingMessage`) follows automatically. The tap
+     * re-checks the follow relationship live, with no cached answer. A known
+     * non-follower gets `followGate.notFollowingMessage`, never the DM. If Instagram
+     * still will not reveal the relationship on the tap, or the lookup fails, the DM
+     * is delivered (fails open).
      *
      */
     whenUnknown?: 'send' | 'skip' | 'verify';
@@ -3518,7 +3522,11 @@ export type followerStatus = 'any' | 'follower' | 'non_follower';
  * * `skip` - stay silent.
  * * `verify` - send `followGate.message` with a confirm button. Tapping it is a
  * message, which grants consent, so the re-check on the tap resolves and the
- * real DM (or `followGate.notFollowingMessage`) follows automatically.
+ * real DM (or `followGate.notFollowingMessage`) follows automatically. The tap
+ * re-checks the follow relationship live, with no cached answer. A known
+ * non-follower gets `followGate.notFollowingMessage`, never the DM. If Instagram
+ * still will not reveal the relationship on the tap, or the lookup fails, the DM
+ * is delivered (fails open).
  *
  */
 export type whenUnknown = 'send' | 'skip' | 'verify';
@@ -3552,6 +3560,10 @@ export type CommentAutomationFollowGate = {
      * Confirm button label. Defaults to "I'm following" (whenUnknown=verify) or "Unlock" (tapToUnlock).
      */
     buttonLabel?: string;
+    /**
+     * Optional. When set, the follow gate DM and the not-following message with the confirm button also carry a URL button with this label that opens the connected Instagram account's profile. Omit for the confirm button only. Instagram only.
+     */
+    profileButtonLabel?: string;
     /**
      * Sent to a commenter we know does not follow (followerStatus=follower), and after a confirm tap that does not unlock the DM. When following is what would unlock it, the message carries the confirm button so they can re-check once they follow; above 640 characters it goes out as plain text without the button. Omit to stay silent on a keyword comment; a confirm tap always gets an answer (a default message is used).
      */
