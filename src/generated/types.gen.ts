@@ -10457,6 +10457,30 @@ export type PhoneNumberStockWatch = {
  */
 export type numberType = 'local' | 'mobile' | 'national' | 'toll_free';
 
+export type PinPostRequest = {
+    /**
+     * Must be `facebook`. Any other value answers 400 `platform_not_supported`.
+     */
+    platform: string;
+    /**
+     * Which Facebook account's copy to change when the post was published to several Facebook accounts. Required in that case.
+     */
+    accountId?: string;
+};
+
+export type PinPostResponse = {
+    success?: boolean;
+    /**
+     * Whether the post is now pinned to the top of the Page.
+     */
+    pinned?: boolean;
+    /**
+     * The Facebook post ID that was changed.
+     */
+    platformPostId?: string;
+    message?: string;
+};
+
 export type PinterestPlatformData = {
     /**
      * Pin title. Defaults to first line of content or "Pin". Must be ≤ 100 characters.
@@ -21143,6 +21167,32 @@ export type UnpublishPostResponse = ({
 });
 
 export type UnpublishPostError = (ErrorResponse | {
+    error?: string;
+} | unknown);
+
+export type PinPostData = {
+    body: PinPostRequest;
+    path: {
+        postId: string;
+    };
+};
+
+export type PinPostResponse2 = (PinPostResponse);
+
+export type PinPostError = (ErrorResponse | {
+    error?: string;
+} | unknown);
+
+export type UnpinPostData = {
+    body: PinPostRequest;
+    path: {
+        postId: string;
+    };
+};
+
+export type UnpinPostResponse = (PinPostResponse);
+
+export type UnpinPostError = (ErrorResponse | {
     error?: string;
 } | unknown);
 

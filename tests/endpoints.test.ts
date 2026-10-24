@@ -777,6 +777,16 @@ describe('Endpoint Methods', () => {
       expect(client.posts.unpublishPost).toBeTypeOf('function');
     });
 
+    it('should have pinPost method', () => {
+      expect(client.posts.pinPost).toBeDefined();
+      expect(client.posts.pinPost).toBeTypeOf('function');
+    });
+
+    it('should have unpinPost method', () => {
+      expect(client.posts.unpinPost).toBeDefined();
+      expect(client.posts.unpinPost).toBeTypeOf('function');
+    });
+
     it('should have editPost method', () => {
       expect(client.posts.editPost).toBeDefined();
       expect(client.posts.editPost).toBeTypeOf('function');

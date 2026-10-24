@@ -179,8 +179,10 @@ try {
 | `posts.updatePostMetadata()` | Update post metadata |
 | `posts.deletePost()` | Delete post |
 | `posts.editPost()` | Edit published post |
+| `posts.pinPost()` | Pin post |
 | `posts.retryPost()` | Retry failed post |
 | `posts.reviewPost()` | Approve or reject a post |
+| `posts.unpinPost()` | Unpin post |
 | `posts.unpublishPost()` | Unpublish post |
 
 ### Accounts
