@@ -11738,7 +11738,8 @@ export const getAdPreviews = <ThrowOnError extends boolean = false>(options: Opt
  * `forbiddenPlacements` lists every placement with feedback. When Meta returns no feedback (usually
  * an ad in review or approved everywhere), the status comes back with empty `rejections` and empty
  * `reviewFeedback` maps; an ACTIVE ad rejected on one placement still carries that placement's
- * feedback. A deleted ad answers 404. `issues` is Meta's
+ * feedback. The `effective_status` read is also stored on the ad, so `GET /v1/ads/{adId}` returns
+ * it next. A deleted ad answers 404. `issues` is Meta's
  * `issues_info` verbatim. `forbiddenAges`, `forbiddenLocations` and `forbiddenOperatingSystems`
  * are always empty on Meta.
  *
