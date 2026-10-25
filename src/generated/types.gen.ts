@@ -22108,6 +22108,26 @@ export type GetAccountPostsResponse = ({
          * Reddit only
          */
         subreddit?: string;
+        /**
+         * Pinterest only: native Pin title
+         */
+        title?: string;
+        /**
+         * Pinterest only: full native Pin description (Pinterest caps it at 800 characters)
+         */
+        description?: string;
+        /**
+         * Pinterest only: destination URL of the Pin, not the Pin page (see permalink)
+         */
+        link?: string;
+        /**
+         * Pinterest only: id of the board holding the Pin
+         */
+        boardId?: string;
+        /**
+         * Pinterest only: username of the board owner
+         */
+        boardOwnerUsername?: string;
     }>;
     lastUpdated?: string;
 });
