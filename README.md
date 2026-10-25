@@ -1072,12 +1072,15 @@ try {
 | Method | Description |
 |--------|-------------|
 | `messages.listInboxConversations()` | List conversations |
+| `messages.listInboxLabels()` | List the Page's conversation labels |
 | `messages.createInboxConversation()` | Create conversation |
+| `messages.createInboxLabel()` | Create a conversation label |
 | `messages.getInboxConversation()` | Get conversation |
 | `messages.getInboxConversationMessages()` | List messages |
 | `messages.getMessageAttachment()` | Resolve message attachment |
 | `messages.updateInboxConversation()` | Update conversation status |
 | `messages.deleteInboxConversation()` | Delete conversation |
+| `messages.deleteInboxLabel()` | Delete a conversation label |
 | `messages.deleteInboxMessage()` | Delete message |
 | `messages.acceptConversationRequest()` | Accept a message request |
 | `messages.addMessageReaction()` | Add reaction |

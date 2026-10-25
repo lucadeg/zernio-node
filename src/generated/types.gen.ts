@@ -31589,6 +31589,73 @@ export type AcceptConversationRequestResponse = ({
 
 export type AcceptConversationRequestError = (ErrorResponse | unknown);
 
+export type ListInboxLabelsData = {
+    query: {
+        /**
+         * Facebook social account ID
+         */
+        accountId: string;
+    };
+};
+
+export type ListInboxLabelsResponse = ({
+    labels?: Array<{
+        /**
+         * Meta label id
+         */
+        id?: string;
+        name?: string;
+    }>;
+});
+
+export type ListInboxLabelsError = (ErrorResponse | unknown);
+
+export type CreateInboxLabelData = {
+    body: {
+        /**
+         * Facebook social account ID
+         */
+        accountId: string;
+        /**
+         * Label name
+         */
+        name: string;
+    };
+};
+
+export type CreateInboxLabelResponse = ({
+    label?: {
+        /**
+         * Meta label id
+         */
+        id?: string;
+        name?: string;
+    };
+});
+
+export type CreateInboxLabelError = (ErrorResponse | unknown);
+
+export type DeleteInboxLabelData = {
+    path: {
+        /**
+         * Meta label id
+         */
+        labelId: string;
+    };
+    query: {
+        /**
+         * Facebook social account ID
+         */
+        accountId: string;
+    };
+};
+
+export type DeleteInboxLabelResponse = ({
+    success?: boolean;
+});
+
+export type DeleteInboxLabelError = (ErrorResponse | unknown);
+
 export type MarkConversationReadData = {
     body: {
         /**
