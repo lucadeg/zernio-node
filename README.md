@@ -1071,6 +1071,7 @@ try {
 ### Messages (Inbox)
 | Method | Description |
 |--------|-------------|
+| `messages.listConversationLabels()` | List the labels on a conversation |
 | `messages.listInboxConversations()` | List conversations |
 | `messages.listInboxLabels()` | List the Page's conversation labels |
 | `messages.createInboxConversation()` | Create conversation |
@@ -1083,9 +1084,11 @@ try {
 | `messages.deleteInboxLabel()` | Delete a conversation label |
 | `messages.deleteInboxMessage()` | Delete message |
 | `messages.acceptConversationRequest()` | Accept a message request |
+| `messages.addConversationLabel()` | Add a label to a conversation |
 | `messages.addMessageReaction()` | Add reaction |
 | `messages.editInboxMessage()` | Edit message |
 | `messages.markConversationRead()` | Mark a conversation as read |
+| `messages.removeConversationLabel()` | Remove a label from a conversation |
 | `messages.removeMessageReaction()` | Remove reaction |
 | `messages.searchInboxConversations()` | Search conversations |
 | `messages.sendInboxMessage()` | Send message |

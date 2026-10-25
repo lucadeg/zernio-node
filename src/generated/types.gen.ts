@@ -31656,6 +31656,83 @@ export type DeleteInboxLabelResponse = ({
 
 export type DeleteInboxLabelError = (ErrorResponse | unknown);
 
+export type ListConversationLabelsData = {
+    path: {
+        /**
+         * Conversation ID (Zernio id or Meta platform conversation id)
+         */
+        conversationId: string;
+    };
+    query: {
+        /**
+         * Facebook social account ID
+         */
+        accountId: string;
+    };
+};
+
+export type ListConversationLabelsResponse = ({
+    labels?: Array<{
+        /**
+         * Meta label id
+         */
+        id?: string;
+        name?: string;
+    }>;
+});
+
+export type ListConversationLabelsError = (ErrorResponse | unknown);
+
+export type AddConversationLabelData = {
+    body: {
+        /**
+         * Facebook social account ID
+         */
+        accountId: string;
+        /**
+         * Meta label id from listInboxLabels
+         */
+        labelId: string;
+    };
+    path: {
+        /**
+         * Conversation ID (Zernio id or Meta platform conversation id)
+         */
+        conversationId: string;
+    };
+};
+
+export type AddConversationLabelResponse = ({
+    success?: boolean;
+});
+
+export type AddConversationLabelError = (ErrorResponse | unknown);
+
+export type RemoveConversationLabelData = {
+    path: {
+        /**
+         * Conversation ID (Zernio id or Meta platform conversation id)
+         */
+        conversationId: string;
+        /**
+         * Meta label id
+         */
+        labelId: string;
+    };
+    query: {
+        /**
+         * Facebook social account ID
+         */
+        accountId: string;
+    };
+};
+
+export type RemoveConversationLabelResponse = ({
+    success?: boolean;
+});
+
+export type RemoveConversationLabelError = (ErrorResponse | unknown);
+
 export type MarkConversationReadData = {
     body: {
         /**
