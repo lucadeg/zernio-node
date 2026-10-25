@@ -36541,7 +36541,7 @@ export type UpdateWhatsAppBusinessProfileData = {
          */
         websites?: Array<(string)>;
         /**
-         * Business category (e.g., RETAIL, ENTERTAINMENT, etc.)
+         * Business category, one of Meta's keys (e.g. AUTO, ENTERTAIN, RETAIL, PROF_SERVICES, OTHER)
          */
         vertical?: string;
         /**
