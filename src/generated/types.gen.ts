@@ -47625,6 +47625,10 @@ export type ListTikTokSmartPlusReviewsData = {
          * Also return Smart+ ads deleted on TikTok (listed with `primary_status: STATUS_ALL`).
          */
         includeDeleted?: boolean;
+        /**
+         * Freshness window in seconds. Reviews, refusals and the listing read within it are served without calling TikTok; older ones are still returned but read again, oldest first.
+         */
+        maxAgeSeconds?: number;
         page?: number;
         pageSize?: number;
     };
@@ -47633,6 +47637,10 @@ export type ListTikTokSmartPlusReviewsData = {
 export type ListTikTokSmartPlusReviewsResponse = ({
     adAccountId?: string;
     includeDeleted?: boolean;
+    /**
+     * The freshness window this page was read with.
+     */
+    maxAgeSeconds?: number;
     page?: number;
     pageSize?: number;
     totalPages?: number;
@@ -47640,6 +47648,58 @@ export type ListTikTokSmartPlusReviewsResponse = ({
      * Smart+ ads of the advertiser across all pages.
      */
     totalSmartPlusAds?: number;
+    /**
+     * The Smart+ ad listing this page was cut from.
+     */
+    listing?: {
+        /**
+         * When the listing was read from TikTok.
+         */
+        readAt?: string;
+        /**
+         * `fresh`: read within `maxAgeSeconds`. `fallback`: relisting failed and this is the older stored listing.
+         */
+        source?: 'fresh' | 'fallback';
+        /**
+         * The relist error on a fallback, otherwise null.
+         */
+        error?: {
+            tiktokCode?: (number) | null;
+            message?: string;
+        } | null;
+    };
+    /**
+     * Set when TikTok refused both halves of a review batch the same way (for example a permission error) and the page was served from stored reviews instead of being refreshed. Null otherwise.
+     */
+    reviewError?: {
+        tiktokCode?: (number) | null;
+        message?: string;
+    } | null;
+    /**
+     * The Smart+ ads on this page split by state; the four counts add up to the Smart+ ads on this page (fewer than `pageSize` on the last page).
+     */
+    counts?: {
+        /**
+         * Items read within `maxAgeSeconds`.
+         */
+        fresh?: number;
+        /**
+         * Items read earlier, returned with their `readAt` and due for a refresh.
+         */
+        stale?: number;
+        /**
+         * Smart+ ads never read (`pendingSmartPlusAdIds`).
+         */
+        pending?: number;
+        /**
+         * Entries of `failedSmartPlusAds`.
+         */
+        failed?: number;
+    };
+    /**
+     * The oldest `readAt` in `items`. Null when `items` is empty.
+     */
+    oldestReadAt?: (string) | null;
     items?: Array<{
         smartPlusAdId?: string;
         adGroupId?: (string) | null;
@@ -47650,12 +47710,12 @@ export type ListTikTokSmartPlusReviewsResponse = ({
          */
         materials?: Array<TikTokSmartPlusMaterialReview>;
         /**
-         * When the verdict was read from TikTok.
+         * When the verdict was read from TikTok, kept as is when served from the store. Older than `maxAgeSeconds` means stale.
          */
         readAt?: string;
     }>;
     /**
-     * Smart+ ads of this page whose review TikTok refused on its own (for example an ad deleted on TikTok since the listing was cached). Zernio splits a refused batch in halves (at most 16 extra calls per page), so the other ads of the batch are still read; ads left unresolved by that cap carry the batch error. Empty when none.
+     * Smart+ ads of this page whose review TikTok refused on its own (for example an ad deleted on TikTok since the listing was read). Zernio splits a refused batch in halves (at most 16 extra calls per page), so the other ads of the batch are still read; ads left unresolved by that cap stay in `items` with their stored review or in `pendingSmartPlusAdIds`. Empty when none.
      */
     failedSmartPlusAds?: Array<{
         smartPlusAdId?: string;
@@ -47671,17 +47731,25 @@ export type ListTikTokSmartPlusReviewsResponse = ({
              */
             message?: string;
         };
+        /**
+         * When TikTok refused this ad. Null for a refusal stored before this field existed.
+         */
+        refusedAt?: (string) | null;
     }>;
     /**
-     * True when some Smart+ ads of this page could not be read because of TikTok's review quota.
+     * True while some Smart+ ads of this page were never read (`counts.pending > 0`). Stale items alone keep it false.
      */
     incomplete?: boolean;
     /**
-     * Smart+ ads of this page still to read. Empty when complete.
+     * True when every item and refusal of this page was read within `maxAgeSeconds` and nothing is pending. False with `incomplete: false` means the page is complete but some reviews are older than the window; a later read refreshes them oldest first.
+     */
+    allFresh?: boolean;
+    /**
+     * Smart+ ads of this page never read. Empty when every ad has a stored review or refusal.
      */
     pendingSmartPlusAdIds?: Array<(string)>;
     /**
-     * Seconds to wait before reading this page again. Null when complete.
+     * Seconds to wait before reading this page again, set only while `incomplete` is true and review reads are paused. Null when complete (stale items included), or when the page is incomplete without a quota pause (read it again right away).
      */
     retryAfterSeconds?: (number) | null;
 });
