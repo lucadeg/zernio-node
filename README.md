@@ -627,6 +627,17 @@ try {
 |--------|-------------|
 | `adLibrary.searchAdLibrary()` | Search the public Ad Library |
 
+### Ad Rules
+| Method | Description |
+|--------|-------------|
+| `adRules.listAdRuleRuns()` | List an ad rule's runs |
+| `adRules.listAdRules()` | List ad rules |
+| `adRules.createAdRule()` | Create an ad rule |
+| `adRules.getAdRule()` | Get an ad rule |
+| `adRules.updateAdRule()` | Update an ad rule |
+| `adRules.deleteAdRule()` | Delete an ad rule |
+| `adRules.previewAdRule()` | Preview an ad rule |
+
 ### Ad Targeting
 | Method | Description |
 |--------|-------------|

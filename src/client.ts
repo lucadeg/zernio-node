@@ -93,6 +93,7 @@ import {
   createAdInsightsReport,
   createAdLabel,
   createAdNegativeKeywordList,
+  createAdRule,
   createAdSet,
   createApiKey,
   createBidStrategy,
@@ -184,6 +185,7 @@ import {
   deleteAdComment,
   deleteAdCreative,
   deleteAdNegativeKeywordList,
+  deleteAdRule,
   deleteAdSet,
   deleteAdVideo,
   deleteApiKey,
@@ -305,6 +307,7 @@ import {
   getAdNegativeKeywordList,
   getAdPreviews,
   getAdReview,
+  getAdRule,
   getAdSetDetails,
   getAdTrackingTags,
   getAdTree,
@@ -562,6 +565,8 @@ import {
   listAdKeywords,
   listAdLabels,
   listAdNegativeKeywordLists,
+  listAdRuleRuns,
+  listAdRules,
   listAdSets,
   listAdStudies,
   listAdVideos,
@@ -729,6 +734,7 @@ import {
   preflightBrandedCallingIdentity,
   preflightSmsRegistration,
   prepareMedia,
+  previewAdRule,
   previewQueue,
   publishWhatsAppFlow,
   purchasePhoneNumber,
@@ -905,6 +911,7 @@ import {
   updateAdKeyword,
   updateAdLabel,
   updateAdNegativeKeywordList,
+  updateAdRule,
   updateAdSet,
   updateAdSetStatus,
   updateAdStatus,
@@ -2183,6 +2190,19 @@ export class Zernio {
     getAdInsightsReport: this._bind(getAdInsightsReport),
     getAdAnalytics: this._bind(getAdAnalytics),
     getTikTokSmartPlusMaterialReport: this._bind(getTikTokSmartPlusMaterialReport),
+  };
+
+  /**
+   * adrules API
+   */
+  adrules = {
+    listAdRules: this._bind(listAdRules),
+    createAdRule: this._bind(createAdRule),
+    getAdRule: this._bind(getAdRule),
+    updateAdRule: this._bind(updateAdRule),
+    deleteAdRule: this._bind(deleteAdRule),
+    previewAdRule: this._bind(previewAdRule),
+    listAdRuleRuns: this._bind(listAdRuleRuns),
   };
 
   /**
