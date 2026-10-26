@@ -1802,6 +1802,10 @@ export type AdTracking = {
         key: string;
         value: string;
     }>;
+    /**
+     * POST /v1/ads/create on Meta and Google only. Every ad created there carries `zrn=<platform ad id>` on its landing URL so orders and events tied to the landing URL map back to the ad. Meta: `{ key: zrn, value: '{{ad.id}}' }` is appended after your `urlTags`, which are sent unchanged; a `zrn` key you send yourself is kept. Skipped for lead forms, call ads, `existingCreativeId` and app promotion. Google (Display and Search): the ad's `final_url_suffix` becomes the suffix it would inherit (ad group, campaign or account) plus `&zrn={creative}`, so your account and campaign UTMs still apply; if that suffix cannot be read or Google rejects it, the ad is created untagged. Existing ads are never changed. Set `false` to create the ad with no Zernio tag.
+     */
+    zernioTag?: boolean;
 };
 
 /**
