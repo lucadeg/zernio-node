@@ -6687,6 +6687,24 @@ export type quotaScope = 'DEVELOPER' | 'ACCOUNT';
  */
 export type budgetScope = 'account' | 'user';
 
+export type EventDestination = {
+    /**
+     * Event destination ID, used to delete it.
+     */
+    id?: string;
+    profileId?: string;
+    accountId?: string;
+    /**
+     * Platform destination (pixel, conversion action, rule, ...).
+     */
+    destinationId?: string;
+    /**
+     * Event names forwarded to this destination; null forwards every event.
+     */
+    eventNames?: Array<(string)> | null;
+    createdAt?: string;
+};
+
 /**
  * A media item on a native (external/synced) post, as carried by post.external.* webhook payloads. Distinct from the richer MediaItem used for Zernio-authored posts: external items are always already-published and limited to image or video. Kept as a separate schema so the generated SDK model does not collide with MediaItem.
  *
@@ -55686,6 +55704,126 @@ export type RemoveCustomConversionGoalResponse = ({
 });
 
 export type RemoveCustomConversionGoalError = (ErrorResponse | unknown);
+
+export type SendEventsData = {
+    body: {
+        /**
+         * Profile the events belong to. Its saved destinations receive the events.
+         */
+        profileId: string;
+        events: Array<ConversionEvent>;
+        /**
+         * Send to these destinations instead of the saved ones (every event goes to each).
+         */
+        destinations?: Array<{
+            /**
+             * Connected ads account ID (metaads, googleads, linkedinads, tiktokads, openaiads, pinterestads or redditads).
+             */
+            accountId: string;
+            /**
+             * Platform destination, as listed by GET /v1/accounts/{accountId}/conversion-destinations.
+             */
+            destinationId: string;
+        }>;
+        /**
+         * Batch-level user consent, forwarded to every destination (see POST /v1/ads/conversions).
+         */
+        consent?: {
+            adUserData?: 'GRANTED' | 'DENIED';
+            adPersonalization?: 'GRANTED' | 'DENIED';
+        };
+        /**
+         * Forwarded as each platform test code (see POST /v1/ads/conversions). Test events are not stored.
+         */
+        testCode?: string;
+    };
+};
+
+export type SendEventsResponse = ({
+    /**
+     * Events in the request.
+     */
+    eventsReceived?: number;
+    /**
+     * Whether the events were stored for reporting (always false with testCode).
+     */
+    stored?: boolean;
+    destinations?: Array<{
+        accountId?: string;
+        destinationId?: string;
+        platform?: 'metaads' | 'googleads' | 'linkedinads' | 'tiktokads' | 'openaiads' | 'pinterestads' | 'redditads';
+        /**
+         * Events the platform accepted.
+         */
+        eventsSent?: number;
+        eventsFailed?: number;
+        failures?: Array<{
+            /**
+             * Index into the events sent to this destination.
+             */
+            eventIndex?: number;
+            eventId?: string;
+            message?: string;
+            code?: (string | number);
+        }>;
+        /**
+         * Set when the destination could not be reached at all (account disconnected, unsupported platform, platform error).
+         */
+        error?: string;
+    }>;
+});
+
+export type SendEventsError = (ErrorResponse | {
+    error?: string;
+});
+
+export type ListEventDestinationsData = {
+    query?: {
+        profileId?: string;
+    };
+};
+
+export type ListEventDestinationsResponse = ({
+    destinations?: Array<EventDestination>;
+});
+
+export type ListEventDestinationsError = (ErrorResponse | {
+    error?: string;
+});
+
+export type CreateEventDestinationData = {
+    body: {
+        profileId: string;
+        /**
+         * Connected ads account ID that owns the destination.
+         */
+        accountId: string;
+        destinationId: string;
+        eventNames?: Array<(string)>;
+    };
+};
+
+export type CreateEventDestinationResponse = ({
+    destination?: EventDestination;
+});
+
+export type CreateEventDestinationError = (ErrorResponse | {
+    error?: string;
+});
+
+export type DeleteEventDestinationData = {
+    path: {
+        destinationId: string;
+    };
+};
+
+export type DeleteEventDestinationResponse = ({
+    deleted?: boolean;
+});
+
+export type DeleteEventDestinationError = (ErrorResponse | {
+    error?: string;
+});
 
 export type GetCampaignConversionGoalsData = {
     path: {

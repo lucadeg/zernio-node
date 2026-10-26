@@ -129,6 +129,7 @@ import {
   createDiscordGuildRole,
   createDiscordScheduledEvent,
   createDiscordThread,
+  createEventDestination,
   createGoogleAssetGroup,
   createGoogleBusinessMedia,
   createGoogleBusinessPlaceAction,
@@ -221,6 +222,7 @@ import {
   deleteDiscordGuildRole,
   deleteDiscordMessage,
   deleteDiscordScheduledEvent,
+  deleteEventDestination,
   deleteGoogleBusinessMedia,
   deleteGoogleBusinessPlaceAction,
   deleteGoogleBusinessReviewReply,
@@ -633,6 +635,7 @@ import {
   listDiscordGuildRoles,
   listDiscordPinnedMessages,
   listDiscordScheduledEvents,
+  listEventDestinations,
   listFacebookPages,
   listFacebookTaggedPosts,
   listFacebookVisitorPosts,
@@ -838,6 +841,7 @@ import {
   sendBusinessAgentTestMessage,
   sendConversions,
   sendDiscordDirectMessage,
+  sendEvents,
   sendInboxMessage,
   sendPrivateReplyToComment,
   sendRcsMessage,
@@ -2432,6 +2436,10 @@ export class Zernio {
     createCustomConversionGoal: this._bind(createCustomConversionGoal),
     updateCustomConversionGoal: this._bind(updateCustomConversionGoal),
     removeCustomConversionGoal: this._bind(removeCustomConversionGoal),
+    sendEvents: this._bind(sendEvents),
+    listEventDestinations: this._bind(listEventDestinations),
+    createEventDestination: this._bind(createEventDestination),
+    deleteEventDestination: this._bind(deleteEventDestination),
     listConversionDestinations: this._bind(listConversionDestinations),
     createConversionDestination: this._bind(createConversionDestination),
     getConversionDestination: this._bind(getConversionDestination),
@@ -3031,6 +3039,14 @@ export class Zernio {
     updateCustomConversionGoal: this._bind(updateCustomConversionGoal),
     /** @deprecated Use `zernio.conversions.removeCustomConversionGoal` instead. */
     removeCustomConversionGoal: this._bind(removeCustomConversionGoal),
+    /** @deprecated Use `zernio.conversions.sendEvents` instead. */
+    sendEvents: this._bind(sendEvents),
+    /** @deprecated Use `zernio.conversions.listEventDestinations` instead. */
+    listEventDestinations: this._bind(listEventDestinations),
+    /** @deprecated Use `zernio.conversions.createEventDestination` instead. */
+    createEventDestination: this._bind(createEventDestination),
+    /** @deprecated Use `zernio.conversions.deleteEventDestination` instead. */
+    deleteEventDestination: this._bind(deleteEventDestination),
     /** @deprecated Use `zernio.conversions.listConversionDestinations` instead. */
     listConversionDestinations: this._bind(listConversionDestinations),
     /** @deprecated Use `zernio.conversions.createConversionDestination` instead. */

@@ -902,9 +902,11 @@ try {
 | `conversions.listConversionAssociations()` | List associated campaigns |
 | `conversions.listConversionDestinations()` | List conversion destinations |
 | `conversions.listCustomConversionGoals()` | List custom conversion goals |
+| `conversions.listEventDestinations()` | List event destinations |
 | `conversions.createConversionAction()` | Create website conversion action |
 | `conversions.createConversionDestination()` | Create a conversion destination |
 | `conversions.createCustomConversionGoal()` | Create a custom conversion goal |
+| `conversions.createEventDestination()` | Add an event destination |
 | `conversions.getConversionDestination()` | Get a conversion destination |
 | `conversions.getConversionMetrics()` | Get attribution metrics |
 | `conversions.getConversionsQuality()` | Get Event Match Quality |
@@ -913,11 +915,13 @@ try {
 | `conversions.updateConversionDestination()` | Update a conversion destination |
 | `conversions.updateCustomConversionGoal()` | Update a custom conversion goal |
 | `conversions.deleteConversionDestination()` | Delete a conversion destination |
+| `conversions.deleteEventDestination()` | Remove an event destination |
 | `conversions.addConversionAssociations()` | Associate campaigns |
 | `conversions.adjustConversions()` | Adjust uploaded conversions |
 | `conversions.removeConversionAssociations()` | Remove associated campaigns |
 | `conversions.removeCustomConversionGoal()` | Remove a custom conversion goal |
 | `conversions.sendConversions()` | Send conversion events |
+| `conversions.sendEvents()` | Send events to every destination |
 
 ### Custom Fields
 | Method | Description |
