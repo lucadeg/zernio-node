@@ -1180,6 +1180,7 @@ export const deletePost = <ThrowOnError extends boolean = false>(options: Option
  * - `mediaUrls` aliases `media_urls`
  * - Per-platform overrides use three dynamic column prefixes, one column per platform (e.g. `schedule_time_instagram`, `custom_content_tiktok`, `custom_media_youtube`): `schedule_time_<platform>`, `custom_content_<platform>`, `custom_media_<platform>`.
  * - Any other column is not read. It does not error, but it is reported in the response's `warnings` array as `unknown_columns:<a,b,c>` (see BulkUploadResult), so a misnamed or unsupported column is never silently dropped.
+ * - The `hashtags` and `mentions` columns are stored on the post but not added to the caption. Put them in `post_content` (or a `custom_content_<platform>` column). A filled column adds `not_added_to_caption:<columns>` to `warnings`.
  * - Timezone: `tz` sets the zone `schedule_time` is read in. A row without `tz` uses its profile's `timezone` (when all its target profiles share one), else UTC.
  * - Row limits: 5000 rows is a hard cap that returns 400 above it. 500 rows is only an advisory threshold, it adds `rows_exceed_advisory_limit:500` to `warnings` and the request still processes.
  *

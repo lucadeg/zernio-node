@@ -2952,7 +2952,7 @@ export type BulkUploadResult = {
         errors?: Array<(string)>;
     }>;
     /**
-     * Top-level advisory warnings, e.g. `rows_exceed_advisory_limit:500` or `unknown_columns:<a,b,c>` (comma-separated unrecognized CSV column names). Empty when none.
+     * Top-level advisory warnings, e.g. `rows_exceed_advisory_limit:500`, `unknown_columns:<a,b,c>` (comma-separated unrecognized CSV column names), or `not_added_to_caption:<columns>` (the `hashtags` and/or `mentions` column is filled: stored on the post, not added to the caption). Empty when none.
      */
     warnings?: Array<(string)>;
     /**
