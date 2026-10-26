@@ -48288,9 +48288,13 @@ export type ListTikTokSmartPlusReviewsResponse = ({
      */
     pendingSmartPlusAdIds?: Array<(string)>;
     /**
-     * Seconds to wait before reading this page again, set only while `incomplete` is true and review reads are paused. Null when complete (stale items included), or when the page is incomplete without a quota pause (read it again right away).
+     * Seconds until Zernio calls TikTok's review endpoint for this advertiser and connection again (the stored pause with its jitter), set exactly when `refreshState` is `paused` or `refused`, stale items with nothing pending included. Always the same value as the `Retry-After` header, which is sent exactly when this is not null. Client rule: present, wait that long before reading the page again; null with stale or pending ads, a retry is not blocked (read again now or on your `maxAgeSeconds` schedule; with `refreshState: error` check `reviewError` first).
      */
     retryAfterSeconds?: (number) | null;
+    /**
+     * Whether this request could refresh the due (stale or pending) Smart+ ads of the page. `refused`: TikTok refused a review call of this request over quota (40002 `OVER_QPS_LIMIT` or 40100) and Zernio paused. `paused`: no call was sent for the due ads because a pause from an earlier refusal, or the spacing of at least 60 seconds after a success, is still running. Both carry `retryAfterSeconds`. `error`: TikTok refused the batch for another reason (both halves the same way), the page is served from stored reviews and `reviewError` holds TikTok's error; `retryAfterSeconds` is null because retrying soon repeats the refusal. `ok`: nothing blocks a retry (every due ad was read, none was due, or the split cap left some for the next read, which can come right away).
+     */
+    refreshState?: 'ok' | 'paused' | 'refused' | 'error';
 });
 
 export type ListTikTokSmartPlusReviewsError = (ErrorResponse | unknown);
