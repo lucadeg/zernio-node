@@ -336,6 +336,7 @@ try {
 | Method | Description |
 |--------|-------------|
 | `connect.listFacebookPages()` | List Facebook pages |
+| `connect.listGoogleAnalyticsProperties()` | List Google Analytics properties for a pending connect |
 | `connect.listGoogleBusinessLocations()` | List Google Business Profile locations |
 | `connect.listInstagramPages()` | List Pages with a linked Instagram account |
 | `connect.listLinkedInOrganizations()` | List LinkedIn orgs |
@@ -394,6 +395,7 @@ try {
 | `connect.initiateTelegramConnect()` | Connect Telegram directly |
 | `connect.resyncPageWebhookSubscription()` | Re-subscribe a Facebook Page to Zernio's webhooks |
 | `connect.selectFacebookPage()` | Select Facebook page |
+| `connect.selectGoogleAnalyticsProperty()` | Connect the chosen Google Analytics property |
 | `connect.selectGoogleBusinessLocation()` | Select Google Business Profile location |
 | `connect.selectInstagramAccount()` | Select the Page whose Instagram account to connect |
 | `connect.selectLinkedInOrganization()` | Select LinkedIn org |

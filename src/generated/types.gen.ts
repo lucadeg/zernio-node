@@ -2661,6 +2661,10 @@ export type BlogArticle = {
      */
     handle?: string;
     /**
+     * WordPress and Wix. Public URL of the article while it is published; null for drafts and scheduled posts, and on a Wix site that is not published yet.
+     */
+    url?: (string) | null;
+    /**
      * Tag names. On WordPress and Wix, missing tag names are created and matching is case-insensitive.
      */
     tags?: Array<(string)>;
@@ -24040,6 +24044,63 @@ export type GetGoogleAnalyticsConnectUrlError = (ErrorResponse | {
         effective_account_limit?: number;
     };
 } | unknown);
+
+export type ListGoogleAnalyticsPropertiesData = {
+    query: {
+        /**
+         * Token from the headless redirect.
+         */
+        pendingDataToken: string;
+    };
+};
+
+export type ListGoogleAnalyticsPropertiesResponse = ({
+    properties?: Array<{
+        /**
+         * Numeric GA4 property ID.
+         */
+        propertyId?: string;
+        displayName?: string;
+        /**
+         * Google Analytics account ID.
+         */
+        accountId?: string;
+        accountName?: string;
+    }>;
+});
+
+export type ListGoogleAnalyticsPropertiesError = (ErrorResponse | unknown);
+
+export type SelectGoogleAnalyticsPropertyData = {
+    body: {
+        /**
+         * Token from the headless redirect.
+         */
+        pendingDataToken: string;
+        /**
+         * A propertyId from the properties list.
+         */
+        propertyId: string;
+    };
+};
+
+export type SelectGoogleAnalyticsPropertyResponse = ({
+    /**
+     * Where to send the user next.
+     */
+    redirect_url?: string;
+    /**
+     * The connected account, or null when the connect was refused.
+     */
+    account?: {
+        accountId?: string;
+        platform?: string;
+        username?: string;
+        displayName?: string;
+    } | null;
+});
+
+export type SelectGoogleAnalyticsPropertyError = (ErrorResponse | unknown);
 
 export type GetHubSpotConnectUrlData = {
     query: {

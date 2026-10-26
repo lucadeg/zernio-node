@@ -404,6 +404,16 @@ describe('Endpoint Methods', () => {
       expect(client.connect.getGoogleAnalyticsConnectUrl).toBeTypeOf('function');
     });
 
+    it('should have listGoogleAnalyticsProperties method', () => {
+      expect(client.connect.listGoogleAnalyticsProperties).toBeDefined();
+      expect(client.connect.listGoogleAnalyticsProperties).toBeTypeOf('function');
+    });
+
+    it('should have selectGoogleAnalyticsProperty method', () => {
+      expect(client.connect.selectGoogleAnalyticsProperty).toBeDefined();
+      expect(client.connect.selectGoogleAnalyticsProperty).toBeTypeOf('function');
+    });
+
     it('should have getHubSpotConnectUrl method', () => {
       expect(client.connect.getHubSpotConnectUrl).toBeDefined();
       expect(client.connect.getHubSpotConnectUrl).toBeTypeOf('function');
