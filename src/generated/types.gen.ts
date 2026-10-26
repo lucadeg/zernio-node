@@ -516,6 +516,7 @@ export type Ad = {
          * Explicit E.164 WhatsApp number supplied when creating a Meta boost or messaging ad. Absent when omitted by the caller or on older records.
          */
         whatsappPhoneNumber?: string;
+        instagramVideoFallback?: InstagramVideoFallback;
         pinterestImageUrl?: string;
         pinterestTitle?: string;
         pinterestDescription?: string;
@@ -9309,6 +9310,32 @@ export type InstagramTaggedMedia = {
 };
 
 /**
+ * Meta only. Present when Meta refused an existing Instagram video as the boosted ad (code 100, subcode 1815279: upload it to Facebook first) and Zernio created the ad another way. `instagram_video_reuploaded`: the video was copied into the ad account and the ad still references the original post. `instagram_video_rehosted_copy`: the video was uploaded as a new Facebook video in a new Page post, so the ad does not show the original post's likes and comments. Send `rehostOnInstagramVideoRejection: false` on the boost to get Meta's error instead.
+ */
+export type InstagramVideoFallback = {
+    kind: 'instagram_video_reuploaded' | 'instagram_video_rehosted_copy';
+    /**
+     * True when the ad still references the original Instagram post and keeps its engagement.
+     */
+    linkedToOriginalPost: boolean;
+    /**
+     * The Facebook-side ad video Zernio made. With instagram_video_reuploaded it is the copy in the ad account video library (possibly one made by an earlier boost of the same media, reused); the creative carries it as video_id unless Meta accepted the plain post reference once the copy existed, in which case the copy is kept for that reference. With instagram_video_rehosted_copy it is the new upload the creative uses (an unused copy made by this request is deleted).
+     */
+    videoId: string;
+    /**
+     * Meta's original refusal.
+     */
+    platformError: {
+        code?: number;
+        subcode?: number;
+        message: string;
+        fbtraceId?: string;
+    };
+};
+
+export type kind2 = 'instagram_video_reuploaded' | 'instagram_video_rehosted_copy';
+
+/**
  * A Google Search keyword: a bare string (BROAD match), or an object naming the match type.
  */
 export type KeywordEntry = string | {
@@ -13167,7 +13194,7 @@ export type platform14 = 'metaads' | 'openaiads' | 'tiktokads' | 'googleads' | '
 /**
  * Platform-native flavor of the tag (Meta: `pixel`).
  */
-export type kind2 = 'pixel' | 'tag' | 'insight_tag';
+export type kind3 = 'pixel' | 'tag' | 'insight_tag';
 
 /**
  * One health check the platform runs on a tracking tag.
@@ -51502,6 +51529,10 @@ export type BoostPostData = {
          */
         bodies?: Array<(string)>;
         /**
+         * Meta only (a 400 elsewhere). When Meta refuses an existing Instagram video as the ad (subcode 1815279), Zernio first copies the video into the ad account and retries on the original post, then falls back to a new Facebook video in a new Page post that does not show the original post's likes and comments; the response reports which in `instagramVideoFallback`. Messaging boosts never use the unlinked copy. `false` skips every fallback and returns Meta's error.
+         */
+        rehostOnInstagramVideoRejection?: boolean;
+        /**
          * TikTok only (a 400 elsewhere). TikTok Smart Targeting on the ad group: `audience` is
          * TikTok's `smart_audience_enabled`, `interestsBehaviors` its `smart_interest_behavior_enabled`.
          * When on, TikTok may deliver beyond the selected audiences or interests. Available on
@@ -51564,6 +51595,11 @@ export type BoostPostData = {
 export type BoostPostResponse = ({
     ad?: Ad;
     message?: string;
+    instagramVideoFallback?: InstagramVideoFallback;
+    /**
+     * Present with instagramVideoFallback: one human-readable line saying how the Instagram video was boosted.
+     */
+    warnings?: Array<(string)>;
 });
 
 export type BoostPostError = (unknown | ErrorResponse);
