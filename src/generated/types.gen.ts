@@ -7461,6 +7461,91 @@ export type GoogleAdsUserInvitationApproval = {
 };
 
 /**
+ * Google Analytics Data API report, passed through as Google returns it. Every value in `rows` is a string; read `metricHeaders[].type` to parse metrics.
+ */
+export type GoogleAnalyticsReport = {
+    /**
+     * Zernio account ID of the Google Analytics connection.
+     */
+    accountId?: string;
+    /**
+     * Numeric GA4 property ID.
+     */
+    propertyId?: string;
+    dimensionHeaders?: Array<{
+        name?: string;
+    }>;
+    metricHeaders?: Array<{
+        name?: string;
+        /**
+         * Google metric type, e.g. TYPE_INTEGER, TYPE_FLOAT, TYPE_SECONDS, TYPE_CURRENCY.
+         */
+        type?: string;
+    }>;
+    rows?: Array<{
+        dimensionValues?: Array<{
+            value?: string;
+        }>;
+        metricValues?: Array<{
+            value?: string;
+        }>;
+    }>;
+    /**
+     * Total rows matching the request, across all pages.
+     */
+    rowCount?: number;
+    /**
+     * Google report metadata (currency, time zone, sampling and thresholding flags).
+     */
+    metadata?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Google quota left on this property after the request (tokens per day and per hour, concurrent requests). Cached responses carry the quota from when they were fetched.
+     */
+    propertyQuota?: {
+        [key: string]: unknown;
+    };
+};
+
+export type GoogleAnalyticsReportFields = {
+    /**
+     * Zernio account ID of the Google Analytics connection (platform `googleanalytics`).
+     */
+    accountId: string;
+    /**
+     * GA4 dimension API names, e.g. `date`, `sessionSource`, `pagePath`. List them with GET /v1/analytics/googleanalytics/metadata.
+     */
+    dimensions?: Array<(string)>;
+    /**
+     * GA4 metric API names, e.g. `sessions`, `activeUsers`, `keyEvents`, `totalRevenue`.
+     */
+    metrics: Array<(string)>;
+    /**
+     * A Google FilterExpression on dimensions, in Google's own shape.
+     */
+    dimensionFilter?: {
+        [key: string]: unknown;
+    };
+    /**
+     * A Google FilterExpression on metrics, in Google's own shape.
+     */
+    metricFilter?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Google OrderBy objects, e.g. `{ "metric": { "metricName": "sessions" }, "desc": true }`.
+     */
+    orderBys?: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Rows to return. Defaults to Google's default (10000).
+     */
+    limit?: number;
+};
+
+/**
  * Link one asset to the asset group. Send exactly one of asset (an existing asset), text, imageUrl or youtubeVideoId (new content, created in the same request).
  */
 export type GoogleAssetGroupAssetLink = {
@@ -12222,7 +12307,7 @@ export type contentType3 = 'story' | 'saved_story' | 'spotlight';
 
 export type SocialAccount = {
     _id: string;
-    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot' | 'webflow';
+    platform: 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot' | 'webflow' | 'googleanalytics';
     profileId: (string | Profile);
     username?: string;
     displayName?: string;
@@ -12332,7 +12417,7 @@ export type SocialAccount = {
     };
 };
 
-export type platform13 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot' | 'webflow';
+export type platform13 = 'tiktok' | 'instagram' | 'facebook' | 'youtube' | 'linkedin' | 'twitter' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'sms' | 'phone' | 'rcs' | 'whopads' | 'hubspot' | 'webflow' | 'googleanalytics';
 
 /**
  * TikTok accounts only. The account type TikTok reported when the account was connected. `personal` accounts cannot use TikTok direct messages through the API (TikTok limits Business Messaging to Business Accounts): skip the inbox for them and tell the user to switch to a Business Account in the TikTok app, then reconnect. `business` is the prerequisite, not a guarantee; messaging also needs the messaging scopes granted and TikTok's regional availability. `unknown` on accounts connected before this was captured or whose grant left out the account-type scope.
@@ -20305,6 +20390,89 @@ export type GetPostTimelineError = ({
     code?: string;
 });
 
+export type RunGoogleAnalyticsReportData = {
+    body: (GoogleAnalyticsReportFields & {
+    /**
+     * Defaults to the last 28 days (`28daysAgo` to `yesterday`).
+     */
+    dateRanges?: Array<{
+        /**
+         * YYYY-MM-DD, today, yesterday or NdaysAgo.
+         */
+        startDate: string;
+        /**
+         * YYYY-MM-DD, today, yesterday or NdaysAgo.
+         */
+        endDate: string;
+        name?: string;
+    }>;
+    /**
+     * Row offset for paging through a report larger than `limit`.
+     */
+    offset?: number;
+    keepEmptyRows?: boolean;
+    /**
+     * ISO 4217 code for currency metrics. Defaults to the property currency.
+     */
+    currencyCode?: string;
+});
+};
+
+export type RunGoogleAnalyticsReportResponse = (GoogleAnalyticsReport);
+
+export type RunGoogleAnalyticsReportError = (ErrorResponse | unknown | {
+    error?: string;
+});
+
+export type RunGoogleAnalyticsRealtimeReportData = {
+    body: (GoogleAnalyticsReportFields & {
+    minuteRanges?: Array<{
+        startMinutesAgo?: number;
+        endMinutesAgo?: number;
+        name?: string;
+    }>;
+});
+};
+
+export type RunGoogleAnalyticsRealtimeReportResponse = (GoogleAnalyticsReport);
+
+export type RunGoogleAnalyticsRealtimeReportError = (ErrorResponse | unknown | {
+    error?: string;
+});
+
+export type GetGoogleAnalyticsMetadataData = {
+    query: {
+        /**
+         * Zernio account ID of the Google Analytics connection.
+         */
+        accountId: string;
+    };
+};
+
+export type GetGoogleAnalyticsMetadataResponse = ({
+    accountId?: string;
+    propertyId?: string;
+    dimensions?: Array<{
+        apiName?: string;
+        uiName?: string;
+        description?: string;
+        category?: string;
+        customDefinition?: boolean;
+    }>;
+    metrics?: Array<{
+        apiName?: string;
+        uiName?: string;
+        description?: string;
+        type?: string;
+        category?: string;
+        customDefinition?: boolean;
+    }>;
+});
+
+export type GetGoogleAnalyticsMetadataError = (ErrorResponse | unknown | {
+    error?: string;
+});
+
 export type GetGoogleBusinessPerformanceData = {
     query: {
         /**
@@ -21954,9 +22122,9 @@ export type DeleteProfileError = (unknown | ErrorResponse | {
 export type ListAccountsData = {
     query?: {
         /**
-         * Only accounts of this kind. ads = ad accounts (Meta, Google, LinkedIn, Pinterest, TikTok, X, OpenAI, Reddit), communication = WhatsApp, Telegram, Discord, Slack and iMessage, blogs = Shopify and WordPress, crm = HubSpot, social = every other platform.
+         * Only accounts of this kind. ads = ad accounts (Meta, Google, LinkedIn, Pinterest, TikTok, X, OpenAI, Reddit), communication = WhatsApp, Telegram, Discord, Slack and iMessage, blogs = Shopify and WordPress, crm = HubSpot, analytics = Google Analytics, social = every other platform.
          */
-        category?: 'social' | 'ads' | 'communication' | 'blogs' | 'crm';
+        category?: 'social' | 'ads' | 'communication' | 'blogs' | 'crm' | 'analytics';
         /**
          * Opaque cursor from a previous response's `pagination.nextCursor`; returns the next page of `limit` accounts (500 when limit is omitted). A cursor we cannot parse returns 400. Cannot be combined with page.
          */
@@ -22174,7 +22342,7 @@ export type GetAllAccountsHealthData = {
         /**
          * Filter by platform
          */
-        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads' | 'hubspot' | 'webflow';
+        platform?: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'tiktok' | 'youtube' | 'threads' | 'pinterest' | 'reddit' | 'bluesky' | 'googlebusiness' | 'telegram' | 'snapchat' | 'discord' | 'slack' | 'whatsapp' | 'shopify' | 'wordpress' | 'wix' | 'linkedinads' | 'metaads' | 'pinterestads' | 'tiktokads' | 'xads' | 'googleads' | 'openaiads' | 'redditads' | 'whopads' | 'hubspot' | 'webflow' | 'googleanalytics';
         /**
          * Filter by profile ID
          */
@@ -23787,6 +23955,91 @@ export type ConnectShopifyWithTokenError = (unknown | ErrorResponse | {
         effective_account_limit?: number;
     };
 });
+
+export type GetGoogleAnalyticsConnectUrlData = {
+    query: {
+        /**
+         * Your Zernio profile ID (get from /v1/profiles).
+         */
+        profileId: string;
+        /**
+         * Zernio account ID of the Google Analytics account being reconnected. Picking a different property then fails instead of adding a second account.
+         */
+        reconnectAccountId?: string;
+        /**
+         * Custom redirect after connection. Must be an absolute http(s) URL or custom app scheme such as `myapp://callback`; relative and unsafe URLs return 400.
+         */
+        redirect_url?: string;
+    };
+};
+
+export type GetGoogleAnalyticsConnectUrlResponse = ({
+    /**
+     * Google URL to open in the user agent.
+     */
+    authUrl: string;
+    /**
+     * Authenticated, expiring OAuth state handled by the callback.
+     */
+    state: string;
+});
+
+export type GetGoogleAnalyticsConnectUrlError = (ErrorResponse | {
+    /**
+     * Human-readable error message suitable for end-user display.
+     */
+    error: string;
+    /**
+     * Machine-readable error code. Stable across versions.
+     */
+    code: 'PAYMENT_REQUIRED';
+    /**
+     * Discriminator for which gate fired.
+     */
+    reason: 'free_tier_exceeded' | 'twitter_passthrough' | 'enterprise_required' | 'card_verification_required';
+    /**
+     * Link to the relevant documentation page.
+     */
+    documentation_url?: string;
+    /**
+     * Deep-link to send the end-user to. For
+     * `free_tier_exceeded` and `twitter_passthrough` this opens
+     * the add-payment-method drawer on the Zernio billing page.
+     * For `enterprise_required` this is the Zernio enterprise
+     * contact page.
+     *
+     */
+    dashboard_url?: string;
+    /**
+     * Structured context for SDK clients that want to render their own UX. Keys vary by `reason`.
+     */
+    details?: {
+        /**
+         * How many accounts the free tier allows. Only set when reason=free_tier_exceeded.
+         */
+        free_tier_account_limit?: number;
+        /**
+         * How many accounts the team currently has connected. Set when reason=free_tier_exceeded or reason=enterprise_required.
+         */
+        current_account_count?: number;
+        /**
+         * Whether the team currently has a card on file in Stripe. Set when reason=free_tier_exceeded or reason=twitter_passthrough.
+         */
+        has_payment_method?: boolean;
+        /**
+         * One-time card verification charge in USD cents, credited to usage. Only set when reason=card_verification_required.
+         */
+        verification_amount_cents?: number;
+        /**
+         * The negotiated connected-account cap from the
+         * team's enterprise contract. Self-service teams
+         * have no cap and never receive this reason. Only
+         * set when reason=enterprise_required.
+         *
+         */
+        effective_account_limit?: number;
+    };
+} | unknown);
 
 export type GetHubSpotConnectUrlData = {
     query: {

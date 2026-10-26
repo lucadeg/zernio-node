@@ -283,6 +283,21 @@ describe('Endpoint Methods', () => {
       expect(client.analytics.getPostTimeline).toBeTypeOf('function');
     });
 
+    it('should have runGoogleAnalyticsReport method', () => {
+      expect(client.analytics.runGoogleAnalyticsReport).toBeDefined();
+      expect(client.analytics.runGoogleAnalyticsReport).toBeTypeOf('function');
+    });
+
+    it('should have runGoogleAnalyticsRealtimeReport method', () => {
+      expect(client.analytics.runGoogleAnalyticsRealtimeReport).toBeDefined();
+      expect(client.analytics.runGoogleAnalyticsRealtimeReport).toBeTypeOf('function');
+    });
+
+    it('should have getGoogleAnalyticsMetadata method', () => {
+      expect(client.analytics.getGoogleAnalyticsMetadata).toBeDefined();
+      expect(client.analytics.getGoogleAnalyticsMetadata).toBeTypeOf('function');
+    });
+
     it('should have getGoogleBusinessPerformance method', () => {
       expect(client.analytics.getGoogleBusinessPerformance).toBeDefined();
       expect(client.analytics.getGoogleBusinessPerformance).toBeTypeOf('function');
@@ -382,6 +397,11 @@ describe('Endpoint Methods', () => {
     it('should have connectShopifyWithToken method', () => {
       expect(client.connect.connectShopifyWithToken).toBeDefined();
       expect(client.connect.connectShopifyWithToken).toBeTypeOf('function');
+    });
+
+    it('should have getGoogleAnalyticsConnectUrl method', () => {
+      expect(client.connect.getGoogleAnalyticsConnectUrl).toBeDefined();
+      expect(client.connect.getGoogleAnalyticsConnectUrl).toBeTypeOf('function');
     });
 
     it('should have getHubSpotConnectUrl method', () => {

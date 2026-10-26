@@ -240,6 +240,7 @@ try {
 | `analytics.getFacebookPageInsights()` | Get Facebook Page insights |
 | `analytics.getFacebookPostEarnings()` | Get Facebook post monetization earnings |
 | `analytics.getFacebookPostReactions()` | Get Facebook post reactions |
+| `analytics.getGoogleAnalyticsMetadata()` | List Google Analytics (GA4) dimensions and metrics |
 | `analytics.getGoogleBusinessPerformance()` | Get Google Business Profile performance metrics |
 | `analytics.getGoogleBusinessSearchKeywords()` | Get Google Business Profile search keywords |
 | `analytics.getInstagramAccountInsights()` | Get Instagram insights |
@@ -258,6 +259,8 @@ try {
 | `analytics.getYouTubeDailyViews()` | Get YouTube daily views |
 | `analytics.getYouTubeDemographics()` | Get YouTube demographics |
 | `analytics.getYouTubeVideoRetention()` | Get YouTube video retention curve |
+| `analytics.runGoogleAnalyticsRealtimeReport()` | Run a Google Analytics (GA4) realtime report |
+| `analytics.runGoogleAnalyticsReport()` | Run a Google Analytics (GA4) report |
 | `analytics.syncExternalPosts()` | Sync an external post |
 
 ### Account Groups
@@ -347,6 +350,7 @@ try {
 | `connect.getConnectWelcomeScreen()` | Get the saved welcome screen |
 | `connect.getFacebookPages()` | List Facebook pages |
 | `connect.getGmbLocations()` | List Google Business Profile locations |
+| `connect.getGoogleAnalyticsConnectUrl()` | Get Google Analytics OAuth connect URL |
 | `connect.getHubSpotConnectUrl()` | Get HubSpot OAuth connect URL |
 | `connect.getLinkedInOrganizations()` | List LinkedIn orgs |
 | `connect.getPageWebhookSubscription()` | Read a Facebook Page's webhook subscription |
