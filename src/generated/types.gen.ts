@@ -1105,6 +1105,7 @@ export type AdLead = {
     fieldData?: Array<{
         [key: string]: unknown;
     }>;
+    consents?: AdLeadConsents;
     /**
      * Meta leads only. `contacted` is set when the first WhatsApp message of a lead_received workflow is delivered, `unreachable` when it fails or the phone number is not valid.
      */
@@ -1126,6 +1127,22 @@ export type AdLead = {
  * Meta leads only. `contacted` is set when the first WhatsApp message of a lead_received workflow is delivered, `unreachable` when it fails or the phone number is not valid.
  */
 export type status2 = 'new' | 'contacted' | 'unreachable' | 'qualified' | 'converted' | 'disqualified';
+
+/**
+ * One custom disclaimer checkbox on a Meta lead form (for example a TCPA call or SMS consent), as Meta returns it in custom_disclaimer_responses.
+ */
+export type AdLeadConsent = {
+    /**
+     * The checkbox key as Meta returns it: the one set in platformSpecificData.customDisclaimer.checkboxes[].key on POST /v1/ads/lead-forms, or otherwise a key Meta derives from the checkbox text, which can be long and contain spaces and punctuation.
+     */
+    checkboxKey: string;
+    isChecked: boolean;
+};
+
+/**
+ * Meta lead forms only: the answer to every custom disclaimer checkbox, required or optional. Empty when the form has none, and may be empty on leads stored before 2026-10-22. LinkedIn leads do not carry the field.
+ */
+export type AdLeadConsents = Array<AdLeadConsent>;
 
 export type AdMetrics = {
     spend?: number;
@@ -15979,6 +15996,10 @@ export type WebhookPayloadLead = {
         fields: {
             [key: string]: (string);
         };
+        /**
+         * Sent on every delivery since 2026-10-25. Absent when an older event is redelivered, since redeliveries replay the stored payload.
+         */
+        consents?: (AdLeadConsents);
         /**
          * True when the lead came from an organic post rather than a paid ad
          */
@@ -53783,6 +53804,7 @@ export type ListFormLeadsResponse = ({
         fieldData?: Array<{
             [key: string]: unknown;
         }>;
+        consents?: AdLeadConsents;
     }>;
     pagination?: {
         hasMore?: boolean;
