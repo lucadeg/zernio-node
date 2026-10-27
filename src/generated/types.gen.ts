@@ -10089,6 +10089,27 @@ export type MessengerIceBreakerLocale = {
 };
 
 /**
+ * Meta ad set dayparting: the hours the ad set delivers, in whole hours. Same `dayOfWeek` /
+ * `startHour` / `endHour` naming as the Google `PUT /v1/ads/campaigns/{campaignId}/ad-schedule`,
+ * but Meta has no minutes and no bid modifiers. Windows on one day must not overlap (adjacent is
+ * fine) and every window must use the same `timezoneType`. Invalid windows are a 400 on
+ * `platformSpecificData.adSchedule`.
+ *
+ */
+export type MetaAdSchedule = Array<{
+    dayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
+    startHour: number;
+    /**
+     * Must be after startHour. 24 is midnight at the end of the day.
+     */
+    endHour: number;
+    /**
+     * Meta `timezone_type`: USER runs the hours in each viewer's time zone, ADVERTISER in the ad account time zone.
+     */
+    timezoneType?: 'USER' | 'ADVERTISER';
+}>;
+
+/**
  * Meta (facebook/instagram) options for platformSpecificData on POST /v1/ads/boost and /v1/ads/create. Unknown keys are rejected, not dropped.
  */
 export type MetaAdsPlatformData = {
@@ -10110,6 +10131,15 @@ export type MetaAdsPlatformData = {
      */
     lifetimeMinSpendTarget?: number;
     customerLifecycle?: MetaCustomerLifecycle;
+    /**
+     * Dayparting on the ad set being created (Meta `adset_schedule` with `pacing_type: ["day_parting"]`).
+     * Meta runs a schedule only on a LIFETIME budget, so a daily budget (on the ad set, or on the
+     * campaign joined with `existingCampaignId`) is a 400 with `param: platformSpecificData.adSchedule`.
+     * Also a 400 when empty, in adSetId attach mode and with `buyingType: RESERVED`. Change it later with
+     * `PUT /v1/ads/ad-sets/{adSetId}`.
+     *
+     */
+    adSchedule?: (MetaAdSchedule);
 };
 
 export type MetaAssignedUser = {
@@ -46198,6 +46228,17 @@ export type UpdateAdSetData = {
             lifetimeMinSpendTarget?: number;
             customerLifecycle?: MetaCustomerLifecycle;
             /**
+             * Replaces the ad set's dayparting (Meta `adset_schedule`, `pacing_type: ["day_parting"]`).
+             * Meta runs a schedule only on a lifetime budget. Before anything in the request is written,
+             * Zernio takes `budget.type` from the same request or reads the ad set's budget (or its
+             * campaign's under Advantage campaign budget), and a daily one is a 400 with
+             * `param: platformSpecificData.adSchedule`. An empty array removes the schedule
+             * (`pacing_type: ["standard"]`). Read it back with `GET /v1/ads/ad-sets/{adSetId}`
+             * (`adset_schedule`, `pacing_type`) or as `adSchedule` on `GET /v1/ads/accounts/live`.
+             *
+             */
+            adSchedule?: (MetaAdSchedule);
+            /**
              * Meta ad-set promoted_object (same shape as /v1/ads/create). Meta makes promoted_object immutable once the ad set exists, so only `pixelId`, `customEventType`, `customEventStr` (with `customEventType` OTHER), `applicationId` and `productCatalogId` can be sent here. Any other key (`pageId`, `whatsappPhoneNumber`, `customConversionId`, `objectStoreUrl`, `productSetId`, `offlineConversionDataSetId`) is a 400 with `param: platformSpecificData.promotedObject` and nothing is written; changing them needs a new ad set (POST /v1/ads/create). Unknown keys are rejected with 400.
              */
             promotedObject?: {
@@ -51003,6 +51044,10 @@ export type GetAdAccountLiveEntitiesResponse = ({
              */
             endDate?: string;
         } | null;
+        /**
+         * Meta only. The ad set's dayparting (`adset_schedule`) in the `platformSpecificData.adSchedule` shape, one window per day (a window Meta stores off the hour is widened to whole hours). Null when the ad set runs around the clock. Absent on TikTok.
+         */
+        adSchedule?: (MetaAdSchedule | null);
     }>;
     /**
      * One entry per level read. `after` is null on the last page.

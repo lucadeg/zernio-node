@@ -11205,8 +11205,8 @@ export const duplicateAd = <ThrowOnError extends boolean = false>(options: Optio
  *
  * Reads the ad set live from Meta, returned verbatim. The default projection includes
  * `learning_stage_info` (learning-phase status: LEARNING / SUCCESS / FAIL / WAIVING; Meta
- * omits its `status` key on paused ad sets), delivery settings, budgets, schedule and
- * targeting. `fields` is a raw-passthrough override; unknown fields return Meta's 400
+ * omits its `status` key on paused ad sets), delivery settings, budgets, schedule, dayparting
+ * (`adset_schedule`, `pacing_type`) and targeting. `fields` is a raw-passthrough override; unknown fields return Meta's 400
  * verbatim.
  */
 export const getAdSetDetails = <ThrowOnError extends boolean = false>(options: OptionsLegacyParser<GetAdSetDetailsData, ThrowOnError>) => {
