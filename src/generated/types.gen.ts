@@ -6643,6 +6643,16 @@ export type ErrorResponse = {
      * unrelated code (e.g. 1487194 on the creative), so branch on `code`, not on
      * `platformError`.
      *
+     * When Meta refuses a write because the Facebook user behind the connection's token
+     * lacks the Advertise permission on the ad account (Meta subcode 2490585, 2490591 or 4841020 on
+     * the write, or a code 200 refusal such as 1487194 whose cleanup deletes Meta refused
+     * with 2490591 or 4841020), any Meta ads write answers 403 `insufficient_permissions`.
+     * Meta may still accept the campaign and ad set and refuse only the ad. The message
+     * names the ad account, asks for the Advertise or Manage permission on it (or a token
+     * granted `ads_management`, by reconnecting), lists the objects left behind and ends
+     * with Meta's `error_user_title`, `error_user_msg` and subcode; the raw error stays in
+     * `platformError`.
+     *
      */
     details?: {
         /**
